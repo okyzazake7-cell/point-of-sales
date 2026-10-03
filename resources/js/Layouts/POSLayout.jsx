@@ -20,6 +20,7 @@ import {
 import Notification from "@/Components/Dashboard/Notification";
 import { useTour } from "@/Hooks/useTour";
 import i18n from "@/i18n";
+import SpandukLangganan from "@/Components/Langganan/SpandukLangganan";
 import {
     getPendingCount,
     pruneExpiredPendingTransactions,
@@ -368,6 +369,9 @@ export default function POSLayout({ children }) {
             )}
 
             {/* Main Content - Full Height */}
+            {/* Mode banyak toko: kasir yang berhenti karena langganan habis
+                harus tahu sebabnya di layar kasir itu sendiri. */}
+            <SpandukLangganan className="mx-4 mt-3 lg:mx-6" />
             <main className="flex-1 overflow-hidden">
                 <Toaster
                     position="top-right"

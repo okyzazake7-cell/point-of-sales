@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import PublicLayout from "@/Layouts/PublicLayout";
 import { BRAND } from "@/Utils/brand";
+import { rupiah } from "@/Utils/rupiah";
 import {
     IconArrowRight,
     IconArrowUpRight,
@@ -131,11 +132,16 @@ const tanya = [
     },
 ];
 
-export default function Welcome() {
+export default function Welcome({ hargaLayanan = null }) {
     const { auth } = usePage().props;
+    // Mode banyak toko (pos.aishiierp.com): tamu diajak MENDAFTAR, dan
+    // harganya dibaca dari server — bukan diketik di halaman ini.
     const ajakan = auth?.user
         ? { label: "Buka Dashboard", href: "/dashboard" }
-        : { label: "Masuk", href: "/login" };
+        : hargaLayanan
+          ? { label: "Daftarkan toko", href: "/daftar" }
+          : { label: "Masuk", href: "/login" };
+    const harga = hargaLayanan ? rupiah(hargaLayanan.harga_per_outlet) : null;
 
     return (
         <PublicLayout>
@@ -174,13 +180,27 @@ export default function Welcome() {
                             {ajakan.label}
                             <IconArrowRight size={18} />
                         </Link>
-                        <Link
-                            href="/fitur"
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 sm:w-auto"
-                        >
-                            Lihat semua fitur
-                        </Link>
+                        {hargaLayanan && !auth?.user ? (
+                            <Link
+                                href="/login"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 sm:w-auto"
+                            >
+                                Sudah punya toko? Masuk
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/fitur"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 sm:w-auto"
+                            >
+                                Lihat semua fitur
+                            </Link>
+                        )}
                     </div>
+                    {harga && (
+                        <p data-harga-pembuka className="mt-4 text-sm font-medium text-slate-600 dark:text-slate-400">
+                            {harga} per outlet berjualan per bulan · bayar lewat QRIS
+                        </p>
+                    )}
 
                     <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
                         Jualan di bazar atau lapak musiman?{" "}
@@ -356,6 +376,41 @@ export default function Welcome() {
                 </div>
             </section>
 
+            {/* ============ HARGA (mode banyak toko) ============ */}
+            {harga && (
+                <section id="harga" data-harga-layanan className="border-t border-slate-200 px-4 py-20 dark:border-slate-800 sm:px-6">
+                    <div className="mx-auto max-w-xl text-center">
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Harga</h2>
+                        <div className="mt-8 rounded-3xl border-2 border-primary-500 bg-white p-6 text-left dark:bg-slate-900 sm:p-8">
+                            <p className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">{harga}</p>
+                            <p className="mt-1 text-slate-600 dark:text-slate-400">per outlet yang berjualan, per bulan</p>
+                            <ul className="mt-6 space-y-3">
+                                {[
+                                    "Tanpa masa coba: kasir aktif begitu tagihan pertama lunas.",
+                                    "Bayar lewat QRIS dari aplikasi pembayaran apa pun — aktif otomatis begitu terbaca.",
+                                    "Gudang pusat dan outlet yang tidak berjualan tidak ditagih.",
+                                    "Telat membayar: kasir berhenti, tetapi laporan tetap bisa dibaca dan data tidak dihapus.",
+                                ].map((b) => (
+                                    <li key={b} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                        <IconCheck size={18} className="mt-0.5 shrink-0 text-success-500" />
+                                        {b}
+                                    </li>
+                                ))}
+                            </ul>
+                            {!auth?.user && (
+                                <Link
+                                    href="/daftar"
+                                    className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-7 py-3.5 text-base font-semibold text-white hover:bg-primary-700"
+                                >
+                                    Daftarkan toko
+                                    <IconArrowRight size={18} />
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* ============ TANYA JAWAB ============ */}
             <section className="border-t border-slate-200 bg-white px-4 py-20 dark:border-slate-800 dark:bg-slate-900/50 sm:px-6">
                 <div className="mx-auto max-w-3xl">
@@ -386,7 +441,9 @@ export default function Welcome() {
                         Toko yang rapi mulai dari kasirnya
                     </h2>
                     <p className="mx-auto mt-4 max-w-xl text-primary-100">
-                        Masuk dengan akun yang dibuat pemilik toko, lalu mulai mencatat penjualan pertama.
+                        {hargaLayanan
+                            ? "Daftar dalam satu layar, bayar lewat QRIS, lalu mulai mencatat penjualan pertama."
+                            : "Masuk dengan akun yang dibuat pemilik toko, lalu mulai mencatat penjualan pertama."}
                     </p>
                     <div className="mt-8 flex justify-center">
                         <Link

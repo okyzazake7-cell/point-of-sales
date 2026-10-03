@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\PosApiController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\WarehouseController;
+use App\Http\Controllers\Penyewaan\HargaController;
 use App\Penyewaan\Penyewaan;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,11 @@ Route::group(Penyewaan::grupPublik(), function () {
         Route::post('/xendit', [PaymentWebhookController::class, 'xendit'])->name('webhooks.xendit');
     });
 });
+
+// Harga Aishii POS untuk halaman /pos Aishii (mode banyak toko saja).
+if (config('penyewaan.aktif')) {
+    Route::get('/harga', HargaController::class)->name('api.harga');
+}
 
 Route::prefix('v1')->group(function () {
     // Auth (public)

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { useTranslation } from "react-i18next";
 import AuthBotGuardFields from "@/Components/AuthBotGuardFields";
@@ -14,6 +14,8 @@ import { useState } from "react";
 
 export default function Login({ status, canResetPassword, canRegister, botGuard }) {
     const { t } = useTranslation();
+    // Mode banyak toko: toko baru lahir lewat /daftar (dokumen 24 §4).
+    const { banyakToko } = usePage().props;
     const honeypotField = botGuard?.honeypot_field || "company_website";
     const tokenField = botGuard?.token_field || "bot_guard_token";
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -204,6 +206,18 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                                     t("auth.login.submit")
                                 )}
                             </button>
+
+                            {banyakToko && (
+                                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                    Belum punya toko di Aishii POS?{" "}
+                                    <Link
+                                        href="/daftar"
+                                        className="text-primary-500 hover:text-primary-600 font-semibold"
+                                    >
+                                        Daftarkan toko
+                                    </Link>
+                                </p>
+                            )}
 
                             {/* Register Link */}
                             {canRegister && (

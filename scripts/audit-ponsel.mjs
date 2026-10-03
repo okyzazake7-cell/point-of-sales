@@ -39,6 +39,16 @@ const CHROMIUM = process.env.CHROMIUM
 
 const PUBLIK = ['/', '/login', '/forgot-password', '/fitur', '/dokumentasi', '/roadmap', '/kontribusi']
 
+/*
+ * Mode banyak toko (BANYAK_TOKO=1, server ber-POS_MULTI_TOKO=true): layar
+ * yang hanya ada di pos.aishiierp.com — daftar, langganan, pengelola — ikut
+ * diukur, sebab "pastikan mobile friendly juga" berlaku untuk mereka juga.
+ * Toko demo harus AKTIF; toko kedua (TERKUNCI_SUREL) yang terkunci dipakai
+ * mengukur spanduk kunci di dashboard dan layar kasir.
+ */
+const BANYAK_TOKO = process.env.BANYAK_TOKO === '1'
+if (BANYAK_TOKO) PUBLIK.push('/daftar', '/pengelola/masuk')
+
 const DASHBOARD = [
     '/dashboard', '/dashboard/transactions', '/dashboard/transactions/history',
     '/dashboard/products', '/dashboard/products/create', '/dashboard/categories',
@@ -61,6 +71,7 @@ const DASHBOARD = [
     '/dashboard/settings/printer', '/dashboard/settings/target', '/dashboard/settings/units',
     '/dashboard/settings/warehouses', '/dashboard/settings/whatsapp',
 ]
+if (BANYAK_TOKO) DASHBOARD.push('/dashboard/langganan')
 
 /** Dijalankan DI DALAM halaman. */
 function ukur() {
@@ -191,16 +202,19 @@ const browser = await puppeteer.launch({
 const tunggu = (ms) => new Promise(r => setTimeout(r, ms))
 
 async function masuk(page, surel) {
-    await page.goto(`${BASE}/login`, { waitUntil: 'networkidle2' })
+    const pengelola = surel.startsWith('pengelola:')
+    if (pengelola) surel = surel.slice('pengelola:'.length)
+    await page.goto(`${BASE}${pengelola ? '/pengelola/masuk' : '/login'}`, { waitUntil: 'networkidle2' })
     await page.type('input[name=email]', surel)
-    await page.type('input[name=password]', 'password')
+    await page.type('input[name=password]', process.env.PENGELOLA_SANDI && pengelola ? process.env.PENGELOLA_SANDI : 'password')
     // Penjaga bot menolak kiriman yang lebih cepat dari dua detik.
     await tunggu(2500)
     await Promise.all([
         page.waitForNavigation({ waitUntil: 'networkidle2' }).catch(() => {}),
         page.click('button[type=submit]'),
     ])
-    if (new URL(page.url()).pathname.startsWith('/login')) throw new Error(`gagal masuk sebagai ${surel}`)
+    if (/\/(login|masuk)$/.test(new URL(page.url()).pathname)) throw new Error(`gagal masuk sebagai ${surel}`)
+    if (pengelola) return
     // Tur pengenalan menutupi layar pada kunjungan pertama tiap halaman, dan
     // yang diukur di sini tata letaknya — jadi turnya ditandai selesai.
     await page.evaluate(() => Promise.all(['dashboard', 'pos', 'products', 'cashier_shifts', 'reports']
@@ -287,6 +301,11 @@ await audit(DASHBOARD, process.env.SUREL ?? 'arya@gmail.com', { rincian: !HANYA.
 // Kasir: layar yang paling sering dibuka di ponsel, dengan shift yang
 // memang terbuka di data demo — layar kasir sungguhan, bukan formulir shift.
 await audit(['/dashboard/transactions', '/dashboard/transactions/history'], 'cashier@gmail.com')
+if (BANYAK_TOKO) {
+    // Toko terkunci: spanduk kunci + halaman Langganan berisi tagihan QRIS.
+    await audit(['/dashboard', '/dashboard/transactions', '/dashboard/langganan', '/dashboard/products'], process.env.TERKUNCI_SUREL ?? 'budi@contoh.id')
+    await audit(['/pengelola'], `pengelola:${process.env.PENGELOLA_SUREL ?? 'kelola@aishiierp.com'}`)
+}
 await browser.close()
 
 console.log(baris.join('\n'))

@@ -10,6 +10,7 @@ use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\Penyewaan\KenaliToko;
 use App\Http\Middleware\Penyewaan\KenaliTokoApi;
 use App\Http\Middleware\Penyewaan\KenaliTokoDariJalur;
+use App\Http\Middleware\Penyewaan\KunciLangganan;
 use App\Http\Middleware\SecureHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Auth\AuthenticationException;
@@ -40,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
             KenaliToko::class,
+            KunciLangganan::class,
             SetLocale::class,
             SecureHeaders::class,
             EnforceAbsoluteSessionLifetime::class,
@@ -64,8 +66,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // pembatas laju, dan pengikatan model rute — ketiganya membaca basis
         // data toko. Daftar prioritas Laravel yang mengurutkannya, bukan
         // urutan penulisan: rute bisa menambah middleware sendiri.
-        $middleware->api(prepend: [KenaliTokoApi::class]);
-        foreach ([KenaliToko::class, KenaliTokoDariJalur::class, KenaliTokoApi::class] as $penanda) {
+        $middleware->api(prepend: [KenaliTokoApi::class, KunciLangganan::class]);
+        foreach ([KenaliToko::class, KenaliTokoDariJalur::class, KenaliTokoApi::class, KunciLangganan::class] as $penanda) {
             $middleware->prependToPriorityList(AuthenticatesRequests::class, $penanda);
         }
     })
@@ -91,7 +93,9 @@ return Application::configure(basePath: dirname(__DIR__))
                     ], Response::HTTP_UNAUTHORIZED);
                 }
 
-                return redirect()->guest(route('login'));
+                return redirect()->guest(route(
+                    in_array('pengelola', $exception->guards(), true) ? 'pengelola.masuk' : 'login'
+                ));
             }
 
             $status = match (true) {

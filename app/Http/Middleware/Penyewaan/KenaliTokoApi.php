@@ -31,8 +31,9 @@ class KenaliTokoApi
             return $next($request);
         }
 
-        // Webhook gerbang bayar berjalur /api/t/{toko}/… dikenali dari jalurnya.
-        if ($request->route()?->hasParameter('toko')) {
+        // Webhook gerbang bayar berjalur /api/t/{toko}/… dikenali dari jalurnya;
+        // harga (dibaca halaman /pos Aishii) milik layanan, bukan toko.
+        if ($request->route()?->hasParameter('toko') || $request->route()?->getName() === 'api.harga') {
             return $next($request);
         }
 

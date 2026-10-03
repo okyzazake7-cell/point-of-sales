@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Http\Middleware\Penyewaan\BatasiLajuPerToko;
+use App\Langganan\Harga;
+use App\Langganan\Langganan;
+use App\Models\Outlet;
 use App\Models\User;
 use App\Penyewaan\PenggunaTokoProvider;
 use App\Penyewaan\Penyewaan;
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use RuntimeException;
 
@@ -68,6 +72,23 @@ class PenyewaanServiceProvider extends ServiceProvider
         // Toko yang sedang dibuka, untuk layar: antrean luring dan tembolok
         // service worker dipisah per toko (AS12, resources/js/app.jsx).
         Inertia::share('toko', fn () => $this->app->make(Penyewaan::class)->toko()?->only(['id', 'kode', 'nama']));
+        Inertia::share('banyakToko', true);
+
+        // Status langganan untuk spanduk tata letak dan layar kasir (dokumen
+        // 24 §6) — ikut tiap halaman toko, termasuk sesudah toko terkunci.
+        Inertia::share('langganan', function () {
+            $toko = $this->app->make(Penyewaan::class)->toko();
+
+            return $toko && Auth::guard('web')->check()
+                ? $this->app->make(Langganan::class)->ringkasan($toko)
+                : null;
+        });
+
+        // Kursi outlet (dokumen 24 §5): menyalakan penjualan di outlet ke-N+1
+        // ditolak dengan kalimat yang menyebut biayanya. Dipasang di model,
+        // bukan di pengendali Outlet hulu: outlet juga lahir dari wizard,
+        // impor, dan API.
+        Outlet::saving(fn (Outlet $outlet) => $this->periksaKursiOutlet($outlet));
 
         $sinkron = $this->app->make(SinkronDirektori::class);
         User::saving(fn (User $user) => $sinkron->saving($user));
@@ -107,11 +128,49 @@ class PenyewaanServiceProvider extends ServiceProvider
             if (! in_array($event->command, self::PERINTAH_BERBAHAYA, true)) {
                 return;
             }
-            if ($event->input->hasParameterOption('--database')) {
+            // Di dalam toko (toko:jalankan) koneksi bawaan memang basis data
+            // toko itu — `db:seed` milik seed:demo, misalnya, mengenai toko yang benar.
+            if ($event->input->hasParameterOption('--database') || $this->app->make(Penyewaan::class)->toko()) {
                 return;
             }
 
             throw new RuntimeException("`{$event->command}`: ".self::PESAN_MIGRASI);
         });
+    }
+
+    private function periksaKursiOutlet(Outlet $outlet): void
+    {
+        $toko = $this->app->make(Penyewaan::class)->toko();
+        if (! $toko) {
+            return;
+        }
+
+        $akanBerjualan = $outlet->is_active && $outlet->is_sales_enabled;
+        $sudahBerjualan = $outlet->exists && $outlet->getOriginal('is_active') && $outlet->getOriginal('is_sales_enabled');
+        if (! $akanBerjualan || $sudahBerjualan) {
+            return;
+        }
+
+        $lain = Outlet::query()
+            ->where('is_active', true)
+            ->where('is_sales_enabled', true)
+            ->when($outlet->exists, fn ($q) => $q->whereKeyNot($outlet->getKey()))
+            ->count();
+
+        if ($lain + 1 <= (int) $toko->kursi_outlet) {
+            return;
+        }
+
+        $langganan = $this->app->make(Langganan::class);
+        $kalimat = $langganan->terkunci($toko)
+            ? 'Langganan sedang tidak aktif. Perpanjang di menu Langganan sambil memilih jumlah outlet yang berjualan.'
+            : sprintf(
+                'Paket Anda untuk %d outlet berjualan. Tambah 1 outlet di menu Langganan — Rp %s untuk sisa %d hari masa aktif.',
+                (int) $toko->kursi_outlet,
+                number_format(Harga::tambahOutlet(1, Harga::sisaHari($toko->aktif_sampai, now())), 0, ',', '.'),
+                Harga::sisaHari($toko->aktif_sampai, now()),
+            );
+
+        throw ValidationException::withMessages(['is_sales_enabled' => $kalimat]);
     }
 }

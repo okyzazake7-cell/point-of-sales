@@ -16,3 +16,8 @@ Schedule::command($perToko('crm:sync-segments'))->dailyAt('01:00');
 Schedule::command($perToko('crm:generate-reminders'))->dailyAt('01:15');
 Schedule::command($perToko('reorder:generate'))->dailyAt('02:00');
 Schedule::command($perToko('transactions:expire'))->hourly();
+
+// Langganan Aishii POS: status pembayaran dijemput dari buku tagihan Aishii.
+if (config('penyewaan.aktif')) {
+    Schedule::command('langganan:periksa')->everyMinute()->withoutOverlapping();
+}

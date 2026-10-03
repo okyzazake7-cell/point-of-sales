@@ -260,6 +260,7 @@
         },
         "items": {
             "dashboard": "Dashboard",
+            "subscription": "Subscription",
             "categories": "Categories",
             "products": "Products",
             "customers": "Customers",
@@ -1013,7 +1014,7 @@
     },
     "setupChecklist": {
         "title": "Store Setup Checklist",
-        "subtitle": ":done of :total steps complete — finish them to start selling.",
+        "subtitle": "{{done}} of {{total}} steps complete — finish them to start selling.",
         "items": {
             "store_profile": "Complete your store profile",
             "category": "Create your first category",

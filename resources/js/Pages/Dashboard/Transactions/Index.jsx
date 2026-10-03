@@ -70,7 +70,16 @@ export default function Index({
         flash,
         lowStockNotifications = [],
         activeCashierShift,
+        langganan = null,
     } = usePage().props;
+    // Mode banyak toko (dokumen 24 §6): langganan yang habis menghentikan
+    // kasir. Tanggalnya disimpan bersama halaman, jadi kasir yang kehilangan
+    // sinyal tetap berhenti tepat pada waktunya.
+    const langgananHabis = () =>
+        Boolean(langganan) &&
+        (langganan.terkunci ||
+            !langganan.aktif_sampai ||
+            Date.now() >= Date.parse(langganan.aktif_sampai));
     const offlineScopeKey = `${auth?.user?.id ?? "guest"}:${activeCashierShift?.warehouse_id ?? "none"}`;
     const { can } = useAuthorization();
     const canOpenShift = can("cashier-shifts-open");
@@ -496,11 +505,16 @@ export default function Index({
             let data;
             try {
                 ({ data } = await axios.post(
-                    "/api/v1/pos/transactions/sync",
+                    // Lewat sesi layar kasir, bukan API bertoken (AS12):
+                    // jalur API selalu menjawab 401 bagi peramban.
+                    route("transactions.sync-offline"),
                     {
                         transactions: sendable.map((row) => ({
                             ...row.data,
                             queue_id: row.id,
+                            // Kapan penjualan ini TERCATAT di perangkat: yang
+                            // tercatat sebelum langganan habis tetap diterima.
+                            recorded_at: row.created_at,
                         })),
                     },
                     { headers: { Accept: "application/json" } }
@@ -509,10 +523,14 @@ export default function Index({
                 const reason =
                     error?.response?.data?.message ||
                     "Server tidak tersedia. Transaksi akan dicoba lagi.";
+                // 423 = langganan habis: antreannya DITAHAN, bukan gagal —
+                // status gagal dipangkas sesudah 30 hari, dan penjualan yang
+                // uangnya sudah diterima tidak boleh ikut terpangkas.
+                const ditahan = error?.response?.status === 423;
                 await Promise.all(
                     sendable.map((row) =>
                         updatePendingTransaction(row.id, {
-                            status: "failed",
+                            status: ditahan ? "pending" : "failed",
                             last_error: reason,
                             last_attempt_at: new Date().toISOString(),
                         })
@@ -535,6 +553,15 @@ export default function Index({
                     await updatePendingTransaction(row.id, {
                         status: "failed",
                         last_error: "Server mengembalikan hasil sync yang tidak lengkap.",
+                        last_attempt_at: new Date().toISOString(),
+                    });
+                    continue;
+                }
+
+                if (result.status === "held") {
+                    await updatePendingTransaction(row.id, {
+                        status: "pending",
+                        last_error: result.reason || "Ditahan sampai langganan diperpanjang.",
                         last_attempt_at: new Date().toISOString(),
                     });
                     continue;
@@ -726,6 +753,13 @@ export default function Index({
                 toast.error("Uang tunai split kurang dari nominal tender");
                 return;
             }
+        }
+
+        if (langgananHabis()) {
+            toast.error(
+                "Langganan Aishii POS sedang tidak aktif — kasir berhenti. Perpanjang di menu Langganan."
+            );
+            return;
         }
 
         setIsSubmitting(true);
