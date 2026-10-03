@@ -1,282 +1,160 @@
 import { Head, Link } from "@inertiajs/react";
 import PublicLayout from "@/Layouts/PublicLayout";
-import {
-    IconRoute,
-    IconRocket,
-    IconSparkles,
-    IconArrowRight,
-    IconBrandGithub,
-    IconCheck,
-    IconBulb,
-} from "@tabler/icons-react";
+import { IconArrowRight, IconCheck, IconHistory } from "@tabler/icons-react";
+import { BRAND } from "@/Utils/brand";
 
-const GITHUB_URL = "https://github.com/aryadwiputra/point-of-sales";
-
-const releases = [
+/*
+ * RIWAYAT VERSI, BUKAN "PERJALANAN".
+ *
+ * Versi pembuat aslinya berjudul "Perjalanan Dikasir" dan ditutup "Arah ke
+ * Depan" — rencana komunitas proyek hulu. Di bawah merek Aishii keduanya
+ * berbohong dengan cara yang berbeda: riwayat proyek orang lain yang diberi
+ * nama kita, dan rencana yang tidak pernah kita janjikan. Yang tersisa di
+ * sini cuma yang sudah TERJADI, dengan asal-usulnya disebut — dan tanpa satu
+ * tanggal pun untuk yang belum ada.
+ *
+ * Label "Rilis saat ini" juga dicabut: ia menempel di v2.10.4 sementara kode
+ * yang berjalan sudah v3.0.3. Label yang harus diingat diperbarui tangan
+ * adalah label yang basi.
+ */
+const rilis = [
     {
-        version: "v2.0",
-        tag: "Revamp besar",
-        date: "2025",
+        version: BRAND.name,
+        tag: "Keluarga Aishii",
+        asal: "aishii",
+        date: "Okt 2026",
         items: [
-            "Redesign UI modern & responsive",
-            "33 screenshot dokumentasi semua modul",
-            "Fondasi arsitektur service layer",
+            "Merek, warna, dan huruf keluarga Aishii",
+            "Ramah ponsel: diukur di lebar 320 dan 390 piksel, tanpa halaman yang bisa digeser ke samping",
+            "Bahasa Indonesia sejak kunjungan pertama, apa pun bahasa HP-nya",
+            "Pemindai barcode kamera dan printer struk USB tidak lagi diblokir header keamanan",
+            "Menu akun dengan Profil dan Keluar di ponsel",
         ],
     },
     {
-        version: "v2.1",
-        tag: "Komunikasi",
-        date: "2025",
+        version: "v3.0.3",
+        tag: "Keamanan",
+        date: "Sep 2026",
         items: [
-            "WhatsApp Gateway via whatsapp-web.js",
-            "App versioning terpusat (APP_VERSION)",
-            "Notifikasi low stock & aging",
+            "Token API kedaluwarsa sesuai pengaturan",
+            "Endpoint kasir API menuntut hak akses kasir",
+            "Penjaga hak istimewa dan verifikasi webhook",
         ],
     },
     {
-        version: "v2.2",
-        tag: "Upgrade Stack",
-        date: "2026",
+        version: "v3.0.1–v3.0.2",
+        tag: "Pemeliharaan",
+        date: "Sep 2026",
         items: [
-            "Upgrade Laravel 12 → 13",
-            "Inertia v3 + React 19",
-            "Multi-language (Indonesia & English)",
+            "Proses checkout web dan API memakai satu layanan yang sama",
+            "Uji otomatis berjalan di setiap perubahan",
         ],
     },
     {
-        version: "v2.3",
-        tag: "Penguatan POS",
-        date: "2026",
+        version: "v3.0.0",
+        tag: "Multi-outlet",
+        date: "Sep 2026",
         items: [
-            "Perbaikan cart & penanganan shift",
-            "Fallback stok per warehouse",
-            "Dokumentasi lengkap per modul",
+            "Outlet sebagai batas data dan operasional",
+            "Pengaturan per outlet dengan cadangan global",
+            "Pemilih outlet di bilah atas",
         ],
     },
     {
-        version: "v2.3.1",
-        tag: "Maintenance",
-        date: "Agu 2026",
+        version: "v2.10",
+        tag: "Pencetakan",
+        date: "Sep 2026",
+        items: ["Cetak otomatis dan ESC/POS lewat WebUSB"],
+    },
+    {
+        version: "v2.8–v2.9",
+        tag: "Operasional kasir",
+        date: "Sep 2026",
         items: [
-            "Rilis pemeliharaan & penyempurnaan",
-            "CI/CD pipeline (build + auto-deploy)",
-            "Landing page & situs publik baru",
-            "Perbaikan portal customer & invoice PDF",
+            "Sinkronisasi transaksi luring dan QRIS dinamis",
+            "Kas masuk-keluar shift, laporan X/Z, dan jenis pesanan",
         ],
     },
     {
-        version: "v2.4.0",
-        tag: "Dine-in QR",
+        version: "v2.4–v2.7",
+        tag: "Dine-in & pengenalan",
         date: "Sep 2026",
         items: [
-            "QR menu dan self-order pelanggan",
-            "Floor plan area dan meja",
-            "Status pesanan publik dan alur accept/reject staff",
+            "Menu QR dan pesanan mandiri dari meja",
+            "Wizard pemasangan pertama, tur, dan daftar periksa penyiapan",
         ],
     },
     {
-        version: "v2.5.0",
-        tag: "Onboarding",
-        date: "Sep 2026",
+        version: "v2.0–v2.3",
+        tag: "Fondasi",
+        date: "2025–2026",
         items: [
-            "First-install setup wizard",
-            "Unified local development command",
+            "Tampilan baru yang responsif",
+            "WhatsApp gateway dan pemberitahuan stok",
+            "Dua bahasa: Indonesia dan Inggris",
         ],
-    },
-    {
-        version: "v2.6.0",
-        tag: "Guided Tour",
-        date: "Sep 2026",
-        items: ["Guided tour untuk onboarding pengguna baru"],
-    },
-    {
-        version: "v2.7.0",
-        tag: "Setup Checklist",
-        date: "Sep 2026",
-        items: ["Tour replay dan checklist setup aplikasi"],
-    },
-    {
-        version: "v2.8.0",
-        tag: "Offline & QRIS",
-        date: "Sep 2026",
-        items: ["Offline transaction sync dan dynamic QRIS"],
-    },
-    {
-        version: "v2.9.0",
-        tag: "Cashier Operations",
-        date: "Sep 2026",
-        items: ["Cash movement shift, laporan X/Z, dan order types"],
-    },
-    {
-        version: "v2.10.0",
-        tag: "Printing",
-        date: "Sep 2026",
-        items: ["Auto-print dan ESC/POS WebUSB"],
-    },
-    {
-        version: "v2.10.1",
-        tag: "Maintenance",
-        date: "Sep 2026",
-        items: ["Perbaikan walk-in checkout dan dokumentasi"],
-    },
-    {
-        version: "v2.10.2",
-        tag: "Maintenance",
-        date: "Sep 2026",
-        items: ["Perbaikan tour dan replay behavior"],
-    },
-    {
-        version: "v2.10.3",
-        tag: "Maintenance",
-        date: "Sep 2026",
-        items: ["Stabilisasi setup wizard dan first-run flow"],
-    },
-    {
-        version: "v2.10.4",
-        tag: "Rilis saat ini",
-        date: "Sep 2026",
-        items: [
-            "Reuse warehouse seeded pada setup wizard",
-            "Perbaikan submission form setup wizard",
-        ],
-    },
-];
-
-const directions = [
-    {
-        icon: IconSparkles,
-        title: "Pengalaman mobile yang lebih dalam",
-        desc: "Penyempurnaan offline: conflict handling, retry queue, observability, dan dukungan master data yang lebih luas.",
-    },
-    {
-        icon: IconBulb,
-        title: "Integrasi ekosistem",
-        desc: "Ekspansi payment gateway & kurir pengiriman, konektor akuntansi, dan integrasi e-commerce.",
-    },
-    {
-        icon: IconRocket,
-        title: "Ekosistem pengembang",
-        desc: "Memperluas dokumentasi API yang sudah tersedia, tema/plugin, dan tooling yang memudahkan kontribusi.",
     },
 ];
 
 export default function Roadmap() {
     return (
         <PublicLayout active="/roadmap">
-            <Head title="Roadmap — Dikasir" />
+            <Head title="Riwayat versi" />
 
-            {/* Header */}
-            <section className="pt-20 pb-14 px-6 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
-                <div className="max-w-4xl mx-auto text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 text-sm font-medium mb-5 border border-primary-100 dark:border-primary-900">
-                        <IconRoute size={16} />
-                        Roadmap
+            <section className="px-4 pt-16 pb-14 sm:px-6 sm:pt-20 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
+                <div className="mx-auto max-w-3xl text-center">
+                    <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-4 py-2 text-sm font-medium text-primary-700 dark:border-primary-900 dark:bg-primary-950/50 dark:text-primary-300">
+                        <IconHistory size={16} />
+                        Riwayat versi
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
-                        Perjalanan Dikasir
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-5xl">
+                        Apa yang berubah, dan dari mana asalnya
                     </h1>
-                    <p className="mt-5 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Dari kasir sederhana menjadi ekosistem POS lengkap — dan masih terus
-                        berkembang bersama komunitas.
+                    <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+                        {BRAND.name} berangkat dari proyek open-source {BRAND.upstream.name} karya{" "}
+                        {BRAND.upstream.author}. Versi bernomor di bawah adalah riwayat proyek aslinya —
+                        fondasi yang kini dipakai {BRAND.name}. Yang terbaru di atas.
                     </p>
                 </div>
             </section>
 
-            {/* Timeline */}
-            <section className="pb-20 px-6">
-                <div className="max-w-3xl mx-auto">
-                    <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-900 space-y-10">
-                        {releases.map((rel) => (
+            <section className="px-4 pb-20 sm:px-6">
+                <div className="mx-auto max-w-3xl">
+                    <div className="relative space-y-10 border-l-2 border-primary-200 pl-8 dark:border-primary-900">
+                        {rilis.map((rel) => (
                             <div key={rel.version} className="relative">
-                                <div className="absolute -left-[41px] top-1.5 w-5 h-5 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-4 border-white dark:border-slate-950" />
-                                <div className="flex items-center gap-3 flex-wrap">
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                                        {rel.version}
-                                    </h2>
-                                    <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-900">
+                                <div className="absolute -left-[41px] top-1.5 size-5 rounded-full border-4 border-white bg-gradient-to-br from-primary-500 to-primary-700 dark:border-slate-950" />
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">{rel.version}</h2>
+                                    <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:border-primary-900 dark:bg-primary-950/60 dark:text-primary-300">
                                         {rel.tag}
                                     </span>
-                                    <span className="text-sm text-slate-400">{rel.date}</span>
+                                    {rel.asal !== "aishii" && (
+                                        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                            Proyek asli
+                                        </span>
+                                    )}
+                                    <span className="text-sm text-slate-500">{rel.date}</span>
                                 </div>
                                 <ul className="mt-3 space-y-2">
                                     {rel.items.map((item) => (
                                         <li key={item} className="flex items-start gap-2.5">
-                                            <IconCheck size={16} className="text-emerald-500 mt-1 shrink-0" />
-                                            <span className="text-sm text-slate-600 dark:text-slate-300">
-                                                {item}
-                                            </span>
+                                            <IconCheck size={16} className="mt-1 shrink-0 text-success-500" />
+                                            <span className="text-sm text-slate-600 dark:text-slate-300">{item}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
 
-            {/* Directions */}
-            <section className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
-                <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-                            Arah ke Depan
-                        </h2>
-                        <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Prioritas dibentuk bersama komunitas — dari feedback pengguna dan
-                            kontributor.
-                        </p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {directions.map((dir) => (
-                            <div
-                                key={dir.title}
-                                className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800"
-                            >
-                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-4">
-                                    <dir.icon size={22} className="text-white" />
-                                </div>
-                                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
-                                    {dir.title}
-                                </h3>
-                                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                    {dir.desc}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Community CTA */}
-            <section className="py-20 px-6">
-                <div className="max-w-3xl mx-auto">
-                    <div className="bg-slate-900 dark:bg-slate-800 rounded-3xl p-10 text-center">
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                            Roadmap dibentuk oleh komunitas
-                        </h2>
-                        <p className="text-slate-400 mb-7">
-                            Punya ide fitur? Laporkan bug? Atau ingin mengerjakan salah satu arah
-                            di atas? Semua dimulai dari GitHub.
-                        </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                            <a
-                                href={`${GITHUB_URL}/issues`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all"
-                            >
-                                <IconBrandGithub size={18} />
-                                Buat Issue / Ide
-                            </a>
-                            <Link
-                                href="/kontribusi"
-                                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-300 border border-slate-600 rounded-xl hover:border-primary-400 hover:text-primary-400 transition-colors"
-                            >
-                                Mulai berkontribusi
-                                <IconArrowRight size={16} />
-                            </Link>
-                        </div>
-                    </div>
+                    <p className="mt-12 text-sm text-slate-500 dark:text-slate-400">
+                        Rincian tiap versi proyek aslinya ada di berkas CHANGELOG kode sumbernya.{" "}
+                        <Link href="/kontribusi" className="inline-flex items-center gap-1 font-medium text-primary-600 hover:underline dark:text-primary-400">
+                            Kode sumber
+                            <IconArrowRight size={14} />
+                        </Link>
+                    </p>
                 </div>
             </section>
         </PublicLayout>

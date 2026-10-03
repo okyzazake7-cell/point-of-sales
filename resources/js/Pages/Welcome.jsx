@@ -1,326 +1,267 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import PublicLayout from "@/Layouts/PublicLayout";
+import { BRAND } from "@/Utils/brand";
 import {
-    IconShoppingCart,
-    IconWallet,
-    IconBuildingWarehouse,
-    IconReceiptTax,
-    IconChartBar,
-    IconReportMoney,
-    IconUsers,
-    IconBrandWhatsapp,
-    IconShieldLock,
-    IconCloudOff,
-    IconBrandGithub,
-    IconStar,
     IconArrowRight,
-    IconDeviceMobile,
-    IconTerminal2,
+    IconArrowUpRight,
+    IconBarcode,
+    IconBuildingWarehouse,
+    IconChartBar,
+    IconCheck,
+    IconCloudOff,
+    IconHeartHandshake,
+    IconPrinter,
     IconQrcode,
-    IconApi,
+    IconReceiptTax,
+    IconShieldCheck,
+    IconTruck,
+    IconWallet,
 } from "@tabler/icons-react";
 
-const GITHUB_URL = "https://github.com/aryadwiputra/point-of-sales";
-const DOCS_URL = `${GITHUB_URL}/blob/main/docs/getting-started.md`;
-const GALLERY_URL = `${GITHUB_URL}/blob/main/docs/screenshots.md`;
+/*
+ * HALAMAN DEPAN AISHII POS.
+ *
+ * Versi pembuat aslinya ditujukan kepada PENGEMBANG — bintang GitHub, "Get
+ * Source", perintah `git clone`. Di keluarga Aishii pembacanya pemilik toko:
+ * yang ia tanyakan "cocok untuk tokoku atau tidak", bukan "bagaimana
+ * memasangnya". Kode sumber dan atribusinya tetap terbuka di halaman "Kode
+ * sumber" dan di kaki halaman.
+ *
+ * Isinya sejajar dengan halaman `/pos` di Aishii (`app/utils/faktaPos.ts`) —
+ * orang yang datang lewat menu Aishii membaca janji yang sama di sini.
+ */
 
-const stats = [
-    { value: "200+", label: "GitHub Stars" },
-    { value: "44+", label: "Fitur Lengkap" },
-    { value: "MIT", label: "Open Source" },
-    { value: "8", label: "Modul Terintegrasi" },
-];
-
-const features = [
+const fitur = [
     {
-        icon: IconShoppingCart,
-        title: "POS Cepat & Mudah",
-        desc: "Cari produk via barcode atau keyboard, scan pakai kamera (PWA), cart hold/resume, dan checkout dalam hitungan detik.",
+        icon: IconBarcode,
+        title: "Kasir berbarcode, cepat di jam ramai",
+        desc: "Cari barang lewat barcode atau nama — kamera HP pun bisa jadi pemindai. Transaksi bisa ditahan dulu lalu dilanjutkan.",
     },
     {
         icon: IconWallet,
-        title: "Multi-Payment",
-        desc: "Tunai, transfer bank, QRIS (Midtrans), Xendit, hingga pay later (piutang) — semua dalam satu kasir.",
+        title: "Tunai, transfer, QRIS, sampai bayar nanti",
+        desc: "Satu kasir untuk semua cara bayar; yang dibayar nanti tercatat otomatis sebagai piutang pelanggan.",
     },
     {
         icon: IconBuildingWarehouse,
-        title: "Multi-Warehouse",
-        desc: "Stok terpisah per gudang/cabang, transfer antar gudang, stock opname, dan tracking batch/expiry (FEFO).",
+        title: "Stok per gudang dan per cabang",
+        desc: "Stok tiap gudang terpisah, bisa dipindah antar-gudang, dihitung ulang lewat stok opname, berikut tanggal kedaluwarsanya.",
     },
     {
-        icon: IconReceiptTax,
-        title: "PPN & Pajak",
-        desc: "Dukungan PPN 11% (exclusive/inclusive), data NPWP pelanggan, dan laporan pajak yang rapi.",
-    },
-    {
-        icon: IconChartBar,
-        title: "Laporan & Insight",
-        desc: "Laporan penjualan, profit & margin, performa per kasir, jam sibuk, dan repeat customer.",
-    },
-    {
-        icon: IconReportMoney,
-        title: "Piutang & Hutang",
-        desc: "Kelola piutang pelanggan & hutang supplier dengan aging analysis dan partial payment.",
-    },
-    {
-        icon: IconUsers,
-        title: "CRM & Loyalty",
-        desc: "Member tiers, poin loyalty, voucher, segmentasi pelanggan otomatis, dan campaign marketing.",
-    },
-    {
-        icon: IconBrandWhatsapp,
-        title: "WhatsApp Gateway",
-        desc: "Kirim struk, reminder piutang, dan promo via WhatsApp jika service Node dan perangkat sudah terhubung.",
-    },
-    {
-        icon: IconShieldLock,
-        title: "RBAC & Audit Log",
-        desc: "Kontrol akses per role (admin/kasir), persetujuan diskon, dan jejak audit before/after setiap perubahan.",
-    },
-    {
-        icon: IconCloudOff,
-        title: "Offline Mode",
-        desc: "Checkout yang sudah disiapkan dapat masuk antrean offline dan tersinkron saat koneksi kembali.",
+        icon: IconTruck,
+        title: "Pemasok, pesanan beli, dan retur",
+        desc: "Pesanan ke pemasok, penerimaan barang, retur, dan hutang yang jatuh tempo — riwayat kulakan tersimpan per nota.",
     },
     {
         icon: IconQrcode,
-        title: "Dine-in QR Menu",
-        desc: "Pelanggan scan QR meja, melihat menu, membuat pesanan, dan memantau status sampai diproses staff.",
+        title: "Pesanan dari meja lewat QR",
+        desc: "Pelanggan memindai QR di meja, memesan dari menunya, dan pesanannya masuk ke kasir.",
     },
     {
-        icon: IconApi,
-        title: "API & Integrasi",
-        desc: "API terautentikasi untuk master data, POS, checkout, shift, transaksi, dan sinkronisasi offline.",
+        icon: IconHeartHandshake,
+        title: "Member, poin, dan voucher",
+        desc: "Tingkat member, poin yang bisa ditukar, voucher, dan pengingat lewat WhatsApp untuk pelanggan setia.",
+    },
+    {
+        icon: IconChartBar,
+        title: "Laporan penjualan dan laba",
+        desc: "Penjualan, laba per barang, jam paling ramai, dan kinerja tiap kasir — bisa diunduh ke Excel atau PDF.",
+    },
+    {
+        icon: IconShieldCheck,
+        title: "Peran, persetujuan diskon, dan jejak perubahan",
+        desc: "Hak akses per peran, diskon besar menunggu persetujuan, dan tiap perubahan data tercatat sebelum-sesudahnya.",
+    },
+    {
+        icon: IconPrinter,
+        title: "Struk thermal, PPN, dan shift kasir",
+        desc: "Struk 58 atau 80 mm, PPN termasuk atau terpisah, dan kas laci dicocokkan tiap buka-tutup shift.",
     },
 ];
 
-const techStack = [
-    { name: "Laravel 13", color: "bg-red-500" },
-    { name: "Inertia.js 3", color: "bg-purple-500" },
-    { name: "React 19", color: "bg-cyan-500" },
-    { name: "Tailwind CSS", color: "bg-sky-500" },
-    { name: "MySQL", color: "bg-orange-500" },
-    { name: "PWA", color: "bg-emerald-500" },
+const sorotan = [
+    { icon: IconCloudOff, label: "Tetap mencatat saat internet putus" },
+    { icon: IconBuildingWarehouse, label: "Banyak gudang & cabang" },
+    { icon: IconReceiptTax, label: "PPN termasuk atau terpisah" },
+    { icon: IconBarcode, label: "Kamera HP jadi pemindai" },
 ];
 
-const screenshots = [
+const pilihBazar = [
+    "Ikut bazar, pameran, atau buka lapak musiman",
+    "Mau tahu untung-rugi sebelum menyewa lapak",
+    "Menu dari resep, modalnya dihitung per porsi",
+    "Kasir di HP yang tetap jalan tanpa sinyal",
+];
+
+const pilihPos = [
+    "Toko, minimarket, atau resto yang buka tiap hari",
+    "Barang berbarcode dan stok di lebih dari satu gudang",
+    "Belanja ke pemasok, retur, dan hutang kulakan",
+    "Meja restoran, member, dan tim kasir bergiliran",
+];
+
+const tangkapan = [
     { src: "/screenshots/01-dashboard.png", title: "Dashboard", span: "col-span-2 row-span-2" },
-    { src: "/screenshots/02-pos-checkout.png", title: "POS Checkout" },
-    { src: "/screenshots/06-stock-opnames.png", title: "Stock Opname" },
-    { src: "/screenshots/12-receivables.png", title: "Receivables" },
-    { src: "/screenshots/15-sales-report.png", title: "Sales Report" },
+    { src: "/screenshots/02-pos-checkout.png", title: "Kasir" },
+    { src: "/screenshots/06-stock-opnames.png", title: "Stok opname" },
+    { src: "/screenshots/12-receivables.png", title: "Piutang" },
+    { src: "/screenshots/15-sales-report.png", title: "Laporan penjualan" },
 ];
 
-const faqs = [
+const tanya = [
     {
-        q: "Apakah Dikasir benar-benar gratis?",
-        a: "Ya. Dikasir dirilis di bawah lisensi MIT, sehingga bebas digunakan, dimodifikasi, dan didistribusikan. Hosting, hardware, biaya payment gateway, dan layanan pihak ketiga tetap menjadi tanggung jawab pengguna.",
+        q: `Apa bedanya ${BRAND.name} dengan Aishii Bazar?`,
+        a: "Aishii Bazar menuntun jualan di bazar dan lapak musiman: menghitung untung-rugi sebelum menyewa lapak, belanja bahan, kasir di HP, sampai laporan per bazar. Aishii POS untuk toko yang buka tiap hari dengan barang berbarcode, gudang, pemasok, dan tim kasir. Keduanya aplikasi terpisah dengan akunnya masing-masing.",
     },
     {
-        q: "Bisakah dipakai untuk bisnis multi-cabang?",
-        a: "Bisa. Dikasir mendukung multi-warehouse dengan stok terpisah per gudang/cabang, transfer stok antar gudang, dan laporan per gudang.",
+        q: "Bisakah dipakai untuk banyak cabang?",
+        a: "Bisa. Stok terpisah per gudang atau cabang, barang bisa dipindah antar-gudang, dan laporannya bisa dibaca per gudang.",
     },
     {
         q: "Bagaimana kalau internet di toko mati?",
-        a: "Checkout yang sudah disiapkan dapat masuk antrean lokal dan tersinkron otomatis saat koneksi kembali. Menambahkan produk baru ke cart saat offline masih memiliki keterbatasan karena cart berbasis server.",
+        a: "Pembayaran yang sudah disiapkan masuk antrean di perangkat dan terkirim sendiri begitu koneksi kembali. Menambah barang baru ke keranjang saat luring masih terbatas, sebab keranjangnya disimpan di server.",
     },
     {
-        q: "Apa saja yang dibutuhkan untuk instalasi?",
-        a: "PHP 8.3+, MySQL/MariaDB, Composer, Node.js 18+, dan npm. Untuk WhatsApp Gateway, siapkan Chrome/Chromium dan service Node terpisah. Semua panduan ada di dokumentasi getting-started.",
+        q: "Perlu perangkat khusus?",
+        a: "Tidak. Cukup HP, tablet, atau komputer dengan peramban. Kamera HP bisa menjadi pemindai barcode, dan printer thermal disambungkan langsung lewat USB di peramban Chrome.",
     },
     {
-        q: "Bagaimana cara berkontribusi?",
-        a: "Fork repository, buat branch dari development (feature/nama-fitur), lalu buat Pull Request ke development. Pastikan php artisan test lulus sebelum submit.",
+        q: "Apakah kode sumbernya terbuka?",
+        a: `Ya. ${BRAND.name} dibangun di atas proyek open-source ${BRAND.upstream.name} karya ${BRAND.upstream.author} dengan lisensi ${BRAND.upstream.license}, dan kodenya bisa dibaca siapa pun.`,
     },
 ];
 
-const quickStart = `git clone https://github.com/aryadwiputra/point-of-sales
-cd point-of-sales
-composer install
-PUPPETEER_SKIP_DOWNLOAD=true npm install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate --seed
-php artisan storage:link
-
-# Jalankan server, queue, logs, dan Vite
-composer run dev
-
-# Buka http://localhost:8000 dan selesaikan wizard /setup`;
-
 export default function Welcome() {
+    const { auth } = usePage().props;
+    const ajakan = auth?.user
+        ? { label: "Buka Dashboard", href: "/dashboard" }
+        : { label: "Masuk", href: "/login" };
+
     return (
         <PublicLayout>
-            <Head title="Dikasir — Sistem Kasir Open Source untuk UMKM" />
+            <Head title={BRAND.tagline} />
 
-            {/* ============ HERO ============ */}
-            <section className="pt-28 pb-16 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-4xl mx-auto">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 text-sm font-medium mb-6 border border-primary-100 dark:border-primary-900">
-                            <IconBrandGithub size={16} />
-                            Open Source · MIT License · 200+ Stars
-                        </div>
+            {/* ============ PEMBUKA ============ */}
+            <section className="relative overflow-hidden px-4 pt-16 pb-12 sm:px-6 sm:pt-24">
+                <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+                    <div className="absolute -top-40 left-1/2 size-[40rem] -translate-x-1/2 rounded-full bg-primary-500/15 blur-3xl" />
+                    <div className="absolute top-1/3 -right-32 size-[24rem] rounded-full bg-accent-500/10 blur-3xl" />
+                </div>
 
-                        <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight">
-                            Sistem Kasir Modern
-                            <span className="block mt-2 bg-gradient-to-r from-primary-500 to-primary-600 bg-clip-text text-transparent">
-                                Gratis &amp; Open Source
-                            </span>
-                        </h1>
+                <div className="mx-auto max-w-3xl text-center">
+                    <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-4 py-1.5 text-sm font-medium text-primary-700 dark:border-primary-900 dark:bg-primary-950/50 dark:text-primary-300">
+                        Keluarga Aishii
+                    </span>
 
-                        <p className="mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Dikasir adalah aplikasi point of sale lengkap untuk warung, toko, dan
-                            UMKM Indonesia — multi-warehouse, PPN, loyalty &amp; CRM, WhatsApp
-                            gateway, hingga offline mode. Self-hosted, data 100% milik Anda.
-                        </p>
+                    <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+                        Kasir toko yang memegang{" "}
+                        <span className="bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent">
+                            stok, pemasok, dan cabangmu
+                        </span>
+                    </h1>
 
-                        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a
-                                href={GITHUB_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl hover:from-primary-600 hover:to-primary-700 shadow-xl shadow-primary-500/30 transition-all flex items-center justify-center gap-2"
-                            >
-                                <IconStar size={20} />
-                                Star di GitHub
-                                <IconArrowRight size={18} />
-                            </a>
-                            <Link
-                                href="/login"
-                                className="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-primary-300 dark:hover:border-primary-700 transition-all flex items-center justify-center gap-2"
-                            >
-                                <IconDeviceMobile size={20} />
-                                Coba Demo
-                            </Link>
-                        </div>
+                    <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+                        {BRAND.name} mencatat penjualan dengan barcode, menjaga stok di tiap gudang,
+                        mengurus belanja ke pemasok, dan menyusun laporan laba — dalam bahasa sehari-hari,
+                        di HP maupun komputer.
+                    </p>
+
+                    <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                        <Link
+                            href={ajakan.href}
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary-600/25 transition-colors hover:bg-primary-700 sm:w-auto"
+                        >
+                            {ajakan.label}
+                            <IconArrowRight size={18} />
+                        </Link>
+                        <Link
+                            href="/fitur"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 sm:w-auto"
+                        >
+                            Lihat semua fitur
+                        </Link>
                     </div>
 
-                    {/* App preview */}
-                    <div className="mt-16 relative">
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-950 to-transparent z-10 pointer-events-none h-32 bottom-0 top-auto" />
-                        <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl bg-white dark:bg-slate-900">
-                            <div className="bg-slate-100 dark:bg-slate-800 px-4 py-3 flex items-center gap-2">
-                                <div className="flex gap-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                                    <div className="w-3 h-3 rounded-full bg-green-400" />
-                                </div>
-                                <div className="flex-1 text-center text-xs text-slate-500">
-                                    dikasir.web.id
-                                </div>
+                    <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
+                        Jualan di bazar atau lapak musiman?{" "}
+                        <a href={BRAND.parentUrl} className="inline-flex items-center gap-0.5 font-medium text-primary-600 hover:underline dark:text-primary-400">
+                            Aishii Bazar dibuat untuk itu
+                            <IconArrowUpRight size={14} />
+                        </a>
+                    </p>
+                </div>
+
+                {/* Pratinjau aplikasi */}
+                <div className="relative mx-auto mt-14 max-w-5xl">
+                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+                        <div className="flex items-center gap-2 bg-slate-100 px-4 py-3 dark:bg-slate-800">
+                            <div className="flex gap-2" aria-hidden="true">
+                                <div className="size-3 rounded-full bg-red-400" />
+                                <div className="size-3 rounded-full bg-yellow-400" />
+                                <div className="size-3 rounded-full bg-green-400" />
                             </div>
-                            <img
-                                src="/media/revamp-pos.png"
-                                alt="Preview POS Dikasir"
-                                className="w-full"
-                                loading="lazy"
-                            />
+                            <div className="flex-1 truncate text-center text-xs text-slate-500">
+                                {BRAND.name}
+                            </div>
                         </div>
+                        <img
+                            src="/screenshots/02-pos-checkout.png"
+                            alt={`Layar kasir ${BRAND.name}`}
+                            width="1440"
+                            height="900"
+                            className="w-full"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </section>
 
-            {/* ============ STATS ============ */}
-            <section className="py-12 px-6 border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
-                <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
-                    {stats.map((stat) => (
-                        <div key={stat.label} className="text-center">
-                            <div className="text-3xl md:text-4xl font-extrabold text-primary-600 dark:text-primary-400">
-                                {stat.value}
+            {/* ============ SOROTAN ============ */}
+            <section className="border-y border-slate-200 bg-white px-4 py-10 dark:border-slate-800 dark:bg-slate-900/50 sm:px-6">
+                <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 md:grid-cols-4">
+                    {sorotan.map((s) => (
+                        <div key={s.label} className="flex flex-col items-center gap-2 text-center">
+                            <div className="flex size-11 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:text-primary-400">
+                                <s.icon size={24} />
                             </div>
-                            <div className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                {stat.label}
-                            </div>
+                            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{s.label}</p>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* ============ SCREENSHOTS ============ */}
-            <section id="screenshot" className="py-20 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-14">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Tampilan Aplikasi
+            {/* ============ FITUR ============ */}
+            <section id="fitur" className="px-4 py-20 sm:px-6">
+                <div className="mx-auto max-w-6xl">
+                    <div className="mx-auto max-w-2xl text-center">
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                            Yang dikerjakan {BRAND.name}
                         </h2>
-                        <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            Dari kasir harian hingga laporan manajemen — semua dalam satu aplikasi
-                            yang rapi dan cepat.
+                        <p className="mt-4 text-slate-600 dark:text-slate-400">
+                            Catat sekali di kasir, terpakai di mana-mana: stok gudang berkurang sendiri,
+                            piutang tercatat, dan laporan laba tersusun tanpa diketik ulang.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[140px] md:auto-rows-[180px]">
-                        {screenshots.map((shot) => (
+                    <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {fitur.map((f) => (
                             <div
-                                key={shot.title}
-                                className={`${shot.span || ""} relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 group`}
+                                key={f.title}
+                                className="h-full rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-primary-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
                             >
-                                <img
-                                    src={shot.src}
-                                    alt={shot.title}
-                                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
-                                    <span className="text-xs font-medium text-white">
-                                        {shot.title}
-                                    </span>
+                                <div className="flex size-11 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:text-primary-400">
+                                    <f.icon size={24} />
                                 </div>
+                                <h3 className="mt-4 font-semibold text-slate-900 dark:text-white">{f.title}</h3>
+                                <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{f.desc}</p>
                             </div>
                         ))}
                     </div>
 
-                    <div className="text-center mt-8">
-                        <a
-                            href={GALLERY_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 transition-colors"
-                        >
-                            Lihat galeri lengkap (33 screenshot)
-                            <IconArrowRight size={16} />
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            {/* ============ FEATURES ============ */}
-            <section id="fitur" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Fitur Lengkap untuk Bisnis Nyata
-                        </h2>
-                        <p className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                            44+ modul terintegrasi — dari transaksi harian sampai analitik
-                            lanjutan, dirancang untuk kebutuhan UMKM Indonesia.
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {features.map((feature) => (
-                            <div
-                                key={feature.title}
-                                className="group p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-lg hover:shadow-primary-500/5 transition-all"
-                            >
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <feature.icon size={24} className="text-white" />
-                                </div>
-                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                    {feature.desc}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="text-center mt-10">
+                    <div className="mt-10 text-center">
                         <Link
                             href="/fitur"
-                            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-950/40 transition-colors"
+                            className="inline-flex items-center gap-2 rounded-xl border border-primary-200 px-6 py-3 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 dark:border-primary-800 dark:text-primary-300 dark:hover:bg-primary-950/40"
                         >
                             Jelajahi semua fitur
                             <IconArrowRight size={16} />
@@ -329,150 +270,132 @@ export default function Welcome() {
                 </div>
             </section>
 
-            {/* ============ TECH STACK ============ */}
-            <section className="py-16 px-6">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
-                        Tech Stack Modern
-                    </h2>
-                    <p className="text-slate-600 dark:text-slate-400 mb-10">
-                        Dibangun dengan teknologi yang teruji, cepat, dan mudah dikembangkan
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {techStack.map((tech) => (
-                            <div
-                                key={tech.name}
-                                className="flex items-center gap-3 px-6 py-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700"
+            {/* ============ BAZAR ATAU TOKO ============ */}
+            <section className="border-t border-slate-200 bg-white px-4 py-20 dark:border-slate-800 dark:bg-slate-900/50 sm:px-6">
+                <div className="mx-auto max-w-5xl">
+                    <div className="mx-auto max-w-2xl text-center">
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                            Bazar atau toko?
+                        </h2>
+                        <p className="mt-4 text-slate-600 dark:text-slate-400">
+                            Keluarga Aishii punya dua aplikasi. Pilih yang sesuai dengan cara kamu berjualan.
+                        </p>
+                    </div>
+
+                    <div className="mt-12 grid gap-6 md:grid-cols-2">
+                        <div className="rounded-2xl border border-slate-200 p-6 dark:border-slate-800">
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Aishii Bazar</h3>
+                            <ul className="mt-4 space-y-2">
+                                {pilihBazar.map((b) => (
+                                    <li key={b} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                        <IconCheck size={18} className="mt-0.5 shrink-0 text-success-500" />
+                                        {b}
+                                    </li>
+                                ))}
+                            </ul>
+                            <a
+                                href={BRAND.parentUrl}
+                                className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
                             >
-                                <div className={`w-3 h-3 rounded-full ${tech.color}`} />
-                                <span className="font-medium text-slate-700 dark:text-slate-300">
-                                    {tech.name}
-                                </span>
+                                Kenalan dengan Aishii Bazar
+                                <IconArrowUpRight size={16} />
+                            </a>
+                        </div>
+                        <div className="rounded-2xl border-2 border-primary-500 p-6">
+                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{BRAND.name}</h3>
+                            <ul className="mt-4 space-y-2">
+                                {pilihPos.map((b) => (
+                                    <li key={b} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                        <IconCheck size={18} className="mt-0.5 shrink-0 text-success-500" />
+                                        {b}
+                                    </li>
+                                ))}
+                            </ul>
+                            <Link
+                                href={ajakan.href}
+                                className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary-600 hover:underline dark:text-primary-400"
+                            >
+                                {ajakan.label}
+                                <IconArrowRight size={16} />
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ============ TAMPILAN ============ */}
+            <section className="border-t border-slate-200 px-4 py-20 dark:border-slate-800 sm:px-6">
+                <div className="mx-auto max-w-6xl">
+                    <div className="mx-auto mb-12 max-w-2xl text-center">
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                            Tampilan aplikasinya
+                        </h2>
+                        <p className="mt-4 text-slate-600 dark:text-slate-400">
+                            Dari kasir harian sampai laporan untuk pemilik — semuanya di satu aplikasi.
+                        </p>
+                    </div>
+
+                    <div className="grid auto-rows-[120px] grid-cols-2 gap-4 sm:auto-rows-[180px] md:grid-cols-3">
+                        {tangkapan.map((t) => (
+                            <div
+                                key={t.title}
+                                className={`${t.span || ""} group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800`}
+                            >
+                                <img
+                                    src={t.src}
+                                    alt={t.title}
+                                    className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                                    loading="lazy"
+                                />
+                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
+                                    <span className="text-xs font-medium text-white">{t.title}</span>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ============ INSTALLATION ============ */}
-            <section id="instalasi" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
-                <div className="max-w-4xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Instalasi dalam Hitungan Menit
-                        </h2>
-                        <p className="mt-4 text-slate-600 dark:text-slate-400">
-                             Clone, install, lalu buka wizard setup untuk membuat akun admin,
-                             profil toko, kategori, dan gudang utama.
-                        </p>
-                    </div>
-
-                    <div className="bg-slate-900 dark:bg-slate-800 rounded-2xl p-6 overflow-hidden">
-                        <div className="flex items-center gap-2 mb-4">
-                            <IconTerminal2 size={16} className="text-slate-500" />
-                            <span className="text-xs font-mono text-slate-500">bash</span>
-                        </div>
-                        <pre className="text-sm text-slate-300 font-mono overflow-x-auto leading-relaxed">
-                            {quickStart}
-                        </pre>
-                    </div>
-
-                    <div className="mt-6 text-center">
-                        <a
-                            href={DOCS_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 transition-colors"
-                        >
-                            Baca dokumentasi lengkap
-                            <IconArrowRight size={16} />
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            {/* ============ DEMO ============ */}
-            <section className="py-16 px-6">
-                <div className="max-w-3xl mx-auto">
-                    <div className="rounded-2xl border border-primary-200 dark:border-primary-900 bg-primary-50/50 dark:bg-primary-950/30 p-8 text-center">
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
-                            Ingin Coba Langsung?
-                        </h2>
-                        <p className="text-slate-600 dark:text-slate-400 mb-6">
-                             Untuk mencoba aplikasi, jalankan instalasi lokal dan selesaikan
-                             wizard setup. Seeder utama tidak membuat akun demo atau sample data.
-                        </p>
-                        <Link
-                            href="/setup"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-2xl hover:from-primary-600 hover:to-primary-700 shadow-lg shadow-primary-500/25 transition-all"
-                        >
-                            Mulai Setup
-                            <IconArrowRight size={18} />
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* ============ FAQ ============ */}
-            <section id="faq" className="py-20 px-6 bg-white dark:bg-slate-900/50 border-y border-slate-200 dark:border-slate-800">
-                <div className="max-w-3xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                            Pertanyaan Umum
-                        </h2>
-                    </div>
-                    <div className="space-y-4">
-                        {faqs.map((faq) => (
+            {/* ============ TANYA JAWAB ============ */}
+            <section className="border-t border-slate-200 bg-white px-4 py-20 dark:border-slate-800 dark:bg-slate-900/50 sm:px-6">
+                <div className="mx-auto max-w-3xl">
+                    <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                        Yang sering ditanyakan
+                    </h2>
+                    <div className="mt-10 space-y-3">
+                        {tanya.map((t) => (
                             <details
-                                key={faq.q}
-                                className="group rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 open:shadow-md transition-all"
+                                key={t.q}
+                                className="group rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                             >
-                                <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none">
-                                    <span className="font-medium text-slate-900 dark:text-white">
-                                        {faq.q}
-                                    </span>
-                                    <span className="text-primary-500 group-open:rotate-45 transition-transform text-lg">
-                                        +
-                                    </span>
+                                <summary className="cursor-pointer list-none font-semibold text-slate-900 dark:text-white">
+                                    {t.q}
                                 </summary>
-                                <p className="px-5 pb-5 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                    {faq.a}
-                                </p>
+                                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{t.a}</p>
                             </details>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ============ CTA ============ */}
-            <section className="py-20 px-6">
-                <div className="max-w-4xl mx-auto">
-                    <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-3xl p-12 text-center text-white">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            Siap Kelola Bisnis dengan Dikasir?
-                        </h2>
-                        <p className="text-lg opacity-90 mb-8 max-w-xl mx-auto">
-                             Gratis digunakan dan dimodifikasi di bawah lisensi MIT, dengan data
-                             tetap berada di infrastruktur Anda.
-                        </p>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a
-                                href={GITHUB_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 font-semibold rounded-2xl hover:bg-slate-50 transition-colors"
-                            >
-                                <IconBrandGithub size={20} />
-                                Star di GitHub
-                            </a>
-                            <Link
-                                href="/login"
-                                className="inline-flex items-center gap-2 px-8 py-4 border border-white/40 text-white font-semibold rounded-2xl hover:bg-white/10 transition-colors"
-                            >
-                                Coba Demo
-                                <IconArrowRight size={18} />
-                            </Link>
-                        </div>
+            {/* ============ AJAKAN PENUTUP ============ */}
+            <section className="px-4 py-20 sm:px-6">
+                <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl bg-gradient-to-br from-primary-700 to-primary-950 px-6 py-16 text-center">
+                    <div className="pointer-events-none absolute -top-24 -right-16 size-72 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+                    <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                        Toko yang rapi mulai dari kasirnya
+                    </h2>
+                    <p className="mx-auto mt-4 max-w-xl text-primary-100">
+                        Masuk dengan akun yang dibuat pemilik toko, lalu mulai mencatat penjualan pertama.
+                    </p>
+                    <div className="mt-8 flex justify-center">
+                        <Link
+                            href={ajakan.href}
+                            className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-base font-semibold text-primary-700 transition-colors hover:bg-primary-50"
+                        >
+                            {ajakan.label}
+                            <IconArrowRight size={18} />
+                        </Link>
                     </div>
                 </div>
             </section>

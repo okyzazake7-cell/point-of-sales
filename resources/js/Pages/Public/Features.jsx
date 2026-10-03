@@ -1,5 +1,6 @@
-import { Head } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import PublicLayout from "@/Layouts/PublicLayout";
+import { BRAND } from "@/Utils/brand";
 import {
     IconShoppingCart,
     IconBuildingWarehouse,
@@ -15,13 +16,11 @@ import {
     IconApi,
 } from "@tabler/icons-react";
 
-const GITHUB_URL = "https://github.com/aryadwiputra/point-of-sales";
-
 const modules = [
     {
         icon: IconShoppingCart,
         title: "POS & Transaksi",
-        desc: "Inti dari Dikasir — kasir yang cepat, fleksibel, dan bisa diandalkan setiap hari.",
+        desc: `Inti dari ${BRAND.name} — kasir yang cepat, fleksibel, dan bisa diandalkan setiap hari.`,
         screenshot: "/screenshots/02-pos-checkout.png",
         features: [
             "Pencarian produk via barcode / keyword",
@@ -165,19 +164,24 @@ const modules = [
 ];
 
 export default function Features() {
+    const { auth } = usePage().props;
+    const ajakan = auth?.user
+        ? { label: "Buka Dashboard", href: "/dashboard" }
+        : { label: "Masuk", href: "/login" };
+
     return (
         <PublicLayout active="/fitur">
-            <Head title="Fitur Lengkap — Dikasir" />
+            <Head title="Fitur lengkap" />
 
             {/* Header */}
-            <section className="pt-20 pb-14 px-6 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
+            <section className="pt-16 sm:pt-20 pb-14 px-4 sm:px-6 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white">
                         Fitur Lengkap untuk Bisnis Nyata
                     </h1>
                     <p className="mt-5 text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
-                        Fitur terintegrasi dari kasir harian sampai analitik lanjutan, gratis
-                        digunakan dan open source di bawah lisensi MIT.
+                        Dari kasir harian sampai laporan untuk pemilik — saling menyambung, untuk
+                        toko yang buka tiap hari.
                     </p>
                     <div className="mt-8 flex flex-wrap justify-center gap-3">
                         {modules.map((m) => (
@@ -194,7 +198,7 @@ export default function Features() {
             </section>
 
             {/* Modules */}
-            <section className="pb-20 px-6">
+            <section className="pb-20 px-4 sm:px-6">
                 <div className="max-w-7xl mx-auto space-y-20">
                     {modules.map((mod, idx) => (
                         <div
@@ -246,26 +250,27 @@ export default function Features() {
                 </div>
             </section>
 
-            {/* CTA */}
-            <section className="pb-20 px-6">
+            {/* Ajakan */}
+            <section className="pb-20 px-4 sm:px-6">
                 <div className="max-w-3xl mx-auto text-center">
-                    <div className="bg-slate-900 dark:bg-slate-800 rounded-3xl p-10">
+                    <div className="rounded-3xl bg-gradient-to-br from-primary-700 to-primary-950 p-8 sm:p-10">
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                            Ada fitur yang kamu butuhkan?
+                            Siap mencatat penjualan pertama?
                         </h2>
-                        <p className="text-slate-400 mb-6">
-                            Karena open source, fitur baru bisa datang dari siapa saja —
-                            termasuk kamu.
+                        <p className="text-primary-100 mb-6">
+                            Masuk dengan akun yang dibuat pemilik toko. Ada pertanyaan?{" "}
+                            <a href={`${BRAND.parentUrl}/bantuan`} className="font-semibold text-white underline">
+                                Baca bantuan Aishii
+                            </a>
+                            .
                         </p>
-                        <a
-                            href={`${GITHUB_URL}/issues`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all"
+                        <Link
+                            href={ajakan.href}
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-700 font-semibold rounded-xl hover:bg-primary-50 transition-colors"
                         >
-                            Ajukan ide fitur di GitHub
+                            {ajakan.label}
                             <IconArrowRight size={16} />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </section>
