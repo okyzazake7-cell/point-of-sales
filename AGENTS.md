@@ -1,10 +1,32 @@
-# AGENTS.md — Point of Sales
+# AGENTS.md — Aishii POS
 
-Open-source POS system (200+ stars). Laravel 13 + Inertia 3.0 + React 19.
+Aishii POS: the store POS of the Aishii family (https://aishiierp.com). A public,
+MIT-licensed fork of `aryadwiputra/point-of-sales` (Point of Sales by Arya Dwi
+Putra). Laravel 13 + Inertia 3.0 + React 19.
 
 ## Important: This Repo
 
-**Remote:** `git@github.com:aryadwiputra/point-of-sales.git`
+**Remote:** `https://github.com/okyzazake7-cell/point-of-sales` (fork).
+**Upstream:** `https://github.com/aryadwiputra/point-of-sales` — keep the
+original copyright in `LICENSE`, and send generic fixes upstream.
+
+**Aishii-specific rules (wave AS, `docs/permintaan-3okt.md` in the Aishii repo):**
+- The brand lives in ONE place per world: `config/brand.php` (PHP/Blade) and
+  `resources/js/Utils/brand.js` (React). Never type the product name in a page;
+  `tests/Feature/BrandTest.php` fails when the two twins drift.
+- Colors come from tokens (`tailwind.config.js` + `resources/css/design-tokens.css`):
+  `primary` = the Aishii palette (#752e8e), `accent` = violet. Do not hard-code
+  `indigo-*`/hex colors in pages — swap tokens instead, so upstream merges stay small.
+- Mobile-friendliness is MEASURED: `node scripts/audit-ponsel.mjs` (server on
+  :8000 with `php artisan seed:demo --force`) must report
+  `0 halaman×lebar meluber` at 390 and 320 px before every PR touching UI.
+- Interface language defaults to Indonesian; `SetLocale` must not read
+  `Accept-Language`. English stays available as an explicit choice.
+- `Permissions-Policy` keeps `camera=(self)` and `usb=(self)`: the camera barcode
+  scanner and WebUSB receipt printing depend on them.
+- `.github/workflows/deploy.yml` still targets the original author's server
+  (`/var/www/dikasir.web.id`, `VPS_*` secrets). Where Aishii POS is hosted is the
+  owner's decision (AS5) — change the workflow before anything is pushed to `main`.
 
 **Branch structure:**
 - `main` — production. Protected. PR only from `development`.
@@ -32,7 +54,7 @@ Open-source POS system (200+ stars). Laravel 13 + Inertia 3.0 + React 19.
 ## CI / Deploy
 
 - **CI validates and tests** — `.github/workflows/deploy.yml` validates Composer, runs `npm run build`, and executes `php artisan test --compact` with PHP 8.4, Node 22, and SQLite. Run `php artisan test` locally before every PR.
-- **Push to `main` auto-deploys to production** (`dikasir.web.id` via SSH). Never push directly to `main` — use the release process below.
+- **Push to `main` runs the deploy job** — in this fork it still points at the original author's server (`dikasir.web.id` via SSH, secrets this fork does not have), so it fails until the owner decides on hosting. Never push directly to `main`.
 - Deploy VPS uses Node 24.15 + PHP 8.4 (`php8.4 artisan migrate --force`).
 - npm is the package manager of record (`package-lock.json` committed, `bun.lock` gitignored). CI/deploy run `npm ci`. Don't switch to bun/yarn lockfiles.
 
@@ -90,7 +112,7 @@ Production must trigger `php artisan schedule:run` every minute for the schedule
 - **Controllers**: `app/Http/Controllers/Apps/` — per-module web controllers (~35)
 - **API Controllers**: `app/Http/Controllers/Api/` — REST API (Sanctum token auth)
 - **Services**: `app/Services/` — ~22 services: AuditLog, BatchService, CashierShiftService, DineOrderService, GoodsReceivingService, LoyaltyService, PaymentGatewayManager, PricingService, PriceListService, PurchaseOrderService, ReorderService, StockMutationService, StockTransferService, UnitConversionService, WhatsAppService, etc.
-- **Layouts**: `POSLayout.jsx` (POS), `DashboardLayout.jsx` (admin), `AuthenticatedLayout.jsx` (profile), `GuestLayout.jsx` (auth), `PublicLayout.jsx` (public dine-in)
+- **Layouts**: `POSLayout.jsx` (POS), `DashboardLayout.jsx` (admin + profile), `GuestLayout.jsx` (reset password, shared receipt), `PublicLayout.jsx` (public marketing pages); `AuthenticatedLayout.jsx` is no longer used
 - **Routes**: `routes/web.php` (~50+ dashboard routes), `routes/api.php` (webhooks + REST API), `routes/auth.php` (Breeze)
 - **Inertia shared props**: `HandleInertiaRequests.php` — auth, permissions, notifications (low stock, receivables, payables aging), active shift, store profile, appVersion
 
@@ -155,7 +177,7 @@ After seeding, a default `PUSAT` warehouse is created and existing product stock
 - **Routing**: Ziggy `route()` helper available
 - **Offline mode**: `resources/js/Utils/offlineDb.js` (IndexedDB via `idb`) queues transactions when offline, flushes on reconnect; idempotent via `client_uuid` — server price wins
 - **ESC/POS printing**: `resources/js/Utils/escpos.js` (WebUSB, Chromium-only; fallback `window.print()`)
-- **Tailwind tokens**: `primary` (indigo), `accent` (cyan), `success` (emerald), `warning` (amber), `danger` (rose)
+- **Tailwind tokens**: `primary` (Aishii purple, #752e8e scale), `accent` (violet), `success` (emerald), `warning` (amber), `danger` (rose)
 - **i18n**: Indonesian (`id.json`) and English (`en.json`) in `resources/js/i18n/locales`
 
 ## Docs

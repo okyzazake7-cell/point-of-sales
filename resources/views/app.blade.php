@@ -38,13 +38,13 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="id_ID">
     <meta property="og:url" content="{{ config('app.url') }}/">
-    <meta property="og:image" content="{{ config('app.url') }}/images/og-image.png">
+    <meta property="og:image" content="{{ config('app.url') }}/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ config('brand.name') }} — {{ config('brand.tagline') }}">
     <meta name="twitter:description" content="{{ config('brand.description') }}">
-    <meta name="twitter:image" content="{{ config('app.url') }}/images/og-image.png">
+    <meta name="twitter:image" content="{{ config('app.url') }}/images/og-image.jpg">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png">

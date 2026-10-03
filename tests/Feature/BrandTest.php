@@ -31,6 +31,20 @@ class BrandTest extends TestCase
         $this->assertStringNotContainsString('fonts.googleapis.com', $html);
     }
 
+    public function test_share_preview_image_exists_and_fits_whatsapp(): void
+    {
+        $html = $this->get('/login')->assertOk()->getContent();
+        preg_match('/<meta property="og:image" content="[^"]*?(\/images\/[^"]+)">/', $html, $og);
+        $this->assertNotEmpty($og, 'og:image tidak ditemukan');
+
+        $berkas = public_path(ltrim($og[1], '/'));
+        $this->assertFileExists($berkas);
+        // WhatsApp kerap tidak menampilkan pratinjau bergambar di atas ±300 KB.
+        $this->assertLessThan(300 * 1024, filesize($berkas));
+        [$lebar, $tinggi] = getimagesize($berkas);
+        $this->assertSame([1200, 630], [$lebar, $tinggi]);
+    }
+
     public function test_brand_name_has_one_value_in_php_and_react(): void
     {
         $js = file_get_contents(resource_path('js/Utils/brand.js'));
