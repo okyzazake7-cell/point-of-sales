@@ -52,12 +52,12 @@ return [
         /*
          * Description rendered on the home page of the API documentation (`/docs/api`).
          */
-        'description' => 'REST API untuk Dikasir — sistem kasir (POS) open source untuk UMKM Indonesia. '
+        'description' => 'REST API untuk Aishii POS — kasir toko keluarga Aishii untuk UMKM Indonesia. '
             .'Semua endpoint (kecuali login/register/webhooks) memerlukan Bearer token dari POST /api/v1/auth/login.',
     ],
 
     'ui' => [
-        'title' => 'Dikasir API Documentation',
+        'title' => 'Dokumentasi API Aishii POS',
     ],
 
     'renderer' => 'elements',

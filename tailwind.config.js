@@ -13,8 +13,11 @@ export default {
     theme: {
         extend: {
             fontFamily: {
+                // Huruf Aishii (`app/assets/css/main.css` di repo Aishii),
+                // disajikan sendiri lewat @fontsource (diimpor di app.jsx).
+                // Inter tetap dipakai dokumen PDF lewat berkas TTF lokalnya.
                 sans: [
-                    "Inter",
+                    "Plus Jakarta Sans Variable",
                     "Plus Jakarta Sans",
                     ...defaultTheme.fontFamily.sans,
                 ],
@@ -25,33 +28,38 @@ export default {
                 ],
             },
             colors: {
-                // Primary - Indigo
+                // Primary — palet merek Aishii, diturunkan dari ungu logonya
+                // (#752e8e). Angkanya SAMA PERSIS dengan `--color-aishii-*` di
+                // repo Aishii: dua aplikasi satu keluarga yang ungunya berbeda
+                // setitik terbaca sebagai tiruan, bukan saudara. Seluruh kelas
+                // `primary-*` (±1.600) ikut berganti dari sini, tanpa menyentuh
+                // satu berkas halaman pun.
                 primary: {
-                    50: "#eef2ff",
-                    100: "#e0e7ff",
-                    200: "#c7d2fe",
-                    300: "#a5b4fc",
-                    400: "#818cf8",
-                    500: "#6366f1",
-                    600: "#4f46e5",
-                    700: "#4338ca",
-                    800: "#3730a3",
-                    900: "#312e81",
-                    950: "#1e1b4b",
+                    50: "#f8f4fb",
+                    100: "#f0e6f6",
+                    200: "#e2cdee",
+                    300: "#cba7df",
+                    400: "#ae76cb",
+                    500: "#934eb2",
+                    600: "#752e8e",
+                    700: "#632777",
+                    800: "#522063",
+                    900: "#451c53",
+                    950: "#2b0e36",
                 },
-                // Accent - Cyan
+                // Accent — violet, warna `secondary` Aishii.
                 accent: {
-                    50: "#ecfeff",
-                    100: "#cffafe",
-                    200: "#a5f3fc",
-                    300: "#67e8f9",
-                    400: "#22d3ee",
-                    500: "#06b6d4",
-                    600: "#0891b2",
-                    700: "#0e7490",
-                    800: "#155e75",
-                    900: "#164e63",
-                    950: "#083344",
+                    50: "#f5f3ff",
+                    100: "#ede9fe",
+                    200: "#ddd6fe",
+                    300: "#c4b5fd",
+                    400: "#a78bfa",
+                    500: "#8b5cf6",
+                    600: "#7c3aed",
+                    700: "#6d28d9",
+                    800: "#5b21b6",
+                    900: "#4c1d95",
+                    950: "#2e1065",
                 },
                 // Success - Emerald
                 success: {
@@ -115,8 +123,8 @@ export default {
                 "4xl": "2rem",
             },
             boxShadow: {
-                glow: "0 0 20px rgba(99, 102, 241, 0.3)",
-                "glow-lg": "0 0 40px rgba(99, 102, 241, 0.4)",
+                glow: "0 0 20px rgba(117, 46, 142, 0.3)",
+                "glow-lg": "0 0 40px rgba(117, 46, 142, 0.4)",
                 "inner-lg": "inset 0 4px 6px -1px rgb(0 0 0 / 0.1)",
             },
             animation: {

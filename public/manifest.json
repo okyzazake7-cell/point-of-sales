@@ -1,16 +1,36 @@
 {
-    "name": "Point of Sales",
-    "short_name": "POS",
-    "description": "Sistem kasir online untuk UMKM",
-    "start_url": "/",
+    "id": "/",
+    "name": "Aishii POS",
+    "short_name": "Aishii POS",
+    "description": "Kasir toko dari keluarga Aishii: barcode, stok per gudang, pemasok, piutang, dan tetap mencatat saat internet putus.",
+    "lang": "id",
+    "dir": "ltr",
+    "start_url": "/dashboard",
+    "scope": "/",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#4f46e5",
     "orientation": "any",
+    "background_color": "#ffffff",
+    "theme_color": "#752e8e",
     "icons": [
-        { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
-        { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+        { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/images/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
     ],
-    "categories": ["business", "finance"],
-    "lang": "id-ID"
+    "shortcuts": [
+        {
+            "name": "Buka Kasir",
+            "short_name": "Kasir",
+            "description": "Langsung ke layar kasir",
+            "url": "/dashboard/transactions",
+            "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Riwayat Transaksi",
+            "short_name": "Riwayat",
+            "description": "Transaksi hari ini dan sebelumnya",
+            "url": "/dashboard/transactions/history",
+            "icons": [{ "src": "/images/icon-192.png", "sizes": "192x192" }]
+        }
+    ],
+    "categories": ["business", "finance", "productivity"]
 }
