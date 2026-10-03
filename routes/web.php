@@ -53,6 +53,7 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UserController;
 use App\Models\Setting;
+use App\Penyewaan\Penyewaan;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -86,18 +87,29 @@ Route::get('/dashboard/access', function () {
     return Inertia::render('Dashboard/Access');
 })->middleware(['auth'])->name('dashboard.access');
 
-// Public share routes (no login, but require the transaction access token)
-Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])
-    ->middleware('throttle:10,1')
-    ->name('transactions.public');
+// Tautan publik toko — dibuka PELANGGAN toko tanpa masuk. Dalam mode banyak
+// toko berawalan /t/{toko} (Penyewaan::grupPublik, dokumen 24 §3); dalam
+// mode satu toko alamatnya tetap seperti di hulu.
+Route::group(Penyewaan::grupPublik(), function () {
+    // Public share routes (no login, but require the transaction access token)
+    Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])
+        ->middleware('throttle:10,1')
+        ->name('transactions.public');
 
-// Customer portal routes (no login, token-based)
-Route::get('/portal/transactions/{invoice}', [PublicPortalController::class, 'showTransaction'])
-    ->middleware('throttle:10,1')
-    ->name('portal.transaction');
-Route::post('/portal/receivables/{receivable}/pay', [PublicPortalController::class, 'payReceivable'])
-    ->middleware('throttle:5,1')
-    ->name('portal.receivable.pay');
+    // Customer portal routes (no login, token-based)
+    Route::get('/portal/transactions/{invoice}', [PublicPortalController::class, 'showTransaction'])
+        ->middleware('throttle:10,1')
+        ->name('portal.transaction');
+    Route::post('/portal/receivables/{receivable}/pay', [PublicPortalController::class, 'payReceivable'])
+        ->middleware('throttle:5,1')
+        ->name('portal.receivable.pay');
+
+    // dine-in public routes
+    Route::get('/dine/{token}', [DineMenuController::class, 'show'])->name('dine.menu');
+    Route::post('/dine/{token}/order', [DineOrderController::class, 'store'])->name('dine-order.store');
+    Route::get('/dine-order/{accessToken}', [DineOrderController::class, 'status'])->name('dine-order.status');
+    Route::get('/dine-order/{accessToken}/check', [DineOrderController::class, 'statusCheck'])->middleware('throttle:30,1')->name('dine-order.status-check');
+});
 
 // Language switch
 Route::post('/language/switch', [LanguageController::class, 'switch'])->name('language.switch');
@@ -435,11 +447,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-// dine-in public routes
-Route::get('/dine/{token}', [DineMenuController::class, 'show'])->name('dine.menu');
-Route::post('/dine/{token}/order', [DineOrderController::class, 'store'])->name('dine-order.store');
-Route::get('/dine-order/{accessToken}', [DineOrderController::class, 'status'])->name('dine-order.status');
-Route::get('/dine-order/{accessToken}/check', [DineOrderController::class, 'statusCheck'])->middleware('throttle:30,1')->name('dine-order.status-check');
 
 require __DIR__.'/auth.php';

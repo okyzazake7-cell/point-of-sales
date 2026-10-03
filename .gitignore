@@ -34,3 +34,6 @@ planning/
 bun.lock
 whatsapp-service/bun.lock
 /storage/pail
+
+# Basis data SQLite per toko (mode banyak toko, pengembangan)
+/database/toko/

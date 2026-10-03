@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use App\Penyewaan\Penyewaan;
 use App\Services\AuditLogService;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\Rule;
@@ -47,17 +48,23 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            app(AuditLogService::class)->log(
-                event: 'auth.login_failed',
-                module: 'auth',
-                auditable: User::query()->where('email', $this->string('email')->toString())->first(),
-                description: 'Login gagal.',
-                meta: [
-                    'severity' => 'warning',
-                    'route' => $this->route()?->getName(),
-                    'email' => $this->string('email')->toString(),
-                ],
-            );
+            // Mode banyak toko: surel yang tidak dikenal direktori tidak punya
+            // toko — tidak ada basis data tempat mencari penggunanya maupun
+            // mencatat jejaknya. Jawabannya tetap sama persis (di bawah).
+            $penyewaan = app(Penyewaan::class);
+            if (! $penyewaan->aktif() || $penyewaan->toko()) {
+                app(AuditLogService::class)->log(
+                    event: 'auth.login_failed',
+                    module: 'auth',
+                    auditable: User::query()->where('email', $this->string('email')->toString())->first(),
+                    description: 'Login gagal.',
+                    meta: [
+                        'severity' => 'warning',
+                        'route' => $this->route()?->getName(),
+                        'email' => $this->string('email')->toString(),
+                    ],
+                );
+            }
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),

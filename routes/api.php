@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\PosApiController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\WarehouseController;
+use App\Penyewaan\Penyewaan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,10 +21,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Public webhooks (payment gateways) — signature verified, no auth
-Route::prefix('webhooks')->group(function () {
-    Route::post('/midtrans', [PaymentWebhookController::class, 'midtrans'])->name('webhooks.midtrans');
-    Route::post('/xendit', [PaymentWebhookController::class, 'xendit'])->name('webhooks.xendit');
+// Public webhooks (payment gateways) — signature verified, no auth.
+// Mode banyak toko: /api/t/{toko}/webhooks/… — gerbang bayar milik toko
+// tidak membawa sesi, jadi tokonya dibaca dari alamat.
+Route::group(Penyewaan::grupPublik(), function () {
+    Route::prefix('webhooks')->group(function () {
+        Route::post('/midtrans', [PaymentWebhookController::class, 'midtrans'])->name('webhooks.midtrans');
+        Route::post('/xendit', [PaymentWebhookController::class, 'xendit'])->name('webhooks.xendit');
+    });
 });
 
 Route::prefix('v1')->group(function () {

@@ -99,7 +99,10 @@ class DineTableController extends Controller
     public function qr(DiningTable $dineTable)
     {
         abort_unless($this->ownsTable($dineTable, request()), 404);
-        $url = config('app.url').'/dine/'.$dineTable->token;
+        // Jalur dari nama rute (mode banyak toko menambah /t/{toko}), akarnya
+        // tetap APP_URL: QR yang dicetak harus menunjuk domain publik walau
+        // admin membukanya lewat alamat lain.
+        $url = rtrim(config('app.url'), '/').route('dine.menu', $dineTable->token, false);
 
         $png = QrCode::format('png')
             ->size(300)

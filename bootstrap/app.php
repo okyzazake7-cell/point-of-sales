@@ -7,9 +7,13 @@ use App\Http\Middleware\EnsureNotInstalled;
 use App\Http\Middleware\EnsurePublicRegistrationEnabled;
 use App\Http\Middleware\EnsureRecentPasswordConfirmation;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\Penyewaan\KenaliToko;
+use App\Http\Middleware\Penyewaan\KenaliTokoApi;
+use App\Http\Middleware\Penyewaan\KenaliTokoDariJalur;
 use App\Http\Middleware\SecureHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -35,6 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->web(append: [
+            KenaliToko::class,
             SetLocale::class,
             SecureHeaders::class,
             EnforceAbsoluteSessionLifetime::class,
@@ -52,7 +57,17 @@ return Application::configure(basePath: dirname(__DIR__))
             'setup.notinstalled' => EnsureNotInstalled::class,
             'step_up' => EnsureRecentPasswordConfirmation::class,
             'abilities' => CheckAbilities::class,
+            'toko.jalur' => KenaliTokoDariJalur::class,
         ]);
+
+        // Mode banyak toko (dokumen 24): toko harus dikenali SEBELUM `auth`,
+        // pembatas laju, dan pengikatan model rute — ketiganya membaca basis
+        // data toko. Daftar prioritas Laravel yang mengurutkannya, bukan
+        // urutan penulisan: rute bisa menambah middleware sendiri.
+        $middleware->api(prepend: [KenaliTokoApi::class]);
+        foreach ([KenaliToko::class, KenaliTokoDariJalur::class, KenaliTokoApi::class] as $penanda) {
+            $middleware->prependToPriorityList(AuthenticatesRequests::class, $penanda);
+        }
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $exception, Request $request) {
