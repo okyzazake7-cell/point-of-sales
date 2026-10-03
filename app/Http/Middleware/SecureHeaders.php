@@ -15,9 +15,15 @@ class SecureHeaders
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('X-Frame-Options', 'DENY');
+        // Kamera dan USB dibuka untuk ASAL SENDIRI saja: kamera adalah
+        // pemindai barcode di HP (html5-qrcode) dan USB jalur printer struk
+        // thermal (WebUSB). `camera=()`/`usb=()` mematikan keduanya di
+        // peramban yang menegakkan kebijakan ini (Chrome: getUserMedia →
+        // NotAllowedError) — fitur yang dijanjikan, mati tanpa satu galat
+        // yang bisa dibaca kasir. Sisanya tetap tertutup.
         $response->headers->set(
             'Permissions-Policy',
-            'camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()'
+            'camera=(self), microphone=(), geolocation=(), payment=(), usb=(self), accelerometer=(), gyroscope=()'
         );
 
         // HSTS only over HTTPS in production to avoid locking out plain-HTTP dev.

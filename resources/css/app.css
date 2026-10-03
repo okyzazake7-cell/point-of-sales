@@ -6,4 +6,31 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* Google Fonts - loaded via HTML head for better performance */
+/* Huruf Plus Jakarta Sans diimpor di app.jsx (@fontsource, disajikan sendiri). */
+
+@layer base {
+    /*
+     * Masukan berkas bawaan peramban punya lebar intrinsiknya sendiri
+     * (±400px dengan huruf saat ini) dan tidak menyusut mengikuti induknya —
+     * di 320–390px ia menyeret halaman Profil dan Pengaturan Toko ikut bisa
+     * digeser ke samping. Satu aturan untuk SEMUA masukan berkas, bukan
+     * tambalan per halaman: masukan berkas berikutnya pasti datang.
+     */
+    input[type="file"] {
+        max-width: 100%;
+    }
+
+    /*
+     * Anak grid BOLEH menyusut di bawah lebar isinya. Lajur grid implisit
+     * (`grid` tanpa `grid-cols-*`, pola halaman rincian di bawah `xl`) dan
+     * lajur `fr` polos berukuran minimum `auto` — tabel lebar di dalamnya
+     * menyeret lajurnya sampai 600–900px, dan halaman rincian PO, penerimaan,
+     * retur, stok opname, serta kampanye bisa digeser ke samping di ponsel.
+     * Dengan min-width 0, tabel kembali menggulir di dalam pembungkus
+     * `overflow-x-auto`-nya sendiri. Lajur `grid-cols-N` Tailwind sudah
+     * `minmax(0, 1fr)`, jadi baginya aturan ini tidak mengubah apa pun.
+     */
+    .grid > * {
+        min-width: 0;
+    }
+}

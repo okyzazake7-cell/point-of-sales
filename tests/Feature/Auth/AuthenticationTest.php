@@ -93,8 +93,23 @@ class AuthenticationTest extends TestCase
         $response->assertHeader('X-Frame-Options', 'DENY');
         $response->assertHeader(
             'Permissions-Policy',
-            'camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=()'
+            'camera=(self), microphone=(), geolocation=(), payment=(), usb=(self), accelerometer=(), gyroscope=()'
         );
+    }
+
+    public function test_permissions_policy_keeps_camera_scanner_and_usb_printer_usable(): void
+    {
+        // Pemindai barcode kamera dan printer struk WebUSB adalah fitur kasir
+        // di HP; `camera=()`/`usb=()` mematikan keduanya di Chrome tanpa
+        // galat yang bisa dibaca kasir. Asal lain tetap tidak boleh.
+        $policy = $this->get('/login')->headers->get('Permissions-Policy');
+
+        $this->assertStringContainsString('camera=(self)', $policy);
+        $this->assertStringContainsString('usb=(self)', $policy);
+        $this->assertStringNotContainsString('camera=()', $policy);
+        $this->assertStringNotContainsString('usb=()', $policy);
+        $this->assertStringContainsString('microphone=()', $policy);
+        $this->assertStringContainsString('geolocation=()', $policy);
     }
 
     public function test_unverified_user_can_access_dashboard_route(): void

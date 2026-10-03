@@ -76,41 +76,44 @@ export default function AgingIndex() {
                 </div>
 
                 {/* Summary Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                {/* Di 320px dua kartu sejajar menyisakan ±94px untuk angkanya, dan
+                    "Rp 667.000" berukuran 2xl butuh ±137px — angkanya meluber
+                    keluar kartu dan menyeret halaman. Huruf mengecil di ponsel. */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30">
                                 <IconTruck size={20} className="text-rose-500" />
                             </div>
                             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Total Hutang</p>
                         </div>
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                        <p className="break-words text-lg sm:text-2xl font-bold text-slate-900 dark:text-white">
                             {formatCurrency(payableTotalOutstanding)}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">{payablesDueSoon} akan jatuh tempo</p>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="p-2 rounded-lg bg-primary-50 dark:bg-primary-950/30">
                                 <IconReceipt size={20} className="text-primary-500" />
                             </div>
                             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Total Piutang</p>
                         </div>
-                        <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                        <p className="break-words text-lg sm:text-2xl font-bold text-slate-900 dark:text-white">
                             {formatCurrency(receivableTotalOutstanding)}
                         </p>
                         <p className="text-xs text-slate-500 mt-1">{receivablesDueSoon} akan jatuh tempo</p>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/30">
                                 <IconAlertTriangle size={20} className="text-amber-500" />
                             </div>
                             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Hutang Overdue</p>
                         </div>
-                        <p className="text-2xl font-bold text-amber-600">
+                        <p className="break-words text-lg sm:text-2xl font-bold text-amber-600">
                             {formatCurrency(
                                 (payableAgingSummary?.find((b) => b.bucket === "90+")?.remaining || 0) +
                                 (payableAgingSummary?.find((b) => b.bucket === "61-90")?.remaining || 0)
@@ -119,14 +122,14 @@ export default function AgingIndex() {
                         <p className="text-xs text-slate-500 mt-1">61+ hari</p>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30">
                                 <IconReceipt size={20} className="text-rose-500" />
                             </div>
                             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Piutang Overdue</p>
                         </div>
-                        <p className="text-2xl font-bold text-rose-600">
+                        <p className="break-words text-lg sm:text-2xl font-bold text-rose-600">
                             {formatCurrency(
                                 (receivableAgingSummary?.find((b) => b.bucket === "90+")?.remaining || 0) +
                                 (receivableAgingSummary?.find((b) => b.bucket === "61-90")?.remaining || 0)

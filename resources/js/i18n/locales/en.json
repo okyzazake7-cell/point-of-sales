@@ -196,7 +196,7 @@
             "title": "Sign In",
             "subtitle": "Welcome Back",
             "description": "Sign in to access your dashboard",
-            "appName": "POS Application",
+            "appName": "Aishii POS",
             "email": "Email",
             "emailPlaceholder": "name@email.com",
             "password": "Password",
@@ -209,7 +209,7 @@
             "registerNow": "Register Now",
             "registerLink": "Register Now",
             "heroTitle": "Manage Your Business with Ease",
-            "heroDescription": "A modern Point of Sale system that helps you manage transactions, inventory, and financial reports efficiently.",
+            "heroDescription": "The store POS from the Aishii family: barcodes, per-warehouse stock, suppliers, and profit reports — in everyday language.",
             "features": ["Fast Transactions", "Real-time Reports", "Multi User"]
         },
         "register": {
@@ -898,6 +898,10 @@
     "tour": {
         "button": "Guided Tour",
         "reset": "Replay Guided Tours",
+        "next": "Next",
+        "prev": "Previous",
+        "done": "Done",
+        "of": "of",
         "dashboard": {
             "title": "Dashboard Page",
             "desc": "This is your business summary hub. Let's take a quick look around.",
@@ -1017,5 +1021,14 @@
             "customer": "Register your first customer",
             "transaction": "Complete your first transaction"
         }
+    },
+    "account": {
+        "menu": "Account menu",
+        "profile": "Profile",
+        "logout": "Log out",
+        "theme_light": "Light mode",
+        "theme_dark": "Dark mode",
+        "toggle_menu": "Toggle menu",
+        "notifications": "Notifications"
     }
 }

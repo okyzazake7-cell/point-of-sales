@@ -4,6 +4,7 @@ import axios from "axios";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { dashboardTour, posTour, productsTour, cashierShiftsTour, reportsTour } from "@/Utils/tours";
+import i18n from "@/i18n";
 
 const TOURS = {
   dashboard: dashboardTour,
@@ -36,6 +37,12 @@ export function useTour(tourName) {
     if (steps.length === 0) return;
 
     driverObj.current = driver({
+      // Tombol bawaan driver.js berbahasa Inggris ("Next", "1 of 6") di atas
+      // isi tur yang berbahasa Indonesia — diterjemahkan lewat i18n.
+      nextBtnText: i18n.t("tour.next"),
+      prevBtnText: i18n.t("tour.prev"),
+      doneBtnText: i18n.t("tour.done"),
+      progressText: `{{current}} ${i18n.t("tour.of")} {{total}}`,
       ...base,
       steps,
       onDestroyed: () => {

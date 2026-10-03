@@ -118,7 +118,7 @@ export default function POSLayout({ children }) {
 
                     {/* Logo */}
                     <Link href={route("dashboard")} className="flex items-center gap-2">
-                        <div className="w-9 h-9 flex items-center justify-center overflow-hidden">
+                        <div className="w-9 h-9 flex items-center justify-center overflow-hidden rounded-lg">
                             {storeProfile?.logo ? (
                                 <img
                                     src={storeProfile.logo}
@@ -183,11 +183,17 @@ export default function POSLayout({ children }) {
                         {appVersion}
                     </span>
 
+                    {/*
+                        Panduan dan layar penuh MENGALAH di ponsel — pindah ke
+                        menu ☰. Di 320px keduanya ikut mendorong nama kasir
+                        keluar layar dan membuat seluruh halaman kasir bisa
+                        digeser ke samping (diukur: 34–50px).
+                    */}
                     {/* Tour Guide */}
                     <button
                         onClick={startTour}
                         disabled={tourActive}
-                        className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch flex items-center justify-center disabled:opacity-50"
+                        className="hidden sm:flex p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch items-center justify-center disabled:opacity-50"
                         title={i18n.t("tour.button")}
                     >
                         <IconQuestionMark size={20} className="text-slate-500" />
@@ -196,8 +202,8 @@ export default function POSLayout({ children }) {
                     {/* Fullscreen Toggle */}
                     <button
                         onClick={toggleFullscreen}
-                        className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch flex items-center justify-center"
-                        title={isFullscreen ? "Keluar Fullscreen" : "Fullscreen"}
+                        className="hidden sm:flex p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch items-center justify-center"
+                        title={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
                     >
                         {isFullscreen ? (
                             <IconArrowsMinimize size={20} className="text-slate-500" />
@@ -210,7 +216,8 @@ export default function POSLayout({ children }) {
                     <button
                         onClick={themeSwitcher}
                         className="p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch flex items-center justify-center"
-                        title={darkMode ? "Light Mode" : "Dark Mode"}
+                        title={darkMode ? "Mode terang" : "Mode gelap"}
+                        aria-label={darkMode ? "Mode terang" : "Mode gelap"}
                     >
                         {darkMode ? (
                             <IconSun size={20} className="text-amber-500" />
@@ -225,7 +232,7 @@ export default function POSLayout({ children }) {
                     </div>
 
                     {/* User Info - Simplified */}
-                    <div className="flex items-center gap-2 pl-2 lg:pl-3 border-l border-slate-200 dark:border-slate-700">
+                    <div className="hidden sm:flex items-center gap-2 pl-2 lg:pl-3 border-l border-slate-200 dark:border-slate-700">
                         {activeCashierShift && (
                             <Link
                                 href={route("cashier-shifts.show", activeCashierShift.id)}
@@ -240,7 +247,7 @@ export default function POSLayout({ children }) {
                                 </span>
                             </Link>
                         )}
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                        <p className="max-w-[10rem] truncate text-sm font-medium text-slate-700 dark:text-slate-200">
                             {auth.user.name}
                         </p>
                     </div>
@@ -281,6 +288,24 @@ export default function POSLayout({ children }) {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <nav className="p-4 space-y-2">
+                            {/* Yang mengalah dari bilah atas di ponsel. */}
+                            <div className="px-4 pb-2 border-b border-slate-200 dark:border-slate-700">
+                                <p className="truncate font-semibold text-slate-800 dark:text-slate-100">
+                                    {auth.user.name}
+                                </p>
+                                {activeCashierShift && (
+                                    <Link
+                                        href={route("cashier-shifts.show", activeCashierShift.id)}
+                                        className="mt-1 inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
+                                    >
+                                        <IconWallet size={14} />
+                                        Shift aktif • Rp{" "}
+                                        {new Intl.NumberFormat("id-ID").format(
+                                            activeCashierShift.expected_cash || 0
+                                        )}
+                                    </Link>
+                                )}
+                            </div>
                             <Link
                                 href={route("dashboard")}
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
@@ -304,6 +329,29 @@ export default function POSLayout({ children }) {
                                 <IconUser size={20} />
                                 <span className="font-medium">Profil</span>
                             </Link>
+                            <button
+                                onClick={() => {
+                                    setShowMobileMenu(false);
+                                    startTour();
+                                }}
+                                disabled={tourActive}
+                                className="sm:hidden flex w-full items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
+                            >
+                                <IconQuestionMark size={20} />
+                                <span className="font-medium">{i18n.t("tour.button")}</span>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowMobileMenu(false);
+                                    toggleFullscreen();
+                                }}
+                                className="sm:hidden flex w-full items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+                            >
+                                {isFullscreen ? <IconArrowsMinimize size={20} /> : <IconArrowsMaximize size={20} />}
+                                <span className="font-medium">
+                                    {isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
+                                </span>
+                            </button>
                             <hr className="border-slate-200 dark:border-slate-700" />
                             <Link
                                 href={route("logout")}
