@@ -202,6 +202,13 @@ per toko (`crm:*`, `reorder:generate`, `transactions:expire`) lewat
 hijau — **hanya bila variabel `POS_DEPLOY` bernilai `aktif`**. Sebelum itu
 push ke `main` cukup menjalankan CI.
 
+**Nyalakan Actions di fork ini lebih dulu.** GitHub mematikan workflow di
+repo hasil fork sampai pemiliknya menyalakannya: tab **Actions** → "I
+understand my workflows, go ahead and enable them". Terukur 4 Okt: fork ini
+belum pernah menjalankan satu workflow pun — PR #1 tidak punya satu
+pemeriksaan CI, dan tanpa langkah ini `POS_DEPLOY=aktif` tidak menerbitkan
+apa pun, tanpa pesan galat.
+
 GitHub → repo `okyzazake7-cell/point-of-sales` → Settings → Secrets and
 variables → Actions:
 
