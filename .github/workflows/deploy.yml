@@ -49,89 +49,106 @@ jobs:
           SESSION_DRIVER: array
           CACHE_STORE: array
 
+  # Terbit ke pos.aishiierp.com (AS10; panduan servernya
+  # docs/deploy-pos-aishiierp.md). Fork ini TIDAK lagi menerbitkan ke server
+  # hulu: job ini hanya menyala bila pemilik sudah menyiapkan servernya dan
+  # menyetel variabel repositori POS_DEPLOY=aktif — tanpa itu, push ke main
+  # cukup menjalankan CI, bukan deploy yang pasti gagal tiap kali.
   deploy:
-    name: Deploy to VPS
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Terbit ke pos.aishiierp.com
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.POS_DEPLOY == 'aktif'
     runs-on: ubuntu-latest
     needs: ci
+    # Dua deploy berbarengan saling menimpa build dan migrasi; yang kedua
+    # menunggu, tidak membatalkan yang sedang berjalan.
+    concurrency:
+      group: deploy-pos
+      cancel-in-progress: false
+    env:
+      POS_DIR: ${{ vars.POS_DIR || '/var/www/pos.aishiierp.com' }}
+      POS_URL: ${{ vars.POS_URL || 'https://pos.aishiierp.com' }}
+      POS_PHP: ${{ vars.POS_PHP || 'php8.4' }}
+      POS_USER: ${{ vars.POS_USER || 'deploy' }}
     steps:
-      - name: Deploy via SSH
+      - name: Terbit lewat SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
+          port: ${{ vars.VPS_PORT || 22 }}
+          envs: POS_DIR,POS_URL,POS_PHP,POS_USER
+          # composer + npm ci + build, ditambah pengisian wilayah di deploy
+          # pertama, bisa melewati batas bawaan 10 menit di VPS kecil.
+          command_timeout: 30m
           script: |
             set -e
-            cd /var/www/dikasir.web.id
+            cd "$POS_DIR"
             export GIT_SSH_COMMAND="ssh -o ConnectTimeout=20 -o BatchMode=yes"
 
-            # Ensure deploy user can modify the web root (fix root-owned dirs from manual ops)
-            sudo chown -R deploy:deploy public
-
-            echo "==> Sync code to production (main)"
-            FETCH_OK=0
-            for i in 1 2 3 4 5; do
-              if sudo -u deploy git fetch origin; then FETCH_OK=1; break; fi
-              echo "git fetch failed (attempt $i/5), retrying in 8s..."
-              sleep 8
-            done
-            [ "$FETCH_OK" = "1" ] || { echo "❌ git fetch failed after 5 attempts"; exit 1; }
-            sudo -u deploy git checkout -f -B main origin/main
-            sudo -u deploy git clean -fd
-
-            echo "==> Backend dependencies"
-            COMPOSER_OK=0
-            for i in 1 2 3; do
-              if sudo -u deploy /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction --no-progress; then COMPOSER_OK=1; break; fi
-              echo "composer install failed (attempt $i/3), retrying in 8s..."
-              sleep 8
-            done
-            [ "$COMPOSER_OK" = "1" ] || { echo "❌ composer install failed after 3 attempts"; exit 1; }
-
-            echo "==> Frontend dependencies + build"
-            NPM_OK=0
-            for i in 1 2 3; do
-              if sudo -u deploy bash -lc 'export PATH=/home/deploy/.nvm/versions/node/v24.15.0/bin:$PATH; cd /var/www/dikasir.web.id && PUPPETEER_SKIP_DOWNLOAD=true npm ci --no-audit --no-fund && npm run build'; then NPM_OK=1; break; fi
-              echo "npm ci/build failed (attempt $i/3), retrying in 8s..."
-              sleep 8
-            done
-            [ "$NPM_OK" = "1" ] || { echo "❌ npm ci/build failed after 3 attempts"; exit 1; }
-
-            echo "==> Laravel housekeeping"
-            sudo -u deploy php8.4 artisan migrate --force
-            sudo -u deploy php8.4 artisan config:clear
-            sudo -u deploy php8.4 artisan view:clear
-            sudo -u deploy php8.4 artisan route:clear
-            sudo -u deploy php8.4 artisan storage:link || true
-
-            echo "==> Permissions"
-            # deploy owns, www-data (php-fpm) needs group write
-            sudo chown -R deploy:www-data storage bootstrap/cache
-            sudo chmod -R g+w storage bootstrap/cache
-            sudo chown -R deploy:deploy public/build
-
-            echo "==> Reload PHP-FPM"
-            sudo systemctl reload php8.4-fpm
-
-            echo "==> Verify"
-            sleep 3
-            check_http() {
-              local url="$1"
-              local expected="$2"
-              local actual
-              actual=$(curl --silent --show-error --location --max-time 20 -o /dev/null -w "%{http_code}" "$url")
-              if [ "$actual" != "$expected" ]; then
-                echo "❌ Smoke check failed: $url returned HTTP $actual (expected $expected)"
-                exit 1
-              fi
-              echo "✅ Smoke check passed: $url (HTTP $actual)"
+            # Semua yang menulis ke folder aplikasi berjalan sebagai pemilik
+            # foldernya, siapa pun pengguna SSH-nya.
+            jalan() {
+              if [ "$(id -un)" = "$POS_USER" ]; then "$@"; else sudo -u "$POS_USER" "$@"; fi
             }
 
-            # Follow the install redirect, then verify the public shell and
-            # unauthenticated API boundary independently.
-            check_http https://dikasir.web.id/ 200
-            check_http https://dikasir.web.id/login 200
-            check_http https://dikasir.web.id/api/v1/products 401
-            echo "✅ Deploy smoke checks passed"
+            echo "==> Mode banyak toko wajib menyala"
+            # pusat:migrasi juga menolak mode satu toko, tetapi baru sesudah
+            # composer dan build menghabiskan menit — ini menolaknya lebih dulu.
+            jalan grep -qE '^POS_MULTI_TOKO=true' .env || {
+              echo "❌ .env belum berisi POS_MULTI_TOKO=true — lihat docs/deploy-pos-aishiierp.md"; exit 1; }
+
+            echo "==> Kode: main terbaru"
+            FETCH_OK=0
+            for i in 1 2 3 4 5; do
+              if jalan git fetch origin; then FETCH_OK=1; break; fi
+              echo "git fetch gagal (percobaan $i/5), coba lagi 8 detik lagi..."
+              sleep 8
+            done
+            [ "$FETCH_OK" = "1" ] || { echo "❌ git fetch gagal 5 kali"; exit 1; }
+            jalan git checkout -f -B main origin/main
+            jalan git clean -fd
+
+            echo "==> Dependensi PHP"
+            COMPOSER_OK=0
+            for i in 1 2 3; do
+              if jalan composer install --no-dev --optimize-autoloader --no-interaction --no-progress; then COMPOSER_OK=1; break; fi
+              echo "composer install gagal (percobaan $i/3), coba lagi 8 detik lagi..."
+              sleep 8
+            done
+            [ "$COMPOSER_OK" = "1" ] || { echo "❌ composer install gagal 3 kali"; exit 1; }
+
+            echo "==> Dependensi JS + build (Node 22)"
+            NPM_OK=0
+            for i in 1 2 3; do
+              if jalan bash -lc 'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; cd "$1" && node -v && PUPPETEER_SKIP_DOWNLOAD=true npm ci --no-audit --no-fund && npm run build' _ "$POS_DIR"; then NPM_OK=1; break; fi
+              echo "npm ci/build gagal (percobaan $i/3), coba lagi 8 detik lagi..."
+              sleep 8
+            done
+            [ "$NPM_OK" = "1" ] || { echo "❌ npm ci/build gagal 3 kali"; exit 1; }
+
+            echo "==> Basis data: pusat, wilayah, lalu SELURUH toko"
+            # `migrate` biasa DITOLAK di mode ini (ia akan menulis ke pusat
+            # tanpa ada yang memutuskan). pusat:wilayah berhenti seketika
+            # begitu wilayahnya sudah terisi.
+            jalan "$POS_PHP" artisan pusat:migrasi --force
+            jalan "$POS_PHP" artisan pusat:wilayah
+            jalan "$POS_PHP" artisan toko:migrasi --force
+
+            echo "==> Bersih-bersih Laravel"
+            jalan "$POS_PHP" artisan config:clear
+            jalan "$POS_PHP" artisan view:clear
+            jalan "$POS_PHP" artisan route:clear
+            jalan "$POS_PHP" artisan storage:link || true
+
+            echo "==> Hak berkas"
+            # Pemilik folder menulis, www-data (php-fpm) butuh tulis-grup.
+            sudo -n chown -R "$POS_USER":www-data storage bootstrap/cache
+            sudo -n chmod -R g+w storage bootstrap/cache
+
+            echo "==> Muat ulang PHP-FPM"
+            sudo -n systemctl reload "${POS_PHP}-fpm"
+
+            echo "==> Uji asap"
+            sleep 3
+            bash scripts/uji-asap-pos.sh "$POS_URL"

@@ -24,9 +24,9 @@ original copyright in `LICENSE`, and send generic fixes upstream.
   `Accept-Language`. English stays available as an explicit choice.
 - `Permissions-Policy` keeps `camera=(self)` and `usb=(self)`: the camera barcode
   scanner and WebUSB receipt printing depend on them.
-- `.github/workflows/deploy.yml` still targets the original author's server
-  (`/var/www/dikasir.web.id`, `VPS_*` secrets). Where Aishii POS is hosted is the
-  owner's decision (AS5) — change the workflow before anything is pushed to `main`.
+- Aishii POS is sold as a service at `https://pos.aishiierp.com` in multi-store
+  mode (decision AS5; design: document 24 in the Aishii repo). See "Multi-store
+  mode" below; the server runbook is `docs/deploy-pos-aishiierp.md`.
 
 **Branch structure:**
 - `main` — production. Protected. PR only from `development`.
@@ -42,7 +42,7 @@ original copyright in `LICENSE`, and send generic fixes upstream.
 
 - **Backend**: Laravel 13 (composer.json requires PHP ^8.3; CI tests on PHP 8.4)
 - **Frontend**: Inertia.js 3.0 + React 19, Vite 5
-- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build, Node 24.15 on deploy VPS
+- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build; the deploy VPS uses Node 22 (nvm of the `deploy` user) + PHP 8.4
 - **Styling**: Tailwind CSS 3 (custom theme in `tailwind.config.js`)
 - **Auth/RBAC**: Spatie Laravel Permission + Laravel Breeze
 - **REST API**: Sanctum token-based at `/api/v1`; Scramble docs at `/docs/api`, spec at `/docs/api.json`; protect with `SCRAMBLE_DOCS_TOKEN`
@@ -54,8 +54,8 @@ original copyright in `LICENSE`, and send generic fixes upstream.
 ## CI / Deploy
 
 - **CI validates and tests** — `.github/workflows/deploy.yml` validates Composer, runs `npm run build`, and executes `php artisan test --compact` with PHP 8.4, Node 22, and SQLite. Run `php artisan test` locally before every PR.
-- **Push to `main` runs the deploy job** — in this fork it still points at the original author's server (`dikasir.web.id` via SSH, secrets this fork does not have), so it fails until the owner decides on hosting. Never push directly to `main`.
-- Deploy VPS uses Node 24.15 + PHP 8.4 (`php8.4 artisan migrate --force`).
+- **Push to `main` deploys to `pos.aishiierp.com` only when the repository variable `POS_DEPLOY` is `aktif`** (secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_KEY`). Until the owner sets it, `main` only runs CI. Never push directly to `main`.
+- The deploy refuses a server whose `.env` lacks `POS_MULTI_TOKO=true`, then runs `pusat:migrasi --force` → `pusat:wilayah` → `toko:migrasi --force` (never plain `migrate`) and ends with `bash scripts/uji-asap-pos.sh $POS_URL`, which checks things only a ready multi-store server answers (`/daftar`, `/api/harga`, `X-Toko` on the API, CORS for Aishii's `/pos`).
 - npm is the package manager of record (`package-lock.json` committed, `bun.lock` gitignored). CI/deploy run `npm ci`. Don't switch to bun/yarn lockfiles.
 
 ## Developer Commands
@@ -142,6 +142,42 @@ After seeding, a default `PUSAT` warehouse is created and existing product stock
 **Demo data is opt-in, not part of `DatabaseSeeder`:** run `php artisan db:seed --class=DemoSeeder --force` (or `php artisan seed:demo --force`) for the complete demo dataset. It creates demo outlets `MAL`, `TKB`, and `PUT`; `PUSAT` remains a central non-sales warehouse. Demo accounts (password `password`): `arya@gmail.com` (super-admin, all outlets), `manager@gmail.com` (manager role, MAL+TKB), `cashier@gmail.com` (cashier, MAL). Never run the demo seeder on production. Full dataset details: `docs/demo-data.md`.
 
 **Email verification is disabled** — `User` no longer implements `MustVerifyEmail`, dashboard routes carry no `verified` middleware, and the verification routes/controllers/pages are removed. `markEmailAsVerified()` is still available via the retained trait (used by seeders and tests).
+
+## Multi-store mode (Aishii POS, `POS_MULTI_TOKO=true`)
+
+`false` (default) is exactly upstream: one install, one store. `true` turns
+`DB_*` into the CENTRAL database (stores, directory of emails, invoices,
+sessions, cache, Indonesian regions) and gives every store its own database
+`POS_AWALAN_DB` + store number, created at `/daftar`. Upstream's 44 modules are
+untouched — isolation comes from the connection, not from a `toko_id` column.
+
+- **The store is resolved per request**: session (login looks the email up in
+  the central directory), path `/t/{toko}` for public customer links, header
+  `X-Toko` for the API (missing/unknown → 400). `App\Penyewaan\Penyewaan::masuk()`
+  switches the default connection, Spatie's permission cache key, and
+  `URL::defaults`; middleware `terminate()` switches back.
+- **Plain `migrate` / `db:seed` without `--database` are refused** (they would
+  write store tables into the central DB). Use `pusat:migrasi`, `pusat:wilayah`
+  (regions — upstream's `laravolt:indonesia:seed` is refused for the same
+  reason, AS16), `toko:migrasi`, and `toko:jalankan "<command>"` (the scheduler
+  wraps per-store commands with it). The guard is a `CommandStarting` listener,
+  which does NOT fire under PHPUnit; a `MigrationsStarted` guard covers tests.
+- **Subscription lock** (`KunciLangganan`): an unpaid or expired store can READ
+  everything but every non-GET is refused, except the narrow `RUTE_BOLEH`
+  whitelist (paying, logging in/out, own account). A new write route that must
+  work while locked is added there on purpose, never by loosening the method rule.
+  Offline sales recorded before expiry are still accepted; later ones come back
+  `held`, in the original order (the cashier matches results by index).
+- **Invoices never self-pick a unique code.** Codes come from the shared invoice
+  book in Aishii's Supabase (`BukuTagihanAishii`, migration `20261153` there);
+  when it is unreachable the invoice is a ROUND amount confirmed manually.
+- **Offline cashier queue syncs over the session** (`transactions.sync-offline`);
+  upstream sent it to the token API, which always answered 401. IndexedDB and
+  the service-worker cache are per store (`pos-offline-t<id>`).
+- **Tests**: extend `Tests\BanyakTokoTestCase` (sets the env BEFORE the app
+  boots, since `/t/{toko}` routes are shaped at boot). Proof scripts:
+  `scripts/uji-luring-per-toko.mjs` (offline queue, real Chromium) and
+  `BANYAK_TOKO=1 node scripts/audit-ponsel.mjs`.
 
 ## Inventory Model
 
