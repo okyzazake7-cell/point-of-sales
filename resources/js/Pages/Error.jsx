@@ -9,6 +9,7 @@ import {
     IconServerOff,
 } from "@tabler/icons-react";
 import { useTheme } from "@/Context/ThemeSwitcherContext";
+import { BRAND } from "@/Utils/brand";
 
 const errorContent = {
     401: {
@@ -58,17 +59,21 @@ export default function Error({ status, homeUrl, homeLabel }) {
             <Head title={`${status} - ${content.title}`} />
 
             <div className="relative min-h-screen overflow-hidden bg-slate-50 text-slate-900 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-50">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(6,182,212,0.14),transparent_35%)] dark:bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.24),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(6,182,212,0.16),transparent_35%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(117,46,142,0.18),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.14),transparent_35%)] dark:bg-[radial-gradient(circle_at_top,rgba(117,46,142,0.24),transparent_45%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.16),transparent_35%)]" />
 
                 <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 py-6">
                     <div className="flex items-center justify-between">
                         <Link href={homeUrl} className="flex items-center gap-3">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/25">
-                                <IconHome2 size={22} className="text-white" />
-                            </div>
+                            <img
+                                src={BRAND.icon}
+                                alt=""
+                                width="44"
+                                height="44"
+                                className="h-11 w-11 rounded-2xl shadow-lg shadow-primary-500/25"
+                            />
                             <div>
                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                    Point of Sales
+                                    {BRAND.name}
                                 </p>
                                 <p className="text-lg font-semibold text-slate-900 dark:text-white">
                                     Error {status}

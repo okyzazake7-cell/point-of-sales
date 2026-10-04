@@ -47,7 +47,20 @@ import React from "react";
 
 export default function Menu() {
     const { t } = useTranslation();
-    const { url } = usePage();
+    const { url, props } = usePage();
+    // Mode banyak toko (Aishii POS berlangganan): prop `langganan` hanya ada
+    // di sana, jadi butirnya tidak pernah muncul di pemasangan satu toko.
+    const butirLangganan = props.langganan
+        ? [
+              {
+                  title: t("sidebar.items.subscription"),
+                  href: "/dashboard/langganan",
+                  active: url.startsWith("/dashboard/langganan"),
+                  icon: <IconCreditCard size={20} strokeWidth={1.5} />,
+                  permissions: true,
+              },
+          ]
+        : [];
 
     // define menu navigations
     const menuNavigation = [
@@ -61,6 +74,7 @@ export default function Menu() {
                     icon: <IconLayout2 size={20} strokeWidth={1.5} />,
                     permissions: hasAnyPermission(["dashboard-access"]),
                 },
+                ...butirLangganan,
             ],
         },
         {

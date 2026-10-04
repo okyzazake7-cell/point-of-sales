@@ -5,6 +5,14 @@ All notable application releases are listed here. Git tags using the same
 
 ## [Unreleased]
 
+### Aishii POS (fork)
+
+- Rebranded as **Aishii POS**, part of the Aishii family: brand config (`config/brand.php`, `resources/js/Utils/brand.js`, guarded by `BrandTest`), Aishii palette and self-hosted Plus Jakarta Sans, Aishii icons/favicon/manifest, OG/Twitter meta, Indonesian-first public pages with MIT attribution to the original project.
+- Mobile-friendly, measured: `scripts/audit-ponsel.mjs` audits every page (detail pages included) at 390 px and 320 px — 121 of 136 page×width combinations overflowed before, zero after. Dashboard top bar no longer pushes buttons off-screen; the account menu works on phones and finally offers Log out; tables inside grids scroll inside their wrapper.
+- Interface is Indonesian on first visit regardless of the phone's language; pinch-zoom follows the Aishii rule (allowed in a browser tab, disabled only in the installed app).
+- `Permissions-Policy` allows `camera` and `usb` for the same origin — `camera=()`/`usb=()` silently disabled the camera barcode scanner and WebUSB receipt printing.
+- `package-lock.json` synced with `package.json` (missing `concurrently`/`driver.js` made `npm ci` fail).
+
 ### Added
 
 - `manager` role and `manager@gmail.com` demo account (scoped to outlets MAL + TKB) to demonstrate multi-outlet RBAC without super-admin privileges.

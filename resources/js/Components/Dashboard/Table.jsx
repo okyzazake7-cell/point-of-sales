@@ -1,9 +1,15 @@
 import React from 'react'
 
+// SATU pembungkus, bukan fragmen. Sebagai fragmen, judul dan isinya menjadi
+// DUA anak terpisah bagi induknya: di `space-y-*` keduanya terpisah celah, di
+// grid dua kolom judulnya duduk di kolom kiri dan isinya di kolom kanan, dan
+// di grid satu kolom ponsel tabel lebarnya menyeret lajur grid sampai ±566px
+// (`min-width: auto`) sehingga seluruh halaman bisa digeser ke samping.
+// `min-w-0` mengembalikan guliran tabel ke pembungkus `overflow-x-auto`-nya.
 const Card = ({ icon, title, className, children }) => {
     return (
-        <>
-            <div className={`p-4 rounded-t-lg border ${className} bg-white dark:bg-gray-950 dark:border-gray-900 `}>
+        <div className="min-w-0">
+            <div className={`p-4 rounded-t-lg border ${className ?? ''} bg-white dark:bg-gray-950 dark:border-gray-900 `}>
                 <div className='flex items-center gap-2 font-semibold text-sm text-gray-700 dark:text-gray-200'>
                     {title}
                 </div>
@@ -11,8 +17,7 @@ const Card = ({ icon, title, className, children }) => {
             <div className='bg-white dark:bg-gray-950 rounded-b-lg border-t-0 dark:border-gray-900'>
                 {children}
             </div>
-        </>
-
+        </div>
     )
 }
 

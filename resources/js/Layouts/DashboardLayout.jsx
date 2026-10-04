@@ -4,6 +4,7 @@ import Sidebar from "@/Components/Dashboard/Sidebar";
 import Navbar from "@/Components/Dashboard/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/Context/ThemeSwitcherContext";
+import SpandukLangganan from "@/Components/Langganan/SpandukLangganan";
 
 export default function AppLayout({ children }) {
     const { darkMode, themeSwitcher } = useTheme();
@@ -83,6 +84,7 @@ export default function AppLayout({ children }) {
                                 </ul>
                             </div>
                         )}
+                        <SpandukLangganan className="mb-6" />
                         <Toaster
                             position="top-right"
                             toastOptions={{

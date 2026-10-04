@@ -1,10 +1,32 @@
-# AGENTS.md — Point of Sales
+# AGENTS.md — Aishii POS
 
-Open-source POS system (200+ stars). Laravel 13 + Inertia 3.0 + React 19.
+Aishii POS: the store POS of the Aishii family (https://aishiierp.com). A public,
+MIT-licensed fork of `aryadwiputra/point-of-sales` (Point of Sales by Arya Dwi
+Putra). Laravel 13 + Inertia 3.0 + React 19.
 
 ## Important: This Repo
 
-**Remote:** `git@github.com:aryadwiputra/point-of-sales.git`
+**Remote:** `https://github.com/okyzazake7-cell/point-of-sales` (fork).
+**Upstream:** `https://github.com/aryadwiputra/point-of-sales` — keep the
+original copyright in `LICENSE`, and send generic fixes upstream.
+
+**Aishii-specific rules (wave AS, `docs/permintaan-3okt.md` in the Aishii repo):**
+- The brand lives in ONE place per world: `config/brand.php` (PHP/Blade) and
+  `resources/js/Utils/brand.js` (React). Never type the product name in a page;
+  `tests/Feature/BrandTest.php` fails when the two twins drift.
+- Colors come from tokens (`tailwind.config.js` + `resources/css/design-tokens.css`):
+  `primary` = the Aishii palette (#752e8e), `accent` = violet. Do not hard-code
+  `indigo-*`/hex colors in pages — swap tokens instead, so upstream merges stay small.
+- Mobile-friendliness is MEASURED: `node scripts/audit-ponsel.mjs` (server on
+  :8000 with `php artisan seed:demo --force`) must report
+  `0 halaman×lebar meluber` at 390 and 320 px before every PR touching UI.
+- Interface language defaults to Indonesian; `SetLocale` must not read
+  `Accept-Language`. English stays available as an explicit choice.
+- `Permissions-Policy` keeps `camera=(self)` and `usb=(self)`: the camera barcode
+  scanner and WebUSB receipt printing depend on them.
+- Aishii POS is sold as a service at `https://pos.aishiierp.com` in multi-store
+  mode (decision AS5; design: document 24 in the Aishii repo). See "Multi-store
+  mode" below; the server runbook is `docs/deploy-pos-aishiierp.md`.
 
 **Branch structure:**
 - `main` — production. Protected. PR only from `development`.
@@ -20,7 +42,7 @@ Open-source POS system (200+ stars). Laravel 13 + Inertia 3.0 + React 19.
 
 - **Backend**: Laravel 13 (composer.json requires PHP ^8.3; CI tests on PHP 8.4)
 - **Frontend**: Inertia.js 3.0 + React 19, Vite 5
-- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build, Node 24.15 on deploy VPS
+- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build; the deploy VPS uses Node 22 (nvm of the `deploy` user) + PHP 8.4
 - **Styling**: Tailwind CSS 3 (custom theme in `tailwind.config.js`)
 - **Auth/RBAC**: Spatie Laravel Permission + Laravel Breeze
 - **REST API**: Sanctum token-based at `/api/v1`; Scramble docs at `/docs/api`, spec at `/docs/api.json`; protect with `SCRAMBLE_DOCS_TOKEN`
@@ -32,8 +54,8 @@ Open-source POS system (200+ stars). Laravel 13 + Inertia 3.0 + React 19.
 ## CI / Deploy
 
 - **CI validates and tests** — `.github/workflows/deploy.yml` validates Composer, runs `npm run build`, and executes `php artisan test --compact` with PHP 8.4, Node 22, and SQLite. Run `php artisan test` locally before every PR.
-- **Push to `main` auto-deploys to production** (`dikasir.web.id` via SSH). Never push directly to `main` — use the release process below.
-- Deploy VPS uses Node 24.15 + PHP 8.4 (`php8.4 artisan migrate --force`).
+- **Push to `main` deploys to `pos.aishiierp.com` only when the repository variable `POS_DEPLOY` is `aktif`** (secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_KEY`). Until the owner sets it, `main` only runs CI. Never push directly to `main`.
+- The deploy refuses a server whose `.env` lacks `POS_MULTI_TOKO=true`, then runs `pusat:migrasi --force` → `pusat:wilayah` → `toko:migrasi --force` (never plain `migrate`) and ends with `bash scripts/uji-asap-pos.sh $POS_URL`, which checks things only a ready multi-store server answers (`/daftar`, `/api/harga`, `X-Toko` on the API, CORS for Aishii's `/pos`).
 - npm is the package manager of record (`package-lock.json` committed, `bun.lock` gitignored). CI/deploy run `npm ci`. Don't switch to bun/yarn lockfiles.
 
 ## Developer Commands
@@ -90,7 +112,7 @@ Production must trigger `php artisan schedule:run` every minute for the schedule
 - **Controllers**: `app/Http/Controllers/Apps/` — per-module web controllers (~35)
 - **API Controllers**: `app/Http/Controllers/Api/` — REST API (Sanctum token auth)
 - **Services**: `app/Services/` — ~22 services: AuditLog, BatchService, CashierShiftService, DineOrderService, GoodsReceivingService, LoyaltyService, PaymentGatewayManager, PricingService, PriceListService, PurchaseOrderService, ReorderService, StockMutationService, StockTransferService, UnitConversionService, WhatsAppService, etc.
-- **Layouts**: `POSLayout.jsx` (POS), `DashboardLayout.jsx` (admin), `AuthenticatedLayout.jsx` (profile), `GuestLayout.jsx` (auth), `PublicLayout.jsx` (public dine-in)
+- **Layouts**: `POSLayout.jsx` (POS), `DashboardLayout.jsx` (admin + profile), `GuestLayout.jsx` (reset password, shared receipt), `PublicLayout.jsx` (public marketing pages); `AuthenticatedLayout.jsx` is no longer used
 - **Routes**: `routes/web.php` (~50+ dashboard routes), `routes/api.php` (webhooks + REST API), `routes/auth.php` (Breeze)
 - **Inertia shared props**: `HandleInertiaRequests.php` — auth, permissions, notifications (low stock, receivables, payables aging), active shift, store profile, appVersion
 
@@ -120,6 +142,42 @@ After seeding, a default `PUSAT` warehouse is created and existing product stock
 **Demo data is opt-in, not part of `DatabaseSeeder`:** run `php artisan db:seed --class=DemoSeeder --force` (or `php artisan seed:demo --force`) for the complete demo dataset. It creates demo outlets `MAL`, `TKB`, and `PUT`; `PUSAT` remains a central non-sales warehouse. Demo accounts (password `password`): `arya@gmail.com` (super-admin, all outlets), `manager@gmail.com` (manager role, MAL+TKB), `cashier@gmail.com` (cashier, MAL). Never run the demo seeder on production. Full dataset details: `docs/demo-data.md`.
 
 **Email verification is disabled** — `User` no longer implements `MustVerifyEmail`, dashboard routes carry no `verified` middleware, and the verification routes/controllers/pages are removed. `markEmailAsVerified()` is still available via the retained trait (used by seeders and tests).
+
+## Multi-store mode (Aishii POS, `POS_MULTI_TOKO=true`)
+
+`false` (default) is exactly upstream: one install, one store. `true` turns
+`DB_*` into the CENTRAL database (stores, directory of emails, invoices,
+sessions, cache, Indonesian regions) and gives every store its own database
+`POS_AWALAN_DB` + store number, created at `/daftar`. Upstream's 44 modules are
+untouched — isolation comes from the connection, not from a `toko_id` column.
+
+- **The store is resolved per request**: session (login looks the email up in
+  the central directory), path `/t/{toko}` for public customer links, header
+  `X-Toko` for the API (missing/unknown → 400). `App\Penyewaan\Penyewaan::masuk()`
+  switches the default connection, Spatie's permission cache key, and
+  `URL::defaults`; middleware `terminate()` switches back.
+- **Plain `migrate` / `db:seed` without `--database` are refused** (they would
+  write store tables into the central DB). Use `pusat:migrasi`, `pusat:wilayah`
+  (regions — upstream's `laravolt:indonesia:seed` is refused for the same
+  reason, AS16), `toko:migrasi`, and `toko:jalankan "<command>"` (the scheduler
+  wraps per-store commands with it). The guard is a `CommandStarting` listener,
+  which does NOT fire under PHPUnit; a `MigrationsStarted` guard covers tests.
+- **Subscription lock** (`KunciLangganan`): an unpaid or expired store can READ
+  everything but every non-GET is refused, except the narrow `RUTE_BOLEH`
+  whitelist (paying, logging in/out, own account). A new write route that must
+  work while locked is added there on purpose, never by loosening the method rule.
+  Offline sales recorded before expiry are still accepted; later ones come back
+  `held`, in the original order (the cashier matches results by index).
+- **Invoices never self-pick a unique code.** Codes come from the shared invoice
+  book in Aishii's Supabase (`BukuTagihanAishii`, migration `20261153` there);
+  when it is unreachable the invoice is a ROUND amount confirmed manually.
+- **Offline cashier queue syncs over the session** (`transactions.sync-offline`);
+  upstream sent it to the token API, which always answered 401. IndexedDB and
+  the service-worker cache are per store (`pos-offline-t<id>`).
+- **Tests**: extend `Tests\BanyakTokoTestCase` (sets the env BEFORE the app
+  boots, since `/t/{toko}` routes are shaped at boot). Proof scripts:
+  `scripts/uji-luring-per-toko.mjs` (offline queue, real Chromium) and
+  `BANYAK_TOKO=1 node scripts/audit-ponsel.mjs`.
 
 ## Inventory Model
 
@@ -155,7 +213,7 @@ After seeding, a default `PUSAT` warehouse is created and existing product stock
 - **Routing**: Ziggy `route()` helper available
 - **Offline mode**: `resources/js/Utils/offlineDb.js` (IndexedDB via `idb`) queues transactions when offline, flushes on reconnect; idempotent via `client_uuid` — server price wins
 - **ESC/POS printing**: `resources/js/Utils/escpos.js` (WebUSB, Chromium-only; fallback `window.print()`)
-- **Tailwind tokens**: `primary` (indigo), `accent` (cyan), `success` (emerald), `warning` (amber), `danger` (rose)
+- **Tailwind tokens**: `primary` (Aishii purple, #752e8e scale), `accent` (violet), `success` (emerald), `warning` (amber), `danger` (rose)
 - **i18n**: Indonesian (`id.json`) and English (`en.json`) in `resources/js/i18n/locales`
 
 ## Docs

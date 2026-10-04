@@ -67,14 +67,17 @@ export default function BankAccounts({ bankAccounts = [] }) {
                             {bankAccounts.map((bank) => (
                                 <div
                                     key={bank.id}
-                                    className={`p-4 flex items-center gap-4 ${
+                                    // Membungkus di ponsel: tombol aktif/ubah/hapus
+                                    // turun ke baris sendiri alih-alih terpotong
+                                    // di luar layar 320px.
+                                    className={`p-4 flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4 ${
                                         !bank.is_active ? "opacity-50" : ""
                                     }`}
                                 >
-                                    <div className="text-slate-400 cursor-move">
+                                    <div className="shrink-0 text-slate-400 cursor-move">
                                         <IconGripVertical size={20} />
                                     </div>
-                                    <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+                                    <div className="w-12 h-12 shrink-0 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
                                         {bank.logo_url ? (
                                             <img
                                                 src={bank.logo_url}
@@ -88,7 +91,7 @@ export default function BankAccounts({ bankAccounts = [] }) {
                                             />
                                         )}
                                     </div>
-                                    <div className="flex-1">
+                                    <div className="min-w-0 flex-1 break-words">
                                         <p className="font-semibold text-slate-800 dark:text-white">
                                             {bank.bank_name}
                                         </p>
@@ -96,7 +99,7 @@ export default function BankAccounts({ bankAccounts = [] }) {
                                             {bank.account_number} • {bank.account_name}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 max-sm:w-full max-sm:justify-end">
                                         {canUpdatePaymentSettings && (
                                             <>
                                                 <button

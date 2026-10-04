@@ -196,7 +196,7 @@
             "title": "Masuk",
             "subtitle": "Selamat Datang Kembali",
             "description": "Masuk untuk mengakses dashboard Anda",
-            "appName": "Aplikasi Kasir",
+            "appName": "Aishii POS",
             "email": "Email",
             "emailPlaceholder": "nama@email.com",
             "password": "Password",
@@ -209,7 +209,7 @@
             "registerNow": "Daftar Sekarang",
             "registerLink": "Daftar Sekarang",
             "heroTitle": "Kelola Bisnis Anda dengan Mudah",
-            "heroDescription": "Sistem Point of Sale modern yang membantu Anda mengelola transaksi, inventori, dan laporan keuangan dengan efisien.",
+            "heroDescription": "Kasir toko dari keluarga Aishii: barcode, stok per gudang, pemasok, dan laporan laba — dalam bahasa sehari-hari.",
             "features": ["Transaksi Cepat", "Laporan Real-time", "Multi User"]
         },
         "register": {
@@ -260,6 +260,7 @@
         },
         "items": {
             "dashboard": "Dashboard",
+            "subscription": "Langganan",
             "categories": "Kategori",
             "products": "Produk",
             "customers": "Pelanggan",
@@ -898,6 +899,10 @@
     "tour": {
         "button": "Panduan Penggunaan",
         "reset": "Putar Ulang Panduan",
+        "next": "Berikutnya",
+        "prev": "Sebelumnya",
+        "done": "Selesai",
+        "of": "dari",
         "dashboard": {
             "title": "Halaman Dashboard",
             "desc": "Ini adalah pusat ringkasan bisnis Anda. Mari kita jelajahi sekilas.",
@@ -1009,7 +1014,7 @@
     },
     "setupChecklist": {
         "title": "Checklist Persiapan Toko",
-        "subtitle": ":done dari :total langkah selesai — lengkapi untuk mulai berjualan.",
+        "subtitle": "{{done}} dari {{total}} langkah selesai — lengkapi untuk mulai berjualan.",
         "items": {
             "store_profile": "Lengkapi profil toko",
             "category": "Buat kategori pertama",
@@ -1017,5 +1022,14 @@
             "customer": "Daftarkan pelanggan pertama",
             "transaction": "Selesaikan transaksi pertama"
         }
+    },
+    "account": {
+        "menu": "Menu akun",
+        "profile": "Profil",
+        "logout": "Keluar",
+        "theme_light": "Mode terang",
+        "theme_dark": "Mode gelap",
+        "toggle_menu": "Buka/tutup menu",
+        "notifications": "Notifikasi"
     }
 }

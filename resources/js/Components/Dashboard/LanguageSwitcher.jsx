@@ -1,21 +1,33 @@
-import React from "react";
-import { usePage, useForm } from "@inertiajs/react";
+import React, { useState } from "react";
+import { usePage, router } from "@inertiajs/react";
 import { IconLanguage } from "@tabler/icons-react";
 import { Menu, Transition } from "@headlessui/react";
 
 export default function LanguageSwitcher() {
     const { locale } = usePage().props;
-    const { post, processing } = useForm({
-        locale: locale?.current || "id",
-    });
+    const [processing, setProcessing] = useState(false);
 
+    /*
+     * Bahasa PILIHAN dikirim di BADAN permintaan. Versi lama mengirim
+     * `useForm({ locale: <bahasa sekarang> })` dengan pilihan di query —
+     * dan `$request->input('locale')` Laravel mendahulukan badan, jadi yang
+     * tersimpan selalu bahasa yang SEDANG dipakai: sakelar bahasa di PC tidak
+     * pernah mengganti apa pun (terukur: query en + badan id → sesi id).
+     */
     const handleChange = (e) => {
-        post(route("language.switch", { locale: e }), {
-            preserveScroll: true,
-            onSuccess: () => {
-                window.location.reload();
-            },
-        });
+        if (e === locale?.current) return;
+        router.post(
+            route("language.switch"),
+            { locale: e },
+            {
+                preserveScroll: true,
+                onStart: () => setProcessing(true),
+                onFinish: () => setProcessing(false),
+                onSuccess: () => {
+                    window.location.reload();
+                },
+            }
+        );
     };
 
     const languages = [

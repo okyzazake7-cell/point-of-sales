@@ -1,8 +1,16 @@
-# Point of Sales
+# Aishii POS
 
-Sistem kasir berbasis Laravel + Inertia + React untuk transaksi penjualan, inventory audit, purchasing, finance, CRM, loyalty, dan observability operasional — dengan dukungan multi-warehouse, PPN, dan offline mode.
+Kasir toko keluarga [Aishii](https://aishiierp.com) — berbasis Laravel + Inertia + React untuk transaksi penjualan, inventory audit, purchasing, finance, CRM, loyalty, dan observability operasional — dengan dukungan multi-warehouse, PPN, dan offline mode.
 
-> 200+ GitHub stars • Open-source • MIT License
+> Fork berlisensi MIT dari **[Point of Sales](https://github.com/aryadwiputra/point-of-sales)** karya **Arya Dwi Putra**. Pemberitahuan hak cipta aslinya tetap di `LICENSE`.
+
+### Yang membedakannya dari proyek asli
+
+- **Merek & tampilan keluarga Aishii** — ungu Aishii (`#752e8e`), huruf Plus Jakarta Sans yang disajikan sendiri, ikon dan manifest PWA Aishii. Merek ditulis di satu tempat per dunia: `config/brand.php` (PHP/Blade) dan `resources/js/Utils/brand.js` (React), dijaga `tests/Feature/BrandTest.php`.
+- **Ramah ponsel yang diukur** — `node scripts/audit-ponsel.mjs` menjalankan Chromium atas data demo dan memeriksa tiap halaman (termasuk halaman rincian) di lebar 390 dan 320 piksel: luber mendatar, tombol yang terpotong, dan teks yang menembus kotaknya.
+- **Bahasa Indonesia sejak kunjungan pertama** — bahasa tidak ditebak dari HP; English tetap bisa dipilih sendiri.
+- **Kamera dan USB tidak diblokir** — `Permissions-Policy` membuka `camera` dan `usb` untuk asal sendiri, sehingga pemindai barcode kamera dan printer struk WebUSB bekerja.
+- **Menu dari halaman depan Aishii** — halaman `/pos` di aishiierp.com memperkenalkan aplikasi ini dan mengantar ke sini begitu alamatnya diisi (`NUXT_PUBLIC_POS_URL` di repo Aishii).
 
 ---
 
@@ -88,7 +96,7 @@ Sistem kasir berbasis Laravel + Inertia + React untuk transaksi penjualan, inven
 ## Quick Start
 
 ```bash
-git clone https://github.com/aryadwiputra/point-of-sales.git
+git clone https://github.com/okyzazake7-cell/point-of-sales.git
 cd point-of-sales
 cp .env.example .env
 composer install && PUPPETEER_SKIP_DOWNLOAD=true npm install
@@ -122,7 +130,7 @@ Ingin langsung mencoba dengan data contoh? Jalankan `php artisan seed:demo --for
 
 ## REST API (OpenAPI)
 
-Dikasir menyediakan REST API untuk integrasi mobile app / pihak ketiga. Dokumentasi interaktif otomatis (Scramble) tersedia di:
+Aishii POS menyediakan REST API untuk integrasi mobile app / pihak ketiga. Dokumentasi interaktif otomatis (Scramble) tersedia di:
 
 - **UI docs:** `/docs/api` — coba endpoint langsung dari browser (Try It)
 - **OpenAPI spec:** `/docs/api.json` — untuk generate client (Postman, OpenAPI Generator, Swagger Codegen)
@@ -131,13 +139,13 @@ Semua endpoint (kecuali `auth/login`, `auth/register`, webhooks) memerlukan **Be
 
 ```bash
 # 1. Login → dapat token
-curl -X POST https://dikasir.web.id/api/v1/auth/login \
+curl -X POST https://<alamat-aishii-pos>/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@example.com","password":"password"}'
 # → {"token": "1|abc123...", "user": {...}}
 
 # 2. Panggil API dengan token
-curl https://dikasir.web.id/api/v1/products \
+curl https://<alamat-aishii-pos>/api/v1/products \
   -H "Authorization: Bearer 1|abc123..."
 ```
 
@@ -153,7 +161,7 @@ curl https://dikasir.web.id/api/v1/products \
 | Supplier | `suppliers` | CRUD |
 | POS | `pos/shift`, `pos/products`, `pos/cart`, `pos/hold`, `pos/checkout`, `pos/transactions` | Alur kasir lengkap (mobile) |
 
-Base URL: `https://dikasir.web.id/api/v1` (dev: `http://localhost:8000/api/v1`)
+Base URL: `https://<alamat-aishii-pos>/api/v1` (dev: `http://localhost:8000/api/v1`)
 
 ### Per Modul
 
@@ -179,12 +187,17 @@ Base URL: `https://dikasir.web.id/api/v1` (dev: `http://localhost:8000/api/v1`)
 
 ## Kontribusi
 
-1. Branch dari `development`: `git checkout -b feature/nama-fitur development`
-2. Buat PR ke `development`
-3. PR ke `main` hanya dari `development` via branching release
+Perbaikan yang berlaku umum — bukan khas Aishii — sebaiknya dikirim ke [proyek aslinya](https://github.com/aryadwiputra/point-of-sales), supaya seluruh pemakainya ikut menikmati, lalu ditarik ke fork ini.
 
-Pastikan `php artisan test` lulus sebelum PR.
+Sebelum PR di fork ini:
+
+```bash
+php artisan test                          # seluruh uji PHP
+npm run build                             # bundel Vite
+php artisan seed:demo --force && php artisan serve --port=8000
+node scripts/audit-ponsel.mjs             # nol luber di 390 dan 320 piksel
+```
 
 ## Lisensi
 
-MIT License
+MIT License — hak cipta asli © Arya Dwi Putra, lihat `LICENSE`.

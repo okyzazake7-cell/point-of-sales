@@ -7,8 +7,10 @@ import {
     IconPackage,
     IconReceipt,
     IconCurrencyDollar,
+    IconX,
 } from "@tabler/icons-react";
 import { usePage, router } from "@inertiajs/react";
+import i18n from "@/i18n";
 
 export default function Notification() {
     const {
@@ -142,12 +144,14 @@ export default function Notification() {
             )}
             {data.map((item) => (
                 <div
-                    className="flex items-center justify-between w-full p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow transition-all"
+                    className="flex items-center justify-between gap-2 w-full p-3 md:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-primary-200 dark:hover:border-primary-800 hover:shadow transition-all"
                     key={item.id}
                 >
-                    <div className="flex items-center gap-4">
-                        {item.icon}
-                        <div>
+                    {/* Teks boleh MEMBUNGKUS: nama produk yang panjang dulu
+                        mendorong tombol "Dibaca" keluar dari laci ponsel. */}
+                    <div className="flex min-w-0 items-center gap-3 md:gap-4">
+                        <span className="shrink-0">{item.icon}</span>
+                        <div className="min-w-0 break-words">
                             <div className="font-semibold text-sm md:text-base text-gray-700 dark:text-gray-200">
                                 {item.title}
                             </div>
@@ -159,7 +163,7 @@ export default function Notification() {
                     <button
                         onClick={() => handleMarkRead(item.id)}
                         disabled={item.noAck}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-primary-600 hover:bg-primary-50 dark:text-primary-300 dark:hover:bg-primary-900/30 border border-transparent hover:border-primary-200 dark:hover:border-primary-800 ${item.noAck ? "opacity-50 cursor-default" : ""}`}
+                        className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-primary-600 hover:bg-primary-50 dark:text-primary-300 dark:hover:bg-primary-900/30 border border-transparent hover:border-primary-200 dark:hover:border-primary-800 ${item.noAck ? "opacity-50 cursor-default" : ""}`}
                     >
                         <IconCircleCheck size={16} />
                         Dibaca
@@ -228,13 +232,19 @@ export default function Notification() {
                     <div
                         className={`${
                             isOpen ? "translate-x-0 opacity-100" : "translate-x-full"
-                        } fixed top-0 right-0 z-50 w-[300px] h-full transition-all duration-300 transform border-l bg-white dark:bg-gray-950 dark:border-gray-900`}
+                        } fixed top-0 right-0 z-50 w-80 max-w-[85vw] h-full transition-all duration-300 transform border-l bg-white dark:bg-gray-950 dark:border-gray-900`}
                     >
                         <div className="flex justify-between items-center gap-2 p-4 border-b mt-2 dark:border-gray-900 ">
                             <div className="text-base font-bold text-gray-500 dark:text-gray-400 ">
-                                Notifications
+                                {i18n.t("account.notifications")}
                             </div>
-                            <IconDots className="text-gray-500 dark:text-gray-400" size={24} />
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-1 rounded-lg text-gray-500 hover:bg-slate-100 dark:text-gray-400 dark:hover:bg-slate-800"
+                                aria-label="Tutup"
+                            >
+                                <IconX size={22} />
+                            </button>
                         </div>
                         <div className="p-4">
                             <div className="flex flex-col gap-3 items-start overflow-y-auto h-screen">

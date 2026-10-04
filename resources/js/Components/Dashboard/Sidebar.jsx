@@ -4,6 +4,8 @@ import { IconLayoutGrid } from "@tabler/icons-react";
 import LinkItem from "@/Components/Dashboard/LinkItem";
 import LinkItemDropdown from "@/Components/Dashboard/LinkItemDropdown";
 import Menu from "@/Utils/Menu";
+import OutletSwitcher from "@/Components/Dashboard/OutletSwitcher";
+import { BRAND } from "@/Utils/brand";
 
 export default function Sidebar({ sidebarOpen }) {
     const { auth, storeProfile, appVersion } = usePage().props;
@@ -65,6 +67,21 @@ export default function Sidebar({ sidebarOpen }) {
                     )
                 )}
             </div>
+
+            {/*
+                Pemilih outlet MENGALAH dari bilah atas di ponsel (tidak muat di
+                samping nama toko) dan pindah ke sini — laci yang sama dengan
+                seluruh menu, satu ketukan dari tombol menu.
+            */}
+            {sidebarOpen && (
+                <div className="md:hidden px-3 pt-3 [&_label]:w-full [&_select]:max-w-none [&_select]:w-full">
+                    <OutletSwitcher
+                        outlet={auth?.currentOutlet}
+                        outlets={auth?.outlets}
+                        locked={auth?.outletLocked}
+                    />
+                </div>
+            )}
 
             {/* Navigation */}
             <nav className="dashboard-scrollbar min-h-0 flex-1 overflow-y-auto py-3">
@@ -130,7 +147,7 @@ export default function Sidebar({ sidebarOpen }) {
             {sidebarOpen && (
                 <div className="p-4 border-t border-slate-100 dark:border-slate-800">
                     <p className="text-[10px] text-slate-400 dark:text-slate-600 text-center">
-                        Point of Sales {appVersion}
+                        {BRAND.name} {appVersion}
                     </p>
                 </div>
             )}

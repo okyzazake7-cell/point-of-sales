@@ -146,7 +146,10 @@ function EmptyState({ message }) {
 
 function ChartCard({ title, subtitle, chartRef, hasData }) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        // `min-w-0` + wadah `relative`: kanvas Chart.js yang responsif harus
+        // boleh MENYUSUT mengikuti lajur grid; tanpanya lebar kanvas lama
+        // menahan lajurnya dan halaman ini bisa digeser ke samping di ponsel.
+        <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <div className="mb-4">
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                     {title}
@@ -156,7 +159,7 @@ function ChartCard({ title, subtitle, chartRef, hasData }) {
                 </p>
             </div>
             {hasData ? (
-                <div className="h-72">
+                <div className="relative h-72">
                     <canvas ref={chartRef} />
                 </div>
             ) : (

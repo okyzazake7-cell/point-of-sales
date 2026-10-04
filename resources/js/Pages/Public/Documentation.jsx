@@ -1,8 +1,11 @@
 import { Head } from "@inertiajs/react";
 import PublicLayout from "@/Layouts/PublicLayout";
+import { BRAND } from "@/Utils/brand";
 import { IconBook2, IconArrowRight, IconBrandGithub } from "@tabler/icons-react";
 
-const GITHUB_URL = "https://github.com/aryadwiputra/point-of-sales";
+// Dokumen dibaca dari repo fork Aishii POS (publik) — dokumen yang ikut
+// berubah bersama kode yang benar-benar dijalankan, bukan versi hulu.
+const GITHUB_URL = BRAND.sourceUrl;
 const DOCS_BASE = `${GITHUB_URL}/blob/main/docs`;
 const REPO_BASE = `${GITHUB_URL}/blob/main`;
 
@@ -74,10 +77,10 @@ const categories = [
 export default function Documentation() {
     return (
         <PublicLayout active="/dokumentasi">
-            <Head title="Dokumentasi — Dikasir" />
+            <Head title="Dokumentasi" />
 
             {/* Header */}
-            <section className="pt-20 pb-14 px-6 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
+            <section className="pt-16 sm:pt-20 pb-14 px-4 sm:px-6 bg-gradient-to-b from-primary-50 dark:from-primary-950/40 to-transparent">
                 <div className="max-w-4xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 dark:bg-primary-950/50 text-primary-600 dark:text-primary-400 text-sm font-medium mb-5 border border-primary-100 dark:border-primary-900">
                         <IconBook2 size={16} />
@@ -87,14 +90,14 @@ export default function Documentation() {
                         Dokumentasi Lengkap
                     </h1>
                     <p className="mt-5 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Semua panduan tersedia di repository GitHub — selalu terbaru, ikut
-                        berkembang bersama kode.
+                        Panduan tiap modul {BRAND.name}, disimpan bersama kodenya supaya selalu
+                        sesuai dengan aplikasi yang berjalan.
                     </p>
                 </div>
             </section>
 
             {/* Categories */}
-            <section className="pb-20 px-6">
+            <section className="pb-20 px-4 sm:px-6">
                 <div className="max-w-5xl mx-auto space-y-14">
                     {categories.map((cat) => (
                         <div key={cat.title}>
@@ -129,15 +132,15 @@ export default function Documentation() {
             </section>
 
             {/* CTA */}
-            <section className="pb-20 px-6">
+            <section className="pb-20 px-4 sm:px-6">
                 <div className="max-w-3xl mx-auto">
                     <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 p-8 text-center">
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
                             Dokumentasi kurang jelas?
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400 mb-6">
-                            Dokumentasi juga open source — perbaiki dan buat PR, atau tanya di
-                            GitHub Discussions.
+                            Tanya jawab keluarga Aishii ada di halaman bantuan; dokumen teknisnya
+                            terbuka di GitHub.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                             <a
@@ -147,15 +150,13 @@ export default function Documentation() {
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all"
                             >
                                 <IconBrandGithub size={18} />
-                                Lihat semua docs di GitHub
+                                Semua dokumen di GitHub
                             </a>
                             <a
-                                href={`${GITHUB_URL}/discussions`}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={`${BRAND.parentUrl}/bantuan`}
                                 className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-primary-300 transition-colors"
                             >
-                                Tanya di Discussions
+                                Bantuan Aishii
                             </a>
                         </div>
                     </div>

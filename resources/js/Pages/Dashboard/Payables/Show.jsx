@@ -142,20 +142,23 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-3">
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        {/* Di ponsel ketiga angka BERTUMPUK, label di kiri dan nominal di
+                            kanan: tiga kotak sejajar di 390px menyisakan ±74px untuk
+                            "Rp 754.000" dan angkanya menembus kotaknya. */}
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+                            <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                 <p className="text-xs text-slate-500">Total</p>
                                 <p className="text-lg font-bold text-slate-900 dark:text-white">
                                     {formatCurrency(payable.total)}
                                 </p>
                             </div>
-                            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                            <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                 <p className="text-xs text-slate-500">Terbayar</p>
                                 <p className="text-lg font-bold text-success-600">
                                     {formatCurrency(payable.paid)}
                                 </p>
                             </div>
-                            <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
+                            <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
                                 <p className="text-xs text-amber-700">Sisa</p>
                                 <p className="text-lg font-bold text-amber-700">
                                     {formatCurrency(payable.remaining)}
@@ -430,20 +433,20 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-3 mt-4">
-                                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3 mt-4">
+                                    <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                         <p className="text-xs text-slate-500">Total</p>
                                         <p className="text-lg font-bold text-slate-900 dark:text-white">
                                             {formatCurrency(payable.total)}
                                         </p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                    <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                         <p className="text-xs text-slate-500">Terbayar</p>
                                         <p className="text-lg font-bold text-success-600">
                                             {formatCurrency(payable.paid)}
                                         </p>
                                     </div>
-                                    <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
+                                    <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
                                         <p className="text-xs text-amber-700">Sisa</p>
                                         <p className="text-lg font-bold text-amber-700">
                                             {formatCurrency(payable.remaining)}

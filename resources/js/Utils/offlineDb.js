@@ -36,28 +36,58 @@ function normalizeQueueRecord(record) {
     };
 }
 
-const dbPromise = openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-        if (!db.objectStoreNames.contains("products")) {
-            db.createObjectStore("products", { keyPath: "id" });
-        }
-        if (!db.objectStoreNames.contains("customers")) {
-            db.createObjectStore("customers", { keyPath: "id" });
-        }
-        if (!db.objectStoreNames.contains("pricing")) {
-            db.createObjectStore("pricing", { keyPath: "id" });
-        }
-        if (!db.objectStoreNames.contains("pending_transactions")) {
-            db.createObjectStore("pending_transactions", {
-                keyPath: "id",
-                autoIncrement: true,
-            });
-        }
-    },
-});
+/**
+ * Mode banyak toko (Aishii POS, dokumen 24 §3 / AS12): SATU basis data
+ * IndexedDB per toko. Nomor pengguna dan nomor gudang berulang di tiap toko,
+ * jadi kunci cakupan `${user}:${gudang}` saja membuat penjualan luring toko A
+ * yang belum terkirim ikut terkirim ke toko B begitu kasir B masuk di
+ * perangkat yang sama — dan daftar produk luring kedua toko saling menimpa.
+ * Mode satu toko tetap memakai nama hulu `pos-offline`, jadi antrean yang
+ * sudah ada di perangkat tidak tertinggal.
+ */
+let tokoAktif = null;
+let terbuka = { nama: null, janji: null };
+
+export function setOfflineStore(tokoId) {
+    tokoAktif = tokoId ? String(tokoId) : null;
+}
+
+export function offlineDbName() {
+    return tokoAktif ? `${DB_NAME}-t${tokoAktif}` : DB_NAME;
+}
+
+function getDb() {
+    const nama = offlineDbName();
+    if (terbuka.nama !== nama) {
+        terbuka = { nama, janji: bukaDb(nama) };
+    }
+    return terbuka.janji;
+}
+
+function bukaDb(nama) {
+    return openDB(nama, DB_VERSION, {
+        upgrade(db) {
+            if (!db.objectStoreNames.contains("products")) {
+                db.createObjectStore("products", { keyPath: "id" });
+            }
+            if (!db.objectStoreNames.contains("customers")) {
+                db.createObjectStore("customers", { keyPath: "id" });
+            }
+            if (!db.objectStoreNames.contains("pricing")) {
+                db.createObjectStore("pricing", { keyPath: "id" });
+            }
+            if (!db.objectStoreNames.contains("pending_transactions")) {
+                db.createObjectStore("pending_transactions", {
+                    keyPath: "id",
+                    autoIncrement: true,
+                });
+            }
+        },
+    });
+}
 
 export async function cacheProducts(products) {
-    const db = await dbPromise;
+    const db = await getDb();
     const tx = db.transaction("products", "readwrite");
     for (const product of products) {
         await tx.store.put(product);
@@ -66,12 +96,12 @@ export async function cacheProducts(products) {
 }
 
 export async function getCachedProducts() {
-    const db = await dbPromise;
+    const db = await getDb();
     return db.getAll("products");
 }
 
 export async function cacheCustomers(customers) {
-    const db = await dbPromise;
+    const db = await getDb();
     const tx = db.transaction("customers", "readwrite");
     for (const customer of customers) {
         await tx.store.put(customer);
@@ -80,12 +110,12 @@ export async function cacheCustomers(customers) {
 }
 
 export async function getCachedCustomers() {
-    const db = await dbPromise;
+    const db = await getDb();
     return db.getAll("customers");
 }
 
 export async function queueTransaction(transactionData, scopeKey = null) {
-    const db = await dbPromise;
+    const db = await getDb();
     return db.add(
         "pending_transactions",
         normalizeQueueRecord({
@@ -97,7 +127,7 @@ export async function queueTransaction(transactionData, scopeKey = null) {
 }
 
 export async function getPendingTransactions(scopeKey = null) {
-    const db = await dbPromise;
+    const db = await getDb();
     const rows = await db.getAll("pending_transactions");
     const staleSyncCutoff = Date.now() - 5 * 60 * 1000;
 
@@ -126,7 +156,7 @@ export async function getPendingCount(scopeKey = null) {
 }
 
 export async function pruneExpiredPendingTransactions(maxAgeDays = 30) {
-    const db = await dbPromise;
+    const db = await getDb();
     const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
     const tx = db.transaction("pending_transactions", "readwrite");
     let cursor = await tx.store.openCursor();
@@ -147,7 +177,7 @@ export async function pruneExpiredPendingTransactions(maxAgeDays = 30) {
 }
 
 export async function updatePendingTransaction(id, changes) {
-    const db = await dbPromise;
+    const db = await getDb();
     const current = await db.get("pending_transactions", id);
     if (!current) return;
     await db.put(
@@ -157,11 +187,11 @@ export async function updatePendingTransaction(id, changes) {
 }
 
 export async function removePendingTransaction(id) {
-    const db = await dbPromise;
+    const db = await getDb();
     return db.delete("pending_transactions", id);
 }
 
 export async function clearPendingTransactions() {
-    const db = await dbPromise;
+    const db = await getDb();
     await db.clear("pending_transactions");
 }

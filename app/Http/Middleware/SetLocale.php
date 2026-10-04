@@ -21,16 +21,14 @@ class SetLocale
             $locale = $request->session()->get('locale');
         } elseif ($request->cookie('locale')) {
             $locale = $request->cookie('locale');
-        } elseif ($request->hasHeader('Accept-Language')) {
-            $acceptLanguage = $request->header('Accept-Language');
-            $preferredLocale = explode(',', $acceptLanguage)[0] ?? null;
-            if ($preferredLocale) {
-                $localeCode = explode('-', $preferredLocale)[0];
-                if (in_array($localeCode, $availableLocales)) {
-                    $locale = $localeCode;
-                }
-            }
         }
+
+        // `Accept-Language` sengaja TIDAK dibaca. Banyak ponsel di Indonesia
+        // berbahasa sistem Inggris, dan menebak dari sana menyuguhkan
+        // antarmuka Inggris kepada pedagang yang tidak pernah memintanya —
+        // keluarga Aishii berbahasa Indonesia sejak kunjungan pertama. Yang
+        // menginginkan English memilihnya sendiri, dan pilihannya diingat
+        // (pengguna, sesi, kuki) oleh cabang-cabang di atas.
 
         if (! in_array($locale, $availableLocales)) {
             $locale = $defaultLocale;

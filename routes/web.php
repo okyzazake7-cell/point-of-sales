@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PosApiController;
 use App\Http\Controllers\Apps\AgingController;
 use App\Http\Controllers\Apps\AuditLogController;
 use App\Http\Controllers\Apps\BankAccountController;
@@ -53,28 +54,38 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UserController;
 use App\Models\Setting;
+use App\Penyewaan\Penyewaan;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    if (! Setting::getBool('app_setup_completed', false)) {
+    // Mode banyak toko: halaman depan milik layanan, bukan satu toko — tidak
+    // ada wizard yang harus diselesaikan dulu, dan pintunya /daftar.
+    if (! config('penyewaan.aktif') && ! Setting::getBool('app_setup_completed', false)) {
         return redirect()->route('setup.index');
     }
 
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => config('security.auth.public_registration'),
+        // Nama sengaja beda dari prop bersama `langganan` (status toko).
+        'hargaLayanan' => config('penyewaan.aktif') ? [
+            'harga_per_outlet' => (int) config('langganan.harga_per_outlet'),
+        ] : null,
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
 });
 
-// First-install setup wizard (locked out once app_setup_completed = true)
-Route::middleware('setup.notinstalled')->group(function () {
-    Route::get('/setup', [SetupController::class, 'index'])->name('setup.index');
-    Route::post('/setup', [SetupController::class, 'store'])->middleware('throttle:10,1')->name('setup.store');
-});
+// First-install setup wizard (locked out once app_setup_completed = true).
+// Mode banyak toko: tidak ada — toko baru lahir lewat /daftar.
+if (! config('penyewaan.aktif')) {
+    Route::middleware('setup.notinstalled')->group(function () {
+        Route::get('/setup', [SetupController::class, 'index'])->name('setup.index');
+        Route::post('/setup', [SetupController::class, 'store'])->middleware('throttle:10,1')->name('setup.store');
+    });
+}
 
 // Public marketing pages (open source)
 Route::get('/fitur', fn () => Inertia::render('Public/Features'))->name('features.index');
@@ -86,18 +97,29 @@ Route::get('/dashboard/access', function () {
     return Inertia::render('Dashboard/Access');
 })->middleware(['auth'])->name('dashboard.access');
 
-// Public share routes (no login, but require the transaction access token)
-Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])
-    ->middleware('throttle:10,1')
-    ->name('transactions.public');
+// Tautan publik toko — dibuka PELANGGAN toko tanpa masuk. Dalam mode banyak
+// toko berawalan /t/{toko} (Penyewaan::grupPublik, dokumen 24 §3); dalam
+// mode satu toko alamatnya tetap seperti di hulu.
+Route::group(Penyewaan::grupPublik(), function () {
+    // Public share routes (no login, but require the transaction access token)
+    Route::get('/share/transactions/{invoice}', [DocumentController::class, 'publicInvoice'])
+        ->middleware('throttle:10,1')
+        ->name('transactions.public');
 
-// Customer portal routes (no login, token-based)
-Route::get('/portal/transactions/{invoice}', [PublicPortalController::class, 'showTransaction'])
-    ->middleware('throttle:10,1')
-    ->name('portal.transaction');
-Route::post('/portal/receivables/{receivable}/pay', [PublicPortalController::class, 'payReceivable'])
-    ->middleware('throttle:5,1')
-    ->name('portal.receivable.pay');
+    // Customer portal routes (no login, token-based)
+    Route::get('/portal/transactions/{invoice}', [PublicPortalController::class, 'showTransaction'])
+        ->middleware('throttle:10,1')
+        ->name('portal.transaction');
+    Route::post('/portal/receivables/{receivable}/pay', [PublicPortalController::class, 'payReceivable'])
+        ->middleware('throttle:5,1')
+        ->name('portal.receivable.pay');
+
+    // dine-in public routes
+    Route::get('/dine/{token}', [DineMenuController::class, 'show'])->name('dine.menu');
+    Route::post('/dine/{token}/order', [DineOrderController::class, 'store'])->name('dine-order.store');
+    Route::get('/dine-order/{accessToken}', [DineOrderController::class, 'status'])->name('dine-order.status');
+    Route::get('/dine-order/{accessToken}/check', [DineOrderController::class, 'statusCheck'])->middleware('throttle:30,1')->name('dine-order.status-check');
+});
 
 // Language switch
 Route::post('/language/switch', [LanguageController::class, 'switch'])->name('language.switch');
@@ -257,6 +279,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     // route transaction store
     Route::post('/transactions/store', [TransactionController::class, 'store'])->middleware(['permission:transactions-access', 'active_shift'])->name('transactions.store');
+    // Antrean penjualan luring dari LAYAR KASIR. Jalur API /api/v1/pos/
+    // transactions/sync menuntut token Sanctum — dan layar kasir tidak punya
+    // token, hanya sesi — sehingga tiap kiriman dari peramban dijawab 401 dan
+    // penjualan luring tidak pernah terkirim (terukur 3 Okt, AS12). Pengendali
+    // yang SAMA, lewat sesi; shift aktif diperiksa per penjualan di dalamnya.
+    Route::post('/transactions/sync-offline', [PosApiController::class, 'syncTransactions'])->middleware(['permission:transactions-access', 'throttle:30,1'])->name('transactions.sync-offline');
     Route::get('/transactions/{invoice}/status', [TransactionController::class, 'status'])->middleware('permission:transactions-access')->name('transactions.status');
     Route::get('/transactions/{invoice}/qr', [TransactionController::class, 'qrisImage'])->middleware('permission:transactions-access')->name('transactions.qr');
     Route::get('/transactions/{invoice}/print', [TransactionController::class, 'print'])->middleware('permission:transactions-access')->name('transactions.print');
@@ -436,10 +464,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// dine-in public routes
-Route::get('/dine/{token}', [DineMenuController::class, 'show'])->name('dine.menu');
-Route::post('/dine/{token}/order', [DineOrderController::class, 'store'])->name('dine-order.store');
-Route::get('/dine-order/{accessToken}', [DineOrderController::class, 'status'])->name('dine-order.status');
-Route::get('/dine-order/{accessToken}/check', [DineOrderController::class, 'statusCheck'])->middleware('throttle:30,1')->name('dine-order.status-check');
-
 require __DIR__.'/auth.php';
+
+if (config('penyewaan.aktif')) {
+    require __DIR__.'/penyewaan.php';
+}

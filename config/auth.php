@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pusat\Pengelola;
 use App\Models\User;
 
 return [
@@ -42,6 +43,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Pengelola layanan Aishii POS (mode banyak toko): akun PUSAT dengan
+        // kunci sesinya sendiri — masuk sebagai pengelola tidak membuat siapa
+        // pun masuk ke toko mana pun, dan sebaliknya.
+        'pengelola' => [
+            'driver' => 'session',
+            'provider' => 'pengelola',
+        ],
     ],
 
     /*
@@ -65,6 +74,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
+        ],
+
+        'pengelola' => [
+            'driver' => 'eloquent',
+            'model' => Pengelola::class,
         ],
 
         // 'users' => [

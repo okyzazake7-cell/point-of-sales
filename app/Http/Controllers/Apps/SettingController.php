@@ -285,7 +285,7 @@ class SettingController extends Controller
 
         $sent = $this->whatsAppService->send(
             $request->target,
-            'Test pesan dari Point of Sales — '.config('app.url'),
+            'Pesan uji dari '.config('brand.name').' — '.config('app.url'),
             $outlet
         );
 

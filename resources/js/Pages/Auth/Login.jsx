@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 import { useTranslation } from "react-i18next";
 import AuthBotGuardFields from "@/Components/AuthBotGuardFields";
 import {
-    IconShoppingCart,
     IconMail,
     IconLock,
     IconEye,
@@ -14,6 +14,8 @@ import { useState } from "react";
 
 export default function Login({ status, canResetPassword, canRegister, botGuard }) {
     const { t } = useTranslation();
+    // Mode banyak toko: toko baru lahir lewat /daftar (dokumen 24 §4).
+    const { banyakToko } = usePage().props;
     const honeypotField = botGuard?.honeypot_field || "company_website";
     const tokenField = botGuard?.token_field || "bot_guard_token";
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -48,12 +50,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                                 href="/"
                                 className="inline-flex items-center gap-3 mb-6"
                             >
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                                    <IconShoppingCart
-                                        size={24}
-                                        className="text-white"
-                                    />
-                                </div>
+                                <ApplicationLogo className="w-12 h-12" />
                                 <span className="text-2xl font-bold text-slate-900 dark:text-white">
                                     {t("auth.login.appName")}
                                 </span>
@@ -210,6 +207,18 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                                 )}
                             </button>
 
+                            {banyakToko && (
+                                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                    Belum punya toko di Aishii POS?{" "}
+                                    <Link
+                                        href="/daftar"
+                                        className="text-primary-500 hover:text-primary-600 font-semibold"
+                                    >
+                                        Daftarkan toko
+                                    </Link>
+                                </p>
+                            )}
+
                             {/* Register Link */}
                             {canRegister && (
                                 <p className="text-center text-sm text-slate-600 dark:text-slate-400">
@@ -229,9 +238,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                 {/* Right - Image/Decoration */}
                 <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-500 to-primary-700 items-center justify-center p-12">
                     <div className="max-w-md text-center text-white">
-                        <div className="w-24 h-24 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-8">
-                            <IconShoppingCart size={48} />
-                        </div>
+                        <ApplicationLogo className="w-24 h-24 mx-auto mb-8 rounded-2xl ring-4 ring-white/20" />
                         <h2 className="text-3xl font-bold mb-4">
                             {t("auth.login.heroTitle")}
                         </h2>
