@@ -1,5 +1,13 @@
 # Menerbitkan Aishii POS di `pos.aishiierp.com`
 
+> **DITUNDA — 4 Okt 2026.** Pemilik memilih **serverless**, bukan VPS
+> (gelombang AT, `docs/permintaan-4okt.md` di repo Aishii). Langkah yang
+> berlaku sekarang ada di `docs/langkah-pemilik-aishii-pos.md` (repo Aishii,
+> bernomor P1–P13), rancangannya di
+> `docs/rencana-saas/25-aishii-pos-serverless.md` (repo Aishii). Panduan VPS
+> ini tetap di repo sebagai CADANGAN bila serverless ternyata tidak bisa
+> dipakai — jangan diikuti tanpa keputusan pemilik yang baru.
+
 Panduan AS10 (`docs/permintaan-3okt.md` di repo Aishii; rancangannya dokumen
 24 di sana). Aishii POS berjalan di **server sendiri** — Cloudflare Workers
 yang menyajikan Aishii tidak menjalankan PHP — dalam **mode banyak toko**:
@@ -172,8 +180,8 @@ sudo -u deploy php8.4 artisan pengelola:buat SUREL-PENGELOLA
   kerusakan: ia akan menulis tabel toko ke basis data pusat. Pusat lewat
   `pusat:migrasi`, seluruh toko lewat `toko:migrasi`.
 - **`pusat:wilayah`** mengisi provinsi sampai desa (83.762 desa; 5 detik di
-  SQLite uji, di MySQL belum diukur) — formulir alamat pelanggan dan member
-  membacanya. Perintah
+  SQLite uji, 4,2 detik di MariaDB 10.11 — terukur 4 Okt) — formulir alamat
+  pelanggan dan member membacanya. Perintah
   hulu `laravolt:indonesia:seed` ditolak pagar yang sama (AS16), jadi
   jangan dipakai. Aman diulang: begitu terisi, ia berhenti seketika.
 - **`pengelola:buat`** menanyakan sandi (minimal 12 huruf). Akun ini masuk

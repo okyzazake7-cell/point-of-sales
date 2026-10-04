@@ -26,7 +26,13 @@ original copyright in `LICENSE`, and send generic fixes upstream.
   scanner and WebUSB receipt printing depend on them.
 - Aishii POS is sold as a service at `https://pos.aishiierp.com` in multi-store
   mode (decision AS5; design: document 24 in the Aishii repo). See "Multi-store
-  mode" below; the server runbook is `docs/deploy-pos-aishiierp.md`.
+  mode" below. Hosting is going **serverless** (owner decision 4 Oct, wave AT;
+  design: document 25 in the Aishii repo, owner steps P1–P13 in its
+  `docs/langkah-pemilik-aishii-pos.md`). The VPS runbook
+  `docs/deploy-pos-aishiierp.md` is DEFERRED — a fallback, not the plan.
+  The multi-store MySQL path was proven end to end on MariaDB 10.11 (4 Oct);
+  upstream tests are only green on SQLite — 12 fail on MariaDB, including
+  Advanced Sales Insights answering 500 under MySQL strict GROUP BY (AT3).
 
 **Branch structure:**
 - `main` — production. Protected. PR only from `development`.
@@ -54,7 +60,7 @@ original copyright in `LICENSE`, and send generic fixes upstream.
 ## CI / Deploy
 
 - **CI validates and tests** — `.github/workflows/deploy.yml` validates Composer, runs `npm run build`, and executes `php artisan test --compact` with PHP 8.4, Node 22, and SQLite. Run `php artisan test` locally before every PR.
-- **Push to `main` deploys to `pos.aishiierp.com` only when the repository variable `POS_DEPLOY` is `aktif`** (secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_KEY`). Until the owner sets it, `main` only runs CI. Never push directly to `main`.
+- **(VPS fallback, deferred) Push to `main` deploys to `pos.aishiierp.com` only when the repository variable `POS_DEPLOY` is `aktif`** (secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_KEY`). Until the owner sets it, `main` only runs CI. Never push directly to `main`.
 - The deploy refuses a server whose `.env` lacks `POS_MULTI_TOKO=true`, then runs `pusat:migrasi --force` → `pusat:wilayah` → `toko:migrasi --force` (never plain `migrate`) and ends with `bash scripts/uji-asap-pos.sh $POS_URL`, which checks things only a ready multi-store server answers (`/daftar`, `/api/harga`, `X-Toko` on the API, CORS for Aishii's `/pos`).
 - npm is the package manager of record (`package-lock.json` committed, `bun.lock` gitignored). CI/deploy run `npm ci`. Don't switch to bun/yarn lockfiles.
 
