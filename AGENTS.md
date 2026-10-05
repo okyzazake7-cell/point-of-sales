@@ -33,10 +33,11 @@ original copyright in `LICENSE`, and send generic fixes upstream.
   `cloudflare/proksi.js` (the Worker in front of `*.run.app`), `pos:siapkan`,
   `POST /_jadwal`. The VPS runbook `docs/deploy-pos-aishiierp.md` is DEFERRED.
 - Upstream CI runs SQLite only. Before a PR that touches queries or
-  migrations, run the suite on MySQL too: MariaDB 10.11 and TiDB v8.5.3 are
-  both 462/493 (5 Oct) — the 31 left are multi-store tests whose harness is
-  SQLite-only. A page makes 84–159 queries, so production keeps the database
-  in the same city as Cloud Run.
+  migrations, run the suite on MySQL too: TiDB v8.5.3 is 479/514 (5 Oct,
+  after stage 1c; MariaDB 10.11 was 462/493 at stage 1a) — every failure is
+  in `tests/Feature/BanyakToko`, whose harness is SQLite-only. A page makes
+  84–159 queries, so production keeps the database in the same city as
+  Cloud Run.
 - Uploaded files go through the `public` disk ONLY (`App\Support\BerkasPublik`
   for URLs and PDF data URIs). `POS_BERKAS=r2` points that disk at R2; R2
   rejects ACL `public-read`, so the disk stays `visibility: private`.

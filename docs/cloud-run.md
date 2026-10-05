@@ -118,7 +118,8 @@ maksimum 3, tagihan per permintaan.
 ## Membuktikan di sesi agen
 
 ```bash
-# MariaDB atau TiDB lokal; seluruh suite (31 uji banyak toko berkerangka SQLite):
+# MariaDB atau TiDB lokal. TiDB 479/514 (5 Okt): SEMUA yang gagal ada di
+# tests/Feature/BanyakToko, yang kerangka ujinya khusus SQLite.
 DB_CONNECTION=mysql DB_HOST=127.0.0.1 DB_PORT=4000 DB_DATABASE=pos_tidb_uji \
   DB_USERNAME=root DB_PASSWORD= php artisan test --compact
 ```
