@@ -77,14 +77,14 @@ class CustomerController extends Controller
          */
         $request->validate([
             'name' => 'required',
-            'no_telp' => 'required|unique:customers',
+            'no_telp' => 'required|string|max:30|unique:customers',
             'address' => 'required',
             'is_loyalty_member' => 'nullable|boolean',
             'loyalty_tier' => ['nullable', 'string', Rule::in(array_keys($this->loyaltyService->tiers()))],
-            'province_id' => 'required|string',
-            'regency_id' => 'required|string',
-            'district_id' => 'required|string',
-            'village_id' => 'required|string',
+            'province_id' => 'required|string|max:10',
+            'regency_id' => 'required|string|max:10',
+            'district_id' => 'required|string|max:10',
+            'village_id' => 'required|string|max:10',
         ]);
 
         $province = Province::where('code', $request->province_id)->first();
@@ -121,14 +121,14 @@ class CustomerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'no_telp' => 'required|string|unique:customers,no_telp',
+            'no_telp' => 'required|string|max:30|unique:customers,no_telp',
             'address' => 'required|string',
             'is_loyalty_member' => 'nullable|boolean',
             'loyalty_tier' => ['nullable', 'string', Rule::in(array_keys($this->loyaltyService->tiers()))],
-            'province_id' => 'nullable|string',
-            'regency_id' => 'nullable|string',
-            'district_id' => 'nullable|string',
-            'village_id' => 'nullable|string',
+            'province_id' => 'nullable|string|max:10',
+            'regency_id' => 'nullable|string|max:10',
+            'district_id' => 'nullable|string|max:10',
+            'village_id' => 'nullable|string|max:10',
         ]);
 
         try {
@@ -222,14 +222,14 @@ class CustomerController extends Controller
          */
         $request->validate([
             'name' => 'required',
-            'no_telp' => 'required|unique:customers,no_telp,'.$customer->id,
+            'no_telp' => 'required|string|max:30|unique:customers,no_telp,'.$customer->id,
             'address' => 'required',
             'is_loyalty_member' => 'nullable|boolean',
             'loyalty_tier' => ['nullable', 'string', Rule::in(array_keys($this->loyaltyService->tiers()))],
-            'province_id' => 'required|string',
-            'regency_id' => 'required|string',
-            'district_id' => 'required|string',
-            'village_id' => 'required|string',
+            'province_id' => 'required|string|max:10',
+            'regency_id' => 'required|string|max:10',
+            'district_id' => 'required|string|max:10',
+            'village_id' => 'required|string|max:10',
         ]);
 
         $province = Province::where('code', $request->province_id)->first();

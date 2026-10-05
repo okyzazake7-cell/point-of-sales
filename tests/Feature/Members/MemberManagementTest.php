@@ -84,9 +84,9 @@ class MemberManagementTest extends TestCase
             'is_loyalty_member' => true,
             'loyalty_tier' => LoyaltyService::TIER_SILVER,
             'province_id' => '11',
-            'regency_id' => '11.01',
-            'district_id' => '11.01.01',
-            'village_id' => '11.01.01.1001',
+            'regency_id' => '1101',
+            'district_id' => '110101',
+            'village_id' => '1101011001',
         ]);
 
         $customer = Customer::query()->latest('id')->first();
@@ -134,11 +134,11 @@ class MemberManagementTest extends TestCase
             'address' => 'Jl. Calon',
             'province_id' => '11',
             'province_name' => 'Aceh',
-            'regency_id' => '11.01',
+            'regency_id' => '1101',
             'regency_name' => 'Kabupaten Test',
-            'district_id' => '11.01.01',
+            'district_id' => '110101',
             'district_name' => 'Kecamatan Test',
-            'village_id' => '11.01.01.1001',
+            'village_id' => '1101011001',
             'village_name' => 'Kelurahan Test',
         ]);
 
@@ -222,27 +222,30 @@ class MemberManagementTest extends TestCase
             });
         }
 
+        // Format kode laravolt (tanpa titik; desa 10 huruf) — sama dengan data
+        // `pusat:wilayah` dan lebar kolom `customers.*_id`. Format bertitik
+        // Kemendagri (13 huruf) hanya lolos di SQLite.
         DB::table('provinces')->insert([
             'code' => '11',
             'name' => 'Aceh',
         ]);
 
         DB::table('cities')->insert([
-            'code' => '11.01',
+            'code' => '1101',
             'name' => 'Kabupaten Test',
             'province_code' => '11',
         ]);
 
         DB::table('districts')->insert([
-            'code' => '11.01.01',
+            'code' => '110101',
             'name' => 'Kecamatan Test',
-            'city_code' => '11.01',
+            'city_code' => '1101',
         ]);
 
         DB::table('villages')->insert([
-            'code' => '11.01.01.1001',
+            'code' => '1101011001',
             'name' => 'Kelurahan Test',
-            'district_code' => '11.01.01',
+            'district_code' => '110101',
         ]);
     }
 }
