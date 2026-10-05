@@ -77,7 +77,7 @@ export default function Store({ settings }) {
                             <div className="w-32 h-32 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden mb-3">
                                 {logoPreview ? (
                                     <img
-                                        src={logoPreview.startsWith("http") || logoPreview.startsWith("/storage")
+                                        src={/^(https?:|blob:|\/storage\/)/.test(logoPreview)
                                             ? logoPreview
                                             : `/storage/${logoPreview}`}
                                         alt="Logo"

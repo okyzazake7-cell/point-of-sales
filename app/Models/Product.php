@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\BerkasPublik;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -147,7 +148,9 @@ class Product extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? asset('/storage/products/'.$value) : null,
+            // Nama berkas polos dari hulu dan penanam data; alamatnya dari disk
+            // `public`, lokal atau R2 (BerkasPublik).
+            get: fn ($value) => BerkasPublik::url($value && ! preg_match('#^(https?://|/storage/)#', $value) ? 'products/'.$value : $value),
         );
     }
 }

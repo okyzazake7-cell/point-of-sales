@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\BerkasPublik;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,21 +64,7 @@ class User extends Authenticatable
     protected function avatar(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
-                if (! $value) {
-                    return null;
-                }
-
-                if (
-                    str_starts_with($value, 'http://') ||
-                    str_starts_with($value, 'https://') ||
-                    str_starts_with($value, '/storage/')
-                ) {
-                    return $value;
-                }
-
-                return asset('storage/'.ltrim($value, '/'));
-            }
+            get: fn ($value) => BerkasPublik::url($value)
         );
     }
 

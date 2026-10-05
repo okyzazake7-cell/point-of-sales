@@ -8,6 +8,7 @@ use App\Services\AuditLogService;
 use App\Services\LoyaltyService;
 use App\Services\OutletAccessService;
 use App\Services\WhatsAppService;
+use App\Support\BerkasPublik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -63,7 +64,8 @@ class SettingController extends Controller
         $outlet = $this->outletAccessService->activeOutlet(request());
         $settings = [
             'store_name' => Setting::getForOutlet('store_name', $outlet, ''),
-            'store_logo' => Setting::getForOutlet('store_logo', $outlet, ''),
+            // Alamat, bukan jalur: di R2 tidak ada /storage untuk ditebak layar.
+            'store_logo' => BerkasPublik::url(Setting::getForOutlet('store_logo', $outlet, '')) ?? '',
             'store_address' => Setting::getForOutlet('store_address', $outlet, ''),
             'store_phone' => Setting::getForOutlet('store_phone', $outlet, ''),
             'store_email' => Setting::getForOutlet('store_email', $outlet, ''),

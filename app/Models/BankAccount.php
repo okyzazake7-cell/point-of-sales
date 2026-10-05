@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\BerkasPublik;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class BankAccount extends Model
 {
@@ -68,6 +68,6 @@ class BankAccount extends Model
 
     public function getLogoUrlAttribute(): ?string
     {
-        return $this->logo ? Storage::disk('public')->url($this->logo) : null;
+        return BerkasPublik::url($this->logo);
     }
 }

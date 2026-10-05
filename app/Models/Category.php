@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\BerkasPublik;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,7 +45,7 @@ class Category extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? asset('/storage/category/'.$value) : null,
+            get: fn ($value) => BerkasPublik::url($value && ! preg_match('#^(https?://|/storage/)#', $value) ? 'category/'.$value : $value),
         );
     }
 }
