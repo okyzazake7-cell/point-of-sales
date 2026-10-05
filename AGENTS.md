@@ -26,13 +26,20 @@ original copyright in `LICENSE`, and send generic fixes upstream.
   scanner and WebUSB receipt printing depend on them.
 - Aishii POS is sold as a service at `https://pos.aishiierp.com` in multi-store
   mode (decision AS5; design: document 24 in the Aishii repo). See "Multi-store
-  mode" below. Hosting is going **serverless** (owner decision 4 Oct, wave AT;
-  design: document 25 in the Aishii repo, owner steps P1–P13 in its
-  `docs/langkah-pemilik-aishii-pos.md`). The VPS runbook
-  `docs/deploy-pos-aishiierp.md` is DEFERRED — a fallback, not the plan.
-  The multi-store MySQL path was proven end to end on MariaDB 10.11 (4 Oct);
-  upstream tests are only green on SQLite — 12 fail on MariaDB, including
-  Advanced Sales Insights answering 500 under MySQL strict GROUP BY (AT3).
+  mode" below. Hosting: **Google Cloud Run in Tokyo + TiDB Cloud Starter in
+  Tokyo + Cloudflare R2** (option E, owner decision 5 Oct; design: document 25
+  in the Aishii repo; owner steps in its `docs/langkah-pemilik-aishii-pos.md`).
+  Technical reference: `docs/cloud-run.md` — `Dockerfile`, `docker/`,
+  `cloudflare/proksi.js` (the Worker in front of `*.run.app`), `pos:siapkan`,
+  `POST /_jadwal`. The VPS runbook `docs/deploy-pos-aishiierp.md` is DEFERRED.
+- Upstream CI runs SQLite only. Before a PR that touches queries or
+  migrations, run the suite on MySQL too: MariaDB 10.11 and TiDB v8.5.3 are
+  both 462/493 (5 Oct) — the 31 left are multi-store tests whose harness is
+  SQLite-only. A page makes 84–159 queries, so production keeps the database
+  in the same city as Cloud Run.
+- Uploaded files go through the `public` disk ONLY (`App\Support\BerkasPublik`
+  for URLs and PDF data URIs). `POS_BERKAS=r2` points that disk at R2; R2
+  rejects ACL `public-read`, so the disk stays `visibility: private`.
 
 **Branch structure:**
 - `main` — production. Protected. PR only from `development`.
@@ -48,7 +55,7 @@ original copyright in `LICENSE`, and send generic fixes upstream.
 
 - **Backend**: Laravel 13 (composer.json requires PHP ^8.3; CI tests on PHP 8.4)
 - **Frontend**: Inertia.js 3.0 + React 19, Vite 5
-- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build; the deploy VPS uses Node 22 (nvm of the `deploy` user) + PHP 8.4
+- **CI**: `.github/workflows/deploy.yml` uses PHP 8.4 + Node 22 for build (its VPS deploy job is gated off; production builds from `Dockerfile` in Cloud Build — PHP 8.4 + Apache, Node 22 for Vite)
 - **Styling**: Tailwind CSS 3 (custom theme in `tailwind.config.js`)
 - **Auth/RBAC**: Spatie Laravel Permission + Laravel Breeze
 - **REST API**: Sanctum token-based at `/api/v1`; Scramble docs at `/docs/api`, spec at `/docs/api.json`; protect with `SCRAMBLE_DOCS_TOKEN`

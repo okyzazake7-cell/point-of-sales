@@ -1,0 +1,12 @@
+// Worker penerus pos.aishiierp.com → Cloud Run (lihat proksi.js).
+// Dipakai untuk uji lokal (`npx wrangler dev --config cloudflare/wrangler.jsonc`)
+// dan bila pemilik memilih menerbitkannya lewat Workers Builds; TUJUAN dan
+// RAHASIA_PROKSI diisi di dasbor, bukan di sini.
+{
+  "name": "aishii-pos-proksi",
+  "main": "proksi.js",
+  "compatibility_date": "2025-07-15",
+  "workers_dev": false,
+  "preview_urls": false,
+  "keep_vars": true
+}

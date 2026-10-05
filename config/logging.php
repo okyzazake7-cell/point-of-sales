@@ -99,6 +99,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
+            // Hanya terpakai bila LOG_STDERR_FORMATTER diisi (Cloud Run:
+            // formatter JSON Google). Formatter JSON bawaannya membuang jejak
+            // tumpukan, padahal jejak itulah yang menunjuk asal galat produksi.
+            'formatter_with' => [
+                'includeStacktraces' => true,
+            ],
             'with' => [
                 'stream' => 'php://stderr',
             ],

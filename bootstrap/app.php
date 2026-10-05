@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Penyewaan\JalankanJadwal;
 use App\Http\Middleware\EnforceAbsoluteSessionLifetime;
 use App\Http\Middleware\EnsureActiveCashierShift;
 use App\Http\Middleware\EnsureBotGuard;
@@ -11,6 +12,7 @@ use App\Http\Middleware\Penyewaan\KenaliToko;
 use App\Http\Middleware\Penyewaan\KenaliTokoApi;
 use App\Http\Middleware\Penyewaan\KenaliTokoDariJalur;
 use App\Http\Middleware\Penyewaan\KunciLangganan;
+use App\Http\Middleware\Penyewaan\TerimaProksi;
 use App\Http\Middleware\SecureHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Auth\AuthenticationException;
@@ -20,6 +22,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Laravel\Sanctum\Exceptions\MissingAbilityException;
@@ -37,8 +40,18 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function () {
+            // Cloud Scheduler (dokumen 25 di repo Aishii): mesin, bukan
+            // peramban — tanpa sesi, tanpa CSRF, tanpa toko. Pagarnya rahasia
+            // di JalankanJadwal; pembatas laju menahan tebakan.
+            Route::post('/_jadwal', JalankanJadwal::class)->middleware('throttle:10,1');
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Paling depan: alamat pengunjung dan host harus sudah benar sebelum
+        // pembatas laju, sesi, dan pembangun tautan membacanya.
+        $middleware->prepend(TerimaProksi::class);
+
         $middleware->web(append: [
             KenaliToko::class,
             KunciLangganan::class,
