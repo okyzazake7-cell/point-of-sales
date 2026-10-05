@@ -19,5 +19,8 @@ Schedule::command($perToko('transactions:expire'))->hourly();
 
 // Langganan Aishii POS: status pembayaran dijemput dari buku tagihan Aishii.
 if (config('penyewaan.aktif')) {
-    Schedule::command('langganan:periksa')->everyMinute()->withoutOverlapping();
+    // Kunci lepas sendiri dalam 5 menit, bukan 24 jam bawaannya: Cloud Run
+    // bisa menghentikan instans di tengah perintah ini (terbitan baru,
+    // penyusutan), dan kunci yang tertinggal menahan penjemputan sehari.
+    Schedule::command('langganan:periksa')->everyMinute()->withoutOverlapping(5);
 }

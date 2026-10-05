@@ -68,6 +68,18 @@ Worker, supaya tidak memakan jatah permintaan Worker. Tiap menit sebab
 pembayaran QRIS dijemput tiap menit, dan panggilan rutin membuat instansnya
 jarang tidur.
 
+- Perintah terjadwal berjalan sebagai subproses `php artisan …` di dalam
+  permintaan itu. Di bawah mod_php `PHP_BINARY` kosong; Laravel menemukan
+  biner CLI lewat `PHP_BINDIR` — terbukti 5 Okt lewat probe di kontainer:
+  `langganan:periksa` berjalan sebagai `www-data`, 270 ms.
+- `langganan:periksa` memakai `withoutOverlapping(5)`, bukan bawaan 24 jam:
+  Cloud Run bisa menghentikan instans di tengah perintah (terbitan baru,
+  penyusutan), dan kunci yang tertinggal menahan penjemputan sehari.
+- Batas waktu permintaan layanan (300 detik) juga batas satu putaran
+  penjadwal: tugas harian per toko (`toko:jalankan …`, pukul 01.00–02.00)
+  yang kelak melewatinya terpotong. Belum terjadi — diukur ulang bila toko
+  sudah puluhan.
+
 ## Log
 
 Laravel menulis ke stderr **satu baris JSON per catatan** berikut `severity`

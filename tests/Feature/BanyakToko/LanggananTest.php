@@ -16,6 +16,7 @@ use Illuminate\Http\Client\Request as PermintaanHttp;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Testing\AssertableInertia;
 use Tests\BanyakTokoTestCase;
@@ -371,5 +372,18 @@ class LanggananTest extends BanyakTokoTestCase
             ->assertHeader('Cache-Control');
         $lintas = $this->withHeader('Origin', 'https://aishiierp.com')->getJson('/api/harga');
         $this->assertContains($lintas->headers->get('Access-Control-Allow-Origin'), ['*', 'https://aishiierp.com']);
+    }
+
+    public function test_payment_poller_lock_releases_itself_within_five_minutes(): void
+    {
+        // Cloud Run bisa menghentikan instans di tengah `langganan:periksa`
+        // (terbitan baru, penyusutan). Kunci withoutOverlapping bawaan
+        // bertahan 24 jam — selama itu pembayaran QRIS tidak dijemput.
+        $periksa = collect(Schedule::events())
+            ->first(fn ($acara) => str_contains($acara->command, 'langganan:periksa'));
+
+        $this->assertNotNull($periksa);
+        $this->assertTrue($periksa->withoutOverlapping);
+        $this->assertSame(5, $periksa->expiresAt);
     }
 }
