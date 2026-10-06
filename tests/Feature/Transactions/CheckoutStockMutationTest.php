@@ -132,7 +132,8 @@ class CheckoutStockMutationTest extends TestCase
 
         $box = Unit::create([
             'name' => 'Box',
-            'code' => 'BOX-'.uniqid(),
+            // Kolom `units.code` varchar(10), sama dengan validasinya.
+            'code' => 'B'.substr(uniqid(), -8),
             'symbol' => 'bx',
         ]);
         $product->units()->attach($box->id, ['conversion_factor' => 12, 'buy_price' => 5000, 'sell_price' => 130000]);

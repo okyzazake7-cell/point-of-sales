@@ -37,3 +37,6 @@ whatsapp-service/bun.lock
 
 # Basis data SQLite per toko (mode banyak toko, pengembangan)
 /database/toko/
+
+# Keadaan lokal `wrangler dev` untuk Worker penerus (cloudflare/proksi.js)
+.wrangler/

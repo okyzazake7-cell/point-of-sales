@@ -15,6 +15,7 @@ use App\Services\CashierShiftService;
 use App\Services\OutletAccessService;
 use App\Services\PayableAgingService;
 use App\Services\ReceivableService;
+use App\Support\BerkasPublik;
 use App\Support\ProductionSecurityBaseline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -224,10 +225,7 @@ class HandleInertiaRequests extends Middleware
         }
 
         if (Schema::hasTable('settings')) {
-            $logo = Setting::getForOutlet('store_logo', $outlet);
-            if ($logo && ! str_starts_with($logo, 'http') && ! str_starts_with($logo, '/storage')) {
-                $logo = asset('storage/'.ltrim($logo, '/'));
-            }
+            $logo = BerkasPublik::url(Setting::getForOutlet('store_logo', $outlet));
 
             $storeProfile = [
                 'name' => Setting::getForOutlet('store_name', $outlet, 'Toko Anda'),

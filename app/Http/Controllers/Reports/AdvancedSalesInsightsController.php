@@ -182,7 +182,9 @@ class AdvancedSalesInsightsController extends Controller
                 'tx',
                 fn ($join) => $join->on('tx.transaction_id', '=', 'td.transaction_id')
             )
-            ->groupBy('td.product_id', 'p.title', 'p.sku', 'c.name', 'ws.current_stock')
+            // `p.stock` ikut dikelompokkan: MySQL/TiDB strict (ONLY_FULL_GROUP_BY)
+            // menolak kolom di luar GROUP BY dan halaman ini menjawab 500 (AT3).
+            ->groupBy('td.product_id', 'p.title', 'p.sku', 'c.name', 'ws.current_stock', 'p.stock')
             ->orderByDesc('qty_sold')
             ->orderByDesc('revenue_total')
             ->limit(10)

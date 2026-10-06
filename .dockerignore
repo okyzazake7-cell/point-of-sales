@@ -1,0 +1,24 @@
+# Konteks build Docker (Dockerfile). Yang dibangun di dalam image tidak ikut
+# dari laptop atau sesi siapa pun.
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+vendor
+public/build
+public/storage
+public/hot
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing
+storage/app/*
+bootstrap/cache/*.php
+database/*.sqlite
+database/toko
+whatsapp-service
+tests
+*.log

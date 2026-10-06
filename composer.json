@@ -16,6 +16,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "laravolt/indonesia": "^0.41",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "maatwebsite/excel": "^3.1.69",
         "picqer/php-barcode-generator": "^3.2",
         "sentry/sentry-laravel": "^4.27",

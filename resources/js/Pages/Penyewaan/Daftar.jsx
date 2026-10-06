@@ -195,6 +195,17 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                             )}
                         </button>
 
+                        {/* Tiap toko mendapat basis data sendiri; di TiDB membuatnya
+                            terukur ±21 detik (dokumen 25 di repo Aishii). Tanpa kalimat
+                            ini, halaman yang diam setengah menit dibaca sebagai macet —
+                            dan yang memuat ulang mendaftar dua kali. */}
+                        {processing && (
+                            <p role="status" className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                Basis data toko Anda sedang dibuat — bisa sampai setengah menit.
+                                Jangan tutup atau muat ulang halaman ini.
+                            </p>
+                        )}
+
                         <p className="text-center text-sm text-slate-600 dark:text-slate-400">
                             Sudah punya toko?{" "}
                             <Link href="/login" className="font-semibold text-primary-600 hover:text-primary-700">

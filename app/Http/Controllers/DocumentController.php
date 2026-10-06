@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\Warehouse;
 use App\Services\OutletAccessService;
 use App\Services\ThermalPrintService;
+use App\Support\BerkasPublik;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -35,29 +36,14 @@ class DocumentController extends Controller
 
     private function storeProfile(?Outlet $outlet = null): array
     {
-        $logo = Setting::getForOutlet('store_logo', $outlet);
-        if ($logo && ! str_starts_with($logo, 'http') && ! str_starts_with($logo, '/storage')) {
-            $logo = asset('storage/'.ltrim($logo, '/'));
-        }
-
-        $logoData = null;
-        if ($logo) {
-            $localPath = null;
-            if (str_starts_with($logo, asset('storage'))) {
-                $localPath = public_path(str_replace(asset(''), '', $logo));
-            } elseif (str_starts_with($logo, '/storage')) {
-                $localPath = public_path($logo);
-            }
-
-            if ($localPath && file_exists($localPath)) {
-                $logoData = 'data:image/png;base64,'.base64_encode(file_get_contents($localPath));
-            }
-        }
+        $jalurLogo = Setting::getForOutlet('store_logo', $outlet);
 
         return [
             'name' => Setting::getForOutlet('store_name', $outlet, 'Toko Anda'),
-            'logo' => $logo,
-            'logo_data' => $logoData,
+            'logo' => BerkasPublik::url($jalurLogo),
+            // Dibaca dari disk (lokal atau R2), bukan dari public_path — dan
+            // jenisnya dari isinya, bukan selalu image/png seperti hulu.
+            'logo_data' => BerkasPublik::dataUri($jalurLogo),
             'address' => Setting::getForOutlet('store_address', $outlet, ''),
             'phone' => Setting::getForOutlet('store_phone', $outlet, ''),
             'email' => Setting::getForOutlet('store_email', $outlet, ''),

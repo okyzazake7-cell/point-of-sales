@@ -40,4 +40,14 @@ return [
     // data toko yang mana begitu sesinya habis.
     'cookie_toko' => 'pos_toko',
 
+    // Cloud Run (dokumen 25 di repo Aishii). `pos.aishiierp.com` dilayani
+    // Worker Cloudflare yang meneruskan ke alamat *.run.app sambil membawa
+    // rahasia ini: aplikasi menolak siapa pun yang datang langsung ke
+    // run.app. Kosong = tanpa Worker penerus (pengembangan, VPS).
+    'rahasia_proksi' => env('POS_RAHASIA_PROKSI', ''),
+
+    // Cloud Scheduler memanggil POST /_jadwal tiap menit dengan rahasia ini
+    // di kepala `X-Aishii-Jadwal`. Kosong = rutenya tidak ada (404).
+    'rahasia_jadwal' => env('POS_RAHASIA_JADWAL', ''),
+
 ];

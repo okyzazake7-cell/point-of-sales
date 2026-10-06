@@ -36,7 +36,37 @@ return [
             'throw' => false,
         ],
 
-        'public' => [
+        /*
+         * Berkas unggahan: logo toko dan bank, avatar, gambar produk dan
+         * kategori. Di Cloud Run disk lokal hilang tiap kali instans bangun
+         * ulang, jadi di sana `POS_BERKAS=r2` mengarahkannya ke Cloudflare
+         * R2 lewat API S3 (dokumen 25 di repo Aishii). Tanpa nilai itu
+         * perilakunya persis hulu: disk lokal yang dibaca lewat /storage.
+         */
+        'public' => env('POS_BERKAS') === 'r2' ? [
+            'driver' => 's3',
+            'key' => env('POS_R2_KUNCI_AKSES'),
+            'secret' => env('POS_R2_KUNCI_RAHASIA'),
+            'region' => 'auto',
+            'bucket' => env('POS_R2_BUCKET'),
+            // https://<id-akun>.r2.cloudflarestorage.com
+            'endpoint' => env('POS_R2_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            // Domain publik bucket-nya, mis. https://berkas-pos.aishiierp.com:
+            // yang membuat berkasnya terbaca umum adalah domain itu, bukan ACL.
+            'url' => env('POS_R2_URL'),
+            // R2 tidak mengenal ACL per objek. Ia menerima `private` lalu
+            // mengabaikannya, tetapi MENOLAK `public-read` (NotImplemented) —
+            // `public` di sini membuat SETIAP unggahan gagal.
+            'visibility' => 'private',
+            // SDK AWS terbaru menambahkan checksum yang tidak semua layanan
+            // S3-kompatibel terima; cukup saat diwajibkan.
+            'request_checksum_calculation' => 'when_required',
+            'response_checksum_validation' => 'when_required',
+            // Gagal menyimpan harus BERBUNYI. Di disk lokal hulu `store()`
+            // memulangkan false dan nilai itu tersimpan sebagai nama berkas.
+            'throw' => true,
+        ] : [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
