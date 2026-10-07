@@ -39,8 +39,10 @@ peramban ── pos.aishiierp.com ──▶ Worker Cloudflare (cloudflare/proksi
 1. `pos:siapkan` — migrasi pusat dan SELURUH toko hanya bila daftar berkas
    migrasinya berubah sejak terbit terakhir (sidiknya di tembolok pusat,
    dikunci supaya dua instans tidak memigrasi bersamaan); data wilayah bila
-   kosong; akun pengelola bila `POS_PENGELOLA_SUREL` dan
-   `POS_PENGELOLA_SANDI` diisi.
+   kosong; akun pengelola bila `POS_PENGELOLA_SUREL` diisi — tanpa sandi
+   bila "Masuk dengan akun Aishii" hidup (AU5: pengelola masuk lewat akun
+   Aishii, barisnya hanya dilahirkan, tidak pernah ditimpa), atau dengan
+   `POS_PENGELOLA_SANDI` bila akun Aishii mati.
 2. Apache. Gagal di langkah mana pun = instans tidak pernah menerima
    permintaan, dan Cloud Run tetap melayani revisi lama.
 
@@ -110,7 +112,8 @@ sesi dan tembolok `database`, `APP_TIMEZONE=Asia/Jakarta`,
 | `AISHII_SUPABASE_URL` / `AISHII_SUPABASE_ANON_KEY` / `AISHII_RAHASIA_POS` | buku tagihan bersama Aishii |
 | `AISHII_OIDC_ID_KLIEN` / `AISHII_OIDC_RAHASIA_KLIEN` | "Masuk dengan akun Aishii" (AU1) — klien OAuth "Aishii POS" di Supabase Aishii; rahasianya RAHASIA. Kosong = mati. Diisi SESUDAH migrasi pusat `2026_10_07_000001` terbit |
 | `MAIL_*` | SMTP Resend |
-| `POS_PENGELOLA_SUREL` / `POS_PENGELOLA_SANDI` | SEMENTARA, sekali — dihapus lagi sesudah masuk |
+| `POS_PENGELOLA_SUREL` | surel akun Aishii pengelola layanan (AU5) — BUKAN rahasia, boleh menetap. Diisi SESUDAH `AISHII_OIDC_*` terisi. Variabel ini hanya MELAHIRKAN: mengosongkannya tidak mencabut siapa pun — yang mencabut, menghapus barisnya di tabel `pengelola` |
+| `POS_PENGELOLA_SANDI` | hanya pintu darurat ketika akun Aishii dimatikan (rahasia klien OIDC dikosongkan) — SEMENTARA, dihapus lagi sesudah masuk |
 
 Pengaturan layanan: CPU 1, memori 512 MiB, **konkurensi 10** (sama dengan
 `MaxRequestWorkers` di `docker/mpm_prefork.conf`), instans minimum 0,

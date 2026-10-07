@@ -3,7 +3,9 @@
 namespace Tests\Feature\BanyakToko;
 
 use App\AkunAishii\AkunTertaut;
+use App\Http\Controllers\Penyewaan\PengelolaController;
 use App\Models\Pusat\DirektoriPengguna;
+use App\Models\Pusat\Pengelola;
 use App\Models\Pusat\Toko;
 use App\Models\User;
 use App\Penyewaan\PendaftaranToko;
@@ -308,6 +310,23 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->assertSame($toko->id, session('toko_id'));
     }
 
+    public function test_round_trips_to_aishii_do_not_use_up_the_registration_limit(): void
+    {
+        // Tiga kali bolak-balik (pemilik mencoba pintu pengelola, lalu pintu
+        // toko) = enam permintaan; jatah /daftar lima per sepuluh menit.
+        for ($i = 0; $i < 3; $i++) {
+            $this->masukLewatAishii(['email' => 'baru@contoh.id', 'name' => 'Bu Baru'])->assertRedirect(route('daftar'));
+        }
+
+        $this->post('/daftar', [
+            'nama_toko' => 'Toko Cempaka',
+            'jenis_usaha' => 'retail',
+            'nama' => 'Bu Baru',
+            ...$this->botGuardPayload(),
+        ])->assertSessionHasNoErrors()->assertRedirect(route('langganan.index'));
+        $this->assertAuthenticated();
+    }
+
     public function test_registering_without_an_aishii_identity_is_refused_while_on(): void
     {
         $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
@@ -428,7 +447,149 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->assertSame($a->id, session('toko_id'));
     }
 
+    // ── Pintu pengelola layanan (AU5) ────────────────────────────────────
+
+    public function test_the_service_admin_door_keeps_its_password_while_off(): void
+    {
+        config(['akun_aishii.rahasia_klien' => '']);
+        $this->buatPengelola('p@contoh.id');
+
+        $this->get('/pengelola/masuk')->assertInertia(fn (AssertableInertia $p) => $p->where('masukAishii', null));
+        $this->get('/auth/aishii/pengelola')->assertNotFound();
+
+        $this->masukPengelolaBersandi('p@contoh.id')->assertRedirect(route('pengelola.index'));
+        $this->assertAuthenticated('pengelola');
+    }
+
+    public function test_the_service_admin_signs_in_with_aishii_and_never_with_a_password(): void
+    {
+        $this->buatPengelola('p@contoh.id');
+
+        $this->get('/pengelola/masuk')->assertInertia(fn (AssertableInertia $p) => $p
+            ->where('masukAishii', route('aishii.pengelola')));
+
+        // Sandi yang BENAR pun ditolak selama akun Aishii hidup: satu orang, satu pintu.
+        $this->masukPengelolaBersandi('p@contoh.id')
+            ->assertSessionHasErrors(['aishii' => PengelolaController::KALIMAT_PAKAI_AISHII]);
+        $this->assertGuest('pengelola');
+
+        // Masuk pertama: surel terverifikasi mengunci barisnya ke sub.
+        $this->pengelolaLewatAishii(['email' => 'P@Contoh.id'])->assertRedirect(route('pengelola.index'));
+        $this->assertAuthenticated('pengelola');
+        $this->assertSame(self::SUB, Pengelola::query()->sole()->aishii_sub);
+        // Akun pusat — bukan pengguna toko mana pun.
+        $this->assertGuest('web');
+        $this->assertNull(session('toko_id'));
+        $this->get('/pengelola')->assertOk();
+
+        // Sesudahnya sub yang menentukan: surel akun Aishii boleh berganti.
+        $this->post('/pengelola/keluar')->assertRedirect(route('pengelola.masuk'));
+        $this->assertGuest('pengelola');
+        $this->pengelolaLewatAishii(['email' => 'surel-baru@contoh.id', 'email_verified' => false])
+            ->assertRedirect(route('pengelola.index'));
+        $this->assertAuthenticated('pengelola');
+    }
+
+    public function test_an_aishii_account_that_is_not_a_service_admin_is_refused(): void
+    {
+        $this->buatPengelola('p@contoh.id');
+        // Pemilik toko yang tertaut: sah di pintu toko, bukan di pintu pengelola.
+        $this->buatTokoAishii('Toko Anggrek', 'a@contoh.id', self::SUB);
+
+        $this->pengelolaLewatAishii(['email' => 'a@contoh.id'])
+            ->assertRedirect(route('pengelola.masuk'))
+            ->assertSessionHasErrors(['aishii' => 'Akun Aishii ini bukan pengelola Aishii POS.']);
+
+        $this->assertGuest('pengelola');
+        $this->assertGuest('web');
+        $this->assertNull(Pengelola::query()->sole()->aishii_sub);
+        $this->get('/pengelola')->assertRedirect(route('pengelola.masuk'));
+    }
+
+    public function test_an_unverified_or_differently_linked_email_never_opens_the_service_admin_door(): void
+    {
+        $pengelola = $this->buatPengelola('p@contoh.id');
+
+        $this->pengelolaLewatAishii(['email' => 'p@contoh.id', 'email_verified' => false])
+            ->assertRedirect(route('pengelola.masuk'))
+            ->assertSessionHasErrors('aishii');
+        $this->assertGuest('pengelola');
+        $this->assertNull($pengelola->fresh()->aishii_sub);
+
+        $pengelola->forceFill(['aishii_sub' => self::SUB_LAIN])->save();
+        $this->pengelolaLewatAishii(['email' => 'p@contoh.id'])
+            ->assertSessionHasErrors(['aishii' => 'Surel p@contoh.id sudah tertaut ke akun Aishii lain sebagai pengelola.']);
+        $this->assertGuest('pengelola');
+        $this->assertSame(self::SUB_LAIN, $pengelola->fresh()->aishii_sub);
+    }
+
+    public function test_cancelling_at_aishii_returns_to_the_service_admin_door(): void
+    {
+        $this->get('/auth/aishii/pengelola');
+        $state = session('akun_aishii.bekal')['state'];
+
+        $this->get('/auth/aishii/kembali?error=access_denied&state='.$state)
+            ->assertRedirect(route('pengelola.masuk'))
+            ->assertSessionHasErrors(['aishii' => 'Masuk dengan akun Aishii dibatalkan.']);
+
+        Http::assertNotSent(fn (PermintaanHttp $r) => str_ends_with($r->url(), '/oauth/token'));
+    }
+
+    public function test_a_signed_in_store_owner_can_also_open_the_service_admin_door(): void
+    {
+        [$a] = $this->buatTokoAishii('Toko Anggrek', 'a@contoh.id', self::SUB);
+        $this->buatPengelola('a@contoh.id');
+
+        $this->masukLewatAishii(['email' => 'a@contoh.id'])->assertRedirect();
+        $this->assertAuthenticated('web');
+
+        $this->pengelolaLewatAishii(['email' => 'a@contoh.id'])->assertRedirect(route('pengelola.index'));
+        $this->assertAuthenticated('pengelola');
+        // Dua penjaga yang terpisah: sesi tokonya tetap utuh.
+        $this->assertAuthenticated('web');
+        $this->assertSame($a->id, session('toko_id'));
+    }
+
+    public function test_a_signed_in_store_user_is_not_signed_in_twice(): void
+    {
+        // `/kembali` kehilangan middleware `guest`-nya demi pintu pengelola;
+        // penjagaan yang sama kini di controller.
+        $this->buatToko('Toko Anggrek', 'a@contoh.id');
+        $this->buatTokoAishii('Toko Bakung', 'b@contoh.id', self::SUB);
+
+        // Tombol ditekan saat belum masuk, lalu masuk bersandi di tab lain —
+        // dan jawaban akun Aishii tiba sesudahnya.
+        $this->bukaOtorisasi('/auth/aishii', ['email' => 'b@contoh.id']);
+        $this->masukSebagai('a@contoh.id')->assertSessionHasNoErrors();
+
+        $this->get('/auth/aishii/kembali?'.http_build_query(['code' => 'kode-uji', 'state' => $this->kueri['state']]))
+            ->assertRedirect(route('dashboard'));
+        $this->assertSame('a@contoh.id', Auth::user()->email);
+        Http::assertNotSent(fn (PermintaanHttp $r) => str_ends_with($r->url(), '/oauth/token'));
+    }
+
     // ── Bantuan ──────────────────────────────────────────────────────────
+
+    private function buatPengelola(string $email): Pengelola
+    {
+        return Pengelola::query()->create(['nama' => 'Pengelola', 'email' => $email, 'password' => 'sandi-pengelola-panjang']);
+    }
+
+    private function masukPengelolaBersandi(string $email): TestResponse
+    {
+        return $this->post('/pengelola/masuk', [
+            'email' => $email,
+            'password' => 'sandi-pengelola-panjang',
+            ...$this->botGuardPayload(),
+        ]);
+    }
+
+    private function pengelolaLewatAishii(array $klaim = []): TestResponse
+    {
+        $this->bukaOtorisasi('/auth/aishii/pengelola', $klaim);
+
+        return $this->get('/auth/aishii/kembali?'.http_build_query(['code' => 'kode-uji', 'state' => $this->kueri['state']]));
+    }
 
     /** @return array{0: Toko, 1: User} */
     private function buatTokoAishii(string $nama, string $email, string $sub): array

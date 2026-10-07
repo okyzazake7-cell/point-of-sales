@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Penyewaan;
 
+use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Controller;
 use App\Langganan\BukuTagihanAishii;
 use App\Langganan\Langganan;
@@ -23,17 +24,30 @@ use Inertia\Response;
  */
 class PengelolaController extends Controller
 {
-    public function masukForm(): Response|RedirectResponse
+    /** AU5 — menyebut tombolnya persis seperti tertulis di halaman masuk pengelola. */
+    public const KALIMAT_PAKAI_AISHII = 'Pengelola masuk lewat tombol "Masuk dengan akun Aishii".';
+
+    public function masukForm(KlienAishii $klien): Response|RedirectResponse
     {
         if (Auth::guard('pengelola')->check()) {
             return redirect()->route('pengelola.index');
         }
 
-        return Inertia::render('Pengelola/Masuk', ['botGuard' => BotGuard::payload()]);
+        return Inertia::render('Pengelola/Masuk', [
+            'botGuard' => BotGuard::payload(),
+            'masukAishii' => $klien->aktif() ? route('aishii.pengelola') : null,
+        ]);
     }
 
-    public function masuk(Request $request): RedirectResponse
+    public function masuk(Request $request, KlienAishii $klien): RedirectResponse
     {
+        // AU5: selama akun Aishii hidup, pengelola tidak punya sandi POS —
+        // satu orang, satu pintu (alasan yang sama dengan D2). Pintu ini
+        // terbuka lagi hanya bila rahasia klien OIDC dikosongkan.
+        if ($klien->aktif()) {
+            throw ValidationException::withMessages(['aishii' => self::KALIMAT_PAKAI_AISHII]);
+        }
+
         $isian = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
