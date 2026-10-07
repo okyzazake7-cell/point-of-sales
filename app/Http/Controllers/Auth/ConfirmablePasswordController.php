@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\AkunAishii\AkunTertaut;
 use App\Http\Controllers\Controller;
 use App\Services\AuditLogService;
 use Illuminate\Http\RedirectResponse;
@@ -20,10 +21,13 @@ class ConfirmablePasswordController extends Controller
     /**
      * Show the confirm password view.
      */
-    public function show(): Response
+    public function show(Request $request): Response
     {
         return Inertia::render('Auth/ConfirmPassword', [
             'challenge' => session('security.step_up_context'),
+            // AU1 — D2: akun yang tertaut ke akun Aishii tidak punya sandi
+            // POS; konfirmasinya pun lewat akun Aishii.
+            'konfirmasiAishii' => AkunTertaut::pengguna($request->user()) ? AkunTertaut::alamatKonfirmasi() : null,
         ]);
     }
 
@@ -32,6 +36,12 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (AkunTertaut::pengguna($request->user())) {
+            throw ValidationException::withMessages([
+                'password' => 'Akun ini dikonfirmasi lewat akun Aishii — tekan "Konfirmasi dengan akun Aishii".',
+            ]);
+        }
+
         if (! Auth::guard('web')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,

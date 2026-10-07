@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import {
     IconShoppingCart,
     IconShieldLock,
@@ -9,7 +9,9 @@ import {
     IconLoader2,
 } from "@tabler/icons-react";
 
-export default function ConfirmPassword({ challenge = null }) {
+export default function ConfirmPassword({ challenge = null, konfirmasiAishii = null }) {
+    // `errors.aishii` datang dari pengalihan sesudah akun Aishii menjawab.
+    const { errors: galatHalaman = {} } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
         password: "",
     });
@@ -58,10 +60,33 @@ export default function ConfirmPassword({ challenge = null }) {
                                 Konfirmasi Password
                             </h1>
                             <p className="mt-2 text-slate-600 dark:text-slate-400">
-                                Untuk melanjutkan {challengeLabel}, masukkan kembali password akun Anda.
+                                {konfirmasiAishii
+                                    ? `Untuk melanjutkan ${challengeLabel}, masukkan lagi kata sandi akun Aishii Anda.`
+                                    : `Untuk melanjutkan ${challengeLabel}, masukkan kembali password akun Anda.`}
                             </p>
                         </div>
 
+                        {/* AU1 — D2: akun yang tertaut ke akun Aishii tidak punya sandi
+                            toko. Sandi akun Aishii diminta lagi di aishiierp.com
+                            (/masuk-ulang), lalu orangnya kembali ke sini. */}
+                        {konfirmasiAishii ? (
+                            <div className="space-y-4" data-konfirmasi-aishii>
+                                {galatHalaman.aishii && (
+                                    <div
+                                        role="alert"
+                                        className="rounded-xl bg-danger-50 px-4 py-3 text-sm text-danger-600 dark:bg-danger-950/40 dark:text-danger-300"
+                                    >
+                                        {galatHalaman.aishii}
+                                    </div>
+                                )}
+                                <a
+                                    href={konfirmasiAishii}
+                                    className="w-full h-12 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold hover:from-primary-600 hover:to-primary-700 focus:ring-4 focus:ring-primary-500/30 transition-all flex items-center justify-center gap-2"
+                                >
+                                    Konfirmasi dengan akun Aishii
+                                </a>
+                            </div>
+                        ) : (
                         <form onSubmit={submit} className="space-y-5">
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -112,6 +137,7 @@ export default function ConfirmPassword({ challenge = null }) {
                                 )}
                             </button>
                         </form>
+                        )}
                     </div>
                 </div>
 

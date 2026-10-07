@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Penyewaan\DaftarController;
 use App\Http\Controllers\Penyewaan\LanggananController;
+use App\Http\Controllers\Penyewaan\MasukAishiiController;
 use App\Http\Controllers\Penyewaan\PengelolaController;
 use App\Http\Middleware\Penyewaan\PastikanPengelola;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,19 @@ Route::middleware('guest')->group(function () {
     Route::post('/daftar', [DaftarController::class, 'store'])
         ->middleware(['bot.guard', 'throttle:5,10'])
         ->name('daftar.store');
+});
+
+// "Masuk dengan akun Aishii" (AU1, dokumen 27 di repo Aishii). Selama ID dan
+// rahasia klien OIDC kosong, keempatnya menjawab 404.
+Route::prefix('auth/aishii')->name('aishii.')->middleware('throttle:20,1')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/', [MasukAishiiController::class, 'mulai'])->name('masuk');
+        Route::get('/kembali', [MasukAishiiController::class, 'kembali'])->name('kembali');
+    });
+    Route::middleware('auth')->group(function () {
+        Route::get('/konfirmasi/mulai', [MasukAishiiController::class, 'konfirmasiMulai'])->name('konfirmasi.mulai');
+        Route::get('/konfirmasi', [MasukAishiiController::class, 'konfirmasi'])->name('konfirmasi');
+    });
 });
 
 Route::prefix('dashboard/langganan')->middleware('auth')->name('langganan.')->group(function () {

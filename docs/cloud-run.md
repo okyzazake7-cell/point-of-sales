@@ -108,6 +108,7 @@ sesi dan tembolok `database`, `APP_TIMEZONE=Asia/Jakarta`,
 | `POS_RAHASIA_PROKSI` | rahasia — sama dengan `RAHASIA_PROKSI` di Worker |
 | `POS_RAHASIA_JADWAL` | rahasia — sama dengan kepala di Cloud Scheduler |
 | `AISHII_SUPABASE_URL` / `AISHII_SUPABASE_ANON_KEY` / `AISHII_RAHASIA_POS` | buku tagihan bersama Aishii |
+| `AISHII_OIDC_ID_KLIEN` / `AISHII_OIDC_RAHASIA_KLIEN` | "Masuk dengan akun Aishii" (AU1) — klien OAuth "Aishii POS" di Supabase Aishii; rahasianya RAHASIA. Kosong = mati. Diisi SESUDAH migrasi pusat `2026_10_07_000001` terbit |
 | `MAIL_*` | SMTP Resend |
 | `POS_PENGELOLA_SUREL` / `POS_PENGELOLA_SANDI` | SEMENTARA, sekali — dihapus lagi sesudah masuk |
 

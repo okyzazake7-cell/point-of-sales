@@ -12,10 +12,12 @@ import {
 } from "@tabler/icons-react";
 import { useState } from "react";
 
-export default function Login({ status, canResetPassword, canRegister, botGuard }) {
+export default function Login({ status, canResetPassword, canRegister, botGuard, masukAishii = null }) {
     const { t } = useTranslation();
     // Mode banyak toko: toko baru lahir lewat /daftar (dokumen 24 §4).
-    const { banyakToko } = usePage().props;
+    // `errors.aishii` datang dari pengalihan sesudah akun Aishii menjawab,
+    // bukan dari kiriman formulir ini — maka dibaca dari props halaman.
+    const { banyakToko, errors: galatHalaman = {} } = usePage().props;
     const honeypotField = botGuard?.honeypot_field || "company_website";
     const tokenField = botGuard?.token_field || "bot_guard_token";
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -67,6 +69,38 @@ export default function Login({ status, canResetPassword, canRegister, botGuard 
                         {status && (
                             <div className="mb-6 p-4 rounded-xl bg-success-50 dark:bg-success-950/50 text-success-700 dark:text-success-400 text-sm">
                                 {status}
+                            </div>
+                        )}
+
+                        {/* AU1: pemilik toko masuk dengan akun Aishii — akun yang sama
+                            dengan Aishii Bazar. Tautan biasa, bukan Link Inertia:
+                            tujuannya server akun Aishii, bukan halaman aplikasi ini.
+                            Kasir tetap bersandi (keputusan D1b). */}
+                        {masukAishii && (
+                            <div className="mb-6 space-y-3" data-masuk-aishii>
+                                <a
+                                    href={masukAishii}
+                                    className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border-2 border-primary-500 bg-white px-4 font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus:ring-4 focus:ring-primary-500/20 dark:bg-slate-900 dark:text-primary-300 dark:hover:bg-slate-800"
+                                >
+                                    <ApplicationLogo className="h-7 w-7 shrink-0" alt="" />
+                                    Masuk dengan akun Aishii
+                                </a>
+                                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                    Untuk pemilik toko — satu akun Aishii untuk semua produk Aishii.
+                                </p>
+                                {galatHalaman.aishii && (
+                                    <div
+                                        role="alert"
+                                        className="rounded-xl bg-danger-50 px-4 py-3 text-sm text-danger-600 dark:bg-danger-950/40 dark:text-danger-300"
+                                    >
+                                        {galatHalaman.aishii}
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-3 pt-2 text-sm text-slate-500 dark:text-slate-400">
+                                    <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+                                    <span className="min-w-0 text-center">Kasir: surel dan kata sandi toko</span>
+                                    <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+                                </div>
                             </div>
                         )}
 

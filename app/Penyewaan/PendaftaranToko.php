@@ -25,16 +25,27 @@ class PendaftaranToko
     ) {}
 
     /**
-     * @param  array{nama_toko: string, jenis_usaha: string, nama: string, email: string, password: string, telepon?: string|null}  $isian
+     * `aishii_sub` (AU1): toko yang lahir dari akun Aishii tertaut ke akun
+     * itu sejak detik pertama — pemiliknya tidak pernah punya sandi POS (D2).
+     *
+     * @param  array{nama_toko: string, jenis_usaha: string, nama: string, email: string, password: string, telepon?: string|null, aishii_sub?: string|null}  $isian
      * @return array{0: Toko, 1: User}
      */
     public function daftarkan(array $isian): array
     {
         $email = DirektoriPengguna::normalkan($isian['email']);
+        $sub = $isian['aishii_sub'] ?? null;
 
         if (DirektoriPengguna::query()->whereKey($email)->exists()) {
             throw ValidationException::withMessages([
                 'email' => 'Surel ini sudah terdaftar di Aishii POS. Masuk, atau pakai surel lain.',
+            ]);
+        }
+
+        // Satu akun Aishii, satu toko — satu akun di banyak toko di luar AU1.
+        if ($sub !== null && DirektoriPengguna::query()->where('aishii_sub', $sub)->exists()) {
+            throw ValidationException::withMessages([
+                'email' => 'Akun Aishii ini sudah punya toko di Aishii POS. Masuk saja.',
             ]);
         }
 
@@ -73,6 +84,12 @@ class PendaftaranToko
                 'phone' => $isian['telepon'] ?? null,
             ]],
         ]));
+
+        // Baris direktorinya ditulis SinkronDirektori sesudah transaksi toko
+        // jadi; tautannya menyusul di baris yang sama.
+        if ($sub !== null) {
+            DirektoriPengguna::query()->whereKey($email)->update(['aishii_sub' => $sub]);
+        }
 
         return [$toko->refresh(), $pengguna];
     }

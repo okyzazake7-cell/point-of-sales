@@ -188,6 +188,18 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
 - **Offline cashier queue syncs over the session** (`transactions.sync-offline`);
   upstream sent it to the token API, which always answered 401. IndexedDB and
   the service-worker cache are per store (`pos-offline-t<id>`).
+- **"Masuk dengan akun Aishii" (AU1, document 27 in the Aishii repo)**: the
+  store owner signs in with the one Aishii account (Supabase OAuth 2.1 Server;
+  POS is a CONFIDENTIAL OIDC client — `config/akun_aishii.php`,
+  `App\AkunAishii\KlienAishii`, `MasukAishiiController`). Off while
+  `AISHII_OIDC_ID_KLIEN`/`AISHII_OIDC_RAHASIA_KLIEN` are empty. The central
+  directory row carries `aishii_sub`; a linked account can NOT sign in (web or
+  API) or confirm `step_up` with a POS password (decision D2) — step-up goes
+  through `{AISHII_URL}/masuk-ulang` and the callback checks `auth_time`.
+  Cashiers stay local password accounts (D1b). New stores at `/daftar` are
+  born from an Aishii identity (email from the verified token, random password).
+  ID tokens are verified ES256-only against the JWKS, never with a shared
+  secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
 - **Tests**: extend `Tests\BanyakTokoTestCase` (sets the env BEFORE the app
   boots, since `/t/{toko}` routes are shaped at boot). Proof scripts:
   `scripts/uji-luring-per-toko.mjs` (offline queue, real Chromium) and

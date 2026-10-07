@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Penyewaan;
 
+use App\AkunAishii\AkunTertaut;
 use App\Http\Responses\ApiResponse;
 use App\Models\Pusat\DirektoriPengguna;
 use App\Models\Pusat\Toko;
@@ -52,6 +53,16 @@ class KenaliTokoApi
 
         if ($toko?->siap()) {
             $this->penyewaan->masuk($toko);
+
+            // D2 (AU1): akun yang tertaut ke akun Aishii tidak mendapat token
+            // API lewat sandi. Kalimatnya sama dengan sandi salah di
+            // AuthController hulu — surel tidak boleh bisa ditebak.
+            if ($nama === 'api.auth.login' && AkunTertaut::tertaut($request->input('email'))) {
+                throw ValidationException::withMessages([
+                    'email' => ['Kredensial yang diberikan tidak cocok dengan data kami.'],
+                ]);
+            }
+
             $jawaban = $next($request);
 
             // Klien API harus tahu kode tokonya untuk kepala X-Toko berikutnya;

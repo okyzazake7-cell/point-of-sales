@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { IconLoader2, IconQrcode, IconBuildingStore, IconLockOpen } from "@tabler/icons-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
@@ -10,6 +10,11 @@ import { rupiah } from "@/Utils/rupiah";
  * /daftar — toko baru Aishii POS (AS7, dokumen 24 §4). Satu layar, satu
  * kolom di ponsel. Harganya dibaca dari server (config/langganan.php),
  * tidak diketik di sini.
+ *
+ * "Masuk dengan akun Aishii" hidup (AU1, `akunAishii` terisi): toko lahir
+ * dari akun Aishii — surel diambil dari akun itu dan TIDAK ada sandi toko
+ * (keputusan D2). Sebelum orangnya masuk, layar ini hanya menawarkan
+ * tombolnya; yang belum punya akun Aishii didaftarkan di sana lalu kembali.
  */
 function Kolom({ label, galat, petunjuk, children }) {
     return (
@@ -27,14 +32,16 @@ const kelasIsian = (galat) =>
         galat ? "border-danger-500 focus:border-danger-500" : "border-slate-200 focus:border-primary-500 dark:border-slate-700"
     }`;
 
-export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
+export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akunAishii = null }) {
     const { t } = useTranslation();
+    const { errors: galatHalaman = {} } = usePage().props;
+    const lewatAishii = !!akunAishii;
     const honeypotField = botGuard?.honeypot_field || "company_website";
     const tokenField = botGuard?.token_field || "bot_guard_token";
     const { data, setData, post, processing, errors } = useForm({
         nama_toko: "",
         jenis_usaha: jenisUsaha[0] ?? "retail",
-        nama: "",
+        nama: akunAishii?.nama ?? "",
         email: "",
         telepon: "",
         password: "",
@@ -86,11 +93,56 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                         </ul>
                     </div>
 
+                    {lewatAishii && !akunAishii.email ? (
+                        <div
+                            data-daftar-masuk-aishii
+                            className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+                        >
+                            <p className="text-sm text-slate-700 dark:text-slate-300">
+                                Toko dibuat untuk akun Aishii Anda — akun yang sama untuk Aishii Bazar dan
+                                produk Aishii lainnya. Belum punya? Tombol ini juga membawa Anda mendaftar,
+                                gratis, lalu kembali ke sini.
+                            </p>
+                            {(galatHalaman.aishii || galatHalaman.email) && (
+                                <div
+                                    role="alert"
+                                    className="rounded-xl bg-danger-50 px-4 py-3 text-sm text-danger-600 dark:bg-danger-950/40 dark:text-danger-300"
+                                >
+                                    {galatHalaman.aishii || galatHalaman.email}
+                                </div>
+                            )}
+                            <a
+                                href={akunAishii.masuk}
+                                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-600 font-semibold text-white shadow-lg shadow-primary-600/25 transition-colors hover:bg-primary-700"
+                            >
+                                Masuk dengan akun Aishii
+                            </a>
+                            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                Sudah punya toko?{" "}
+                                <Link href="/login" className="font-semibold text-primary-600 hover:text-primary-700">
+                                    Masuk
+                                </Link>
+                            </p>
+                        </div>
+                    ) : (
                     <form onSubmit={kirim} className="mt-6 space-y-4">
                         <AuthBotGuardFields botGuard={botGuard} data={data} setData={setData} />
                         {errors.human && (
                             <div className="rounded-xl bg-danger-50 px-4 py-3 text-sm text-danger-600 dark:bg-danger-950/40 dark:text-danger-300">
                                 {errors.human}
+                            </div>
+                        )}
+
+                        {lewatAishii && (
+                            <div
+                                data-daftar-akun-aishii
+                                className="rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900"
+                            >
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Akun Aishii pemilik toko</p>
+                                <p className="break-all font-semibold text-slate-900 dark:text-white">{akunAishii.email}</p>
+                                {(errors.email || galatHalaman.aishii) && (
+                                    <p className="mt-1 text-sm text-danger-500">{errors.email || galatHalaman.aishii}</p>
+                                )}
                             </div>
                         )}
 
@@ -134,6 +186,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                             />
                         </Kolom>
 
+                        {!lewatAishii && (
                         <Kolom label="Surel" galat={errors.email} petunjuk="Dipakai untuk masuk. Satu surel untuk satu toko.">
                             <input
                                 type="email"
@@ -145,6 +198,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                                 inputMode="email"
                             />
                         </Kolom>
+                        )}
 
                         <Kolom label="Nomor WhatsApp (boleh dikosongkan)" galat={errors.telepon}>
                             <input
@@ -158,6 +212,8 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                             />
                         </Kolom>
 
+                        {!lewatAishii && (
+                        <>
                         <Kolom label="Kata sandi" galat={errors.password} petunjuk="Minimal 8 huruf.">
                             <input
                                 type="password"
@@ -179,6 +235,8 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                                 autoComplete="new-password"
                             />
                         </Kolom>
+                        </>
+                        )}
 
                         <button
                             type="submit"
@@ -213,6 +271,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard }) {
                             </Link>
                         </p>
                     </form>
+                    )}
                 </div>
             </div>
         </>

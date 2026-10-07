@@ -57,17 +57,23 @@ class SinkronDirektori
         $idPengguna = $user->getKey();
 
         DB::connection()->afterCommit(function () use ($emailBaru, $emailLama, $idToko, $idPengguna) {
+            // Surel adalah kunci barisnya, jadi surel yang berganti = baris
+            // baru. Tautan akun Aishii (AU1) ikut pindah: tanpa itu, pemilik
+            // yang mengganti surelnya di Profil diam-diam tidak bisa masuk lagi.
+            $tautan = null;
             if ($emailLama !== '' && $emailLama !== $emailBaru) {
-                DirektoriPengguna::query()
+                $lama = DirektoriPengguna::query()
                     ->whereKey($emailLama)
                     ->where('toko_id', $idToko)
                     ->where('user_id', $idPengguna)
-                    ->delete();
+                    ->first();
+                $tautan = $lama?->aishii_sub;
+                $lama?->delete();
             }
 
             DirektoriPengguna::query()->updateOrCreate(
                 ['email' => $emailBaru],
-                ['toko_id' => $idToko, 'user_id' => $idPengguna],
+                ['toko_id' => $idToko, 'user_id' => $idPengguna, ...($tautan ? ['aishii_sub' => $tautan] : [])],
             );
         });
     }

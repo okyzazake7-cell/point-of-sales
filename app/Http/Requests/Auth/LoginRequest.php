@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\AkunAishii\AkunTertaut;
 use App\Models\User;
 use App\Penyewaan\Penyewaan;
 use App\Services\AuditLogService;
@@ -45,7 +46,20 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // D2 (AU1): akun yang tertaut ke akun Aishii hanya masuk lewat akun
+        // Aishii. Sandinya tetap DIPERIKSA (sekali, sama mahalnya dengan
+        // akun biasa): sandi yang salah dijawab persis seperti sandi salah —
+        // surel tidak boleh bisa ditebak dari jawabannya — dan hanya yang
+        // tahu sandinya diberi tahu jalan yang benar.
+        $tertaut = AkunTertaut::tertaut($this->string('email')->toString());
+
+        if ($tertaut || ! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            if ($tertaut && Auth::validate($this->only('email', 'password'))) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages(['email' => AkunTertaut::KALIMAT_PAKAI_AISHII]);
+            }
+
             RateLimiter::hit($this->throttleKey());
 
             // Mode banyak toko: surel yang tidak dikenal direktori tidak punya

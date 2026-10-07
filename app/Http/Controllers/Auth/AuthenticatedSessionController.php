@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Services\AuditLogService;
 use App\Support\BotGuard;
 use Illuminate\Http\RedirectResponse;
@@ -29,6 +31,9 @@ class AuthenticatedSessionController extends Controller
             'canRegister' => config('security.auth.public_registration'),
             'status' => session('status'),
             'botGuard' => BotGuard::payload(),
+            // AU1: tombol "Masuk dengan akun Aishii" — kosong selama klien
+            // OIDC-nya belum diisi.
+            'masukAishii' => app(KlienAishii::class)->aktif() ? route('aishii.masuk') : null,
         ]);
     }
 
@@ -56,6 +61,15 @@ class AuthenticatedSessionController extends Controller
             ],
         );
 
+        return redirect()->intended(self::halamanAwal($user));
+    }
+
+    /**
+     * Halaman pertama sesudah masuk, menurut izin penggunanya. Dipakai juga
+     * oleh "Masuk dengan akun Aishii" (AU1) — satu urutan, bukan dua salinan.
+     */
+    public static function halamanAwal(?User $user): string
+    {
         $routePriority = [
             'transactions-access' => 'transactions.index',
             'receivables-access' => 'receivables.index',
@@ -74,7 +88,7 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
-        return redirect()->intended(route($defaultRoute, absolute: false));
+        return route($defaultRoute, absolute: false);
     }
 
     /**
