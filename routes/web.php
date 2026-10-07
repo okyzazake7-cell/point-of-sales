@@ -1,5 +1,6 @@
 <?php
 
+use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Api\PosApiController;
 use App\Http\Controllers\Apps\AgingController;
 use App\Http\Controllers\Apps\AuditLogController;
@@ -73,6 +74,9 @@ Route::get('/', function () {
         'hargaLayanan' => config('penyewaan.aktif') ? [
             'harga_per_outlet' => (int) config('langganan.harga_per_outlet'),
         ] : null,
+        // AU1: tanya jawab "akunnya masing-masing" hanya benar selama
+        // "Masuk dengan akun Aishii" belum hidup.
+        'akunAishii' => app(KlienAishii::class)->aktif(),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);

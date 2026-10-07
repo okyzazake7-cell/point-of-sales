@@ -21,7 +21,9 @@ class DirektoriPengguna extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['email', 'toko_id', 'user_id'];
+    // `aishii_sub`: akun Aishii yang tertaut (AU1) — kosong untuk kasir
+    // bersandi dan akun yang belum pernah masuk lewat akun Aishii.
+    protected $fillable = ['email', 'toko_id', 'user_id', 'aishii_sub'];
 
     public static function normalkan(?string $email): string
     {

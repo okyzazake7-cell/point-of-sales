@@ -113,6 +113,8 @@ const tanya = [
     {
         q: `Apa bedanya ${BRAND.name} dengan Aishii Bazar?`,
         a: "Aishii Bazar menuntun jualan di bazar dan lapak musiman: menghitung untung-rugi sebelum menyewa lapak, belanja bahan, kasir di HP, sampai laporan per bazar. Aishii POS untuk toko yang buka tiap hari dengan barang berbarcode, gudang, pemasok, dan tim kasir. Keduanya aplikasi terpisah dengan akunnya masing-masing.",
+        // AU1: berlaku begitu "Masuk dengan akun Aishii" hidup (prop `akunAishii`).
+        aSatuAkun: "Aishii Bazar menuntun jualan di bazar dan lapak musiman: menghitung untung-rugi sebelum menyewa lapak, belanja bahan, kasir di HP, sampai laporan per bazar. Aishii POS untuk toko yang buka tiap hari dengan barang berbarcode, gudang, pemasok, dan tim kasir. Keduanya aplikasi terpisah dengan langganannya masing-masing, tetapi satu akun Aishii masuk ke keduanya.",
     },
     {
         q: "Bisakah dipakai untuk banyak cabang?",
@@ -132,7 +134,7 @@ const tanya = [
     },
 ];
 
-export default function Welcome({ hargaLayanan = null }) {
+export default function Welcome({ hargaLayanan = null, akunAishii = false }) {
     const { auth } = usePage().props;
     // Mode banyak toko (pos.aishiierp.com): tamu diajak MENDAFTAR, dan
     // harganya dibaca dari server — bukan diketik di halaman ini.
@@ -426,7 +428,9 @@ export default function Welcome({ hargaLayanan = null }) {
                                 <summary className="cursor-pointer list-none font-semibold text-slate-900 dark:text-white">
                                     {t.q}
                                 </summary>
-                                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{t.a}</p>
+                                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    {akunAishii && t.aSatuAkun ? t.aSatuAkun : t.a}
+                                </p>
                             </details>
                         ))}
                     </div>
