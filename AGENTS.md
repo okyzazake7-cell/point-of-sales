@@ -200,6 +200,23 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   born from an Aishii identity (email from the verified token, random password).
   ID tokens are verified ES256-only against the JWKS, never with a shared
   secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
+- **Service admin with the Aishii account (AU5, owner's decision 7 Oct —
+  reverses D4)**: while AU1 is on, `/pengelola/masuk` shows only "Masuk dengan
+  akun Aishii" (`/auth/aishii/pengelola`) and the password POST is refused for
+  everyone. WHO is an admin stays POS's own list — rows in `pengelola`, born
+  from `POS_PENGELOLA_SUREL` via `pengelola:buat --akun-aishii` (create-only,
+  random unknown password; never overwrites a row, it runs on every boot) —
+  never Aishii Bazar's `admin_platform`. First sign-in locks the row to the
+  token `sub` through a VERIFIED email; afterwards `sub` decides. Both doors
+  share the ONE registered callback `/auth/aishii/kembali`; the session
+  `bekal.tujuan` picks the door, so `/kembali` has no `guest` middleware (the
+  check moved into the controller). Emergency door: empty the OIDC secret and
+  set `POS_PENGELOLA_SANDI` — the password path works again.
+- **Unnamed `throttle:N,M` share ONE counter** per visitor IP (guest) or per
+  user id (`ThrottleRequests::resolveRequestSignature`, no route in the key).
+  Measured 7 Oct: three Aishii round trips used up `/daftar`'s 5 per 10 min →
+  429. The `auth/aishii` group therefore uses its own prefix
+  (`throttle:20,1,aishii`); give any new limiter a prefix too.
 - **Tests**: extend `Tests\BanyakTokoTestCase` (sets the env BEFORE the app
   boots, since `/t/{toko}` routes are shaped at boot). Proof scripts:
   `scripts/uji-luring-per-toko.mjs` (offline queue, real Chromium) and

@@ -81,6 +81,36 @@ class SiapkanTerbitTest extends BanyakTokoTestCase
         $this->assertSame(0, Pengelola::count());
     }
 
+    public function test_dengan_akun_aishii_pengelola_cukup_surelnya_dan_nyala_berikutnya_tidak_menyentuhnya(): void
+    {
+        // AU5: pengelola masuk lewat akun Aishii — POS_PENGELOLA_SANDI tidak ada.
+        config(['akun_aishii.penerbit' => 'https://akun.uji/auth/v1', 'akun_aishii.id_klien' => 'klien', 'akun_aishii.rahasia_klien' => 'rahasia']);
+        $this->pasang('POS_PENGELOLA_SUREL', 'Pengelola@Contoh.id');
+
+        $this->artisan('pos:siapkan')
+            ->expectsOutputToContain('Masuk di /pengelola/masuk dengan akun Aishii')
+            ->assertSuccessful();
+
+        $pengelola = Pengelola::where('email', 'pengelola@contoh.id')->sole();
+        $sandiAcak = $pengelola->password;
+        $pengelola->forceFill(['aishii_sub' => 'sub-yang-sudah-terkunci'])->save();
+
+        // Tiap nyala instans menjalankannya lagi: sandi acak dan tautan sub
+        // yang terkunci pada masuk pertama tidak boleh tertimpa.
+        $this->artisan('pos:siapkan')->assertSuccessful();
+        $baris = Pengelola::sole();
+        $this->assertSame($sandiAcak, $baris->password);
+        $this->assertSame('sub-yang-sudah-terkunci', $baris->aishii_sub);
+    }
+
+    public function test_tanpa_akun_aishii_surel_saja_tidak_melahirkan_pengelola(): void
+    {
+        $this->pasang('POS_PENGELOLA_SUREL', 'pengelola@contoh.id');
+
+        $this->artisan('pos:siapkan')->assertSuccessful();
+        $this->assertSame(0, Pengelola::count());
+    }
+
     private function pasang(string $nama, string $nilai): void
     {
         putenv("{$nama}={$nilai}");

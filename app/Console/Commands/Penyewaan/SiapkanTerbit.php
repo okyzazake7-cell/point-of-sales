@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Penyewaan;
 
+use App\AkunAishii\KlienAishii;
 use App\Penyewaan\Penyewaan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
@@ -66,6 +67,12 @@ class SiapkanTerbit extends Command
         $surel = trim((string) env('POS_PENGELOLA_SUREL', ''));
         if ($surel !== '' && (string) env('POS_PENGELOLA_SANDI', '') !== '') {
             if ($this->call('pengelola:buat', ['email' => $surel, '--sandi-dari-env' => 'POS_PENGELOLA_SANDI']) !== self::SUCCESS) {
+                return self::FAILURE;
+            }
+        } elseif ($surel !== '' && app(KlienAishii::class)->aktif()) {
+            // AU5: pengelola masuk lewat akun Aishii — cukup surelnya, tanpa
+            // sandi, dan variabelnya boleh menetap (tidak ada rahasia di sana).
+            if ($this->call('pengelola:buat', ['email' => $surel, '--akun-aishii' => true]) !== self::SUCCESS) {
                 return self::FAILURE;
             }
         }

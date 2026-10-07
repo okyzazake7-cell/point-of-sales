@@ -25,12 +25,18 @@ Route::middleware('guest')->group(function () {
 });
 
 // "Masuk dengan akun Aishii" (AU1, dokumen 27 di repo Aishii). Selama ID dan
-// rahasia klien OIDC kosong, keempatnya menjawab 404.
-Route::prefix('auth/aishii')->name('aishii.')->middleware('throttle:20,1')->group(function () {
-    Route::middleware('guest')->group(function () {
-        Route::get('/', [MasukAishiiController::class, 'mulai'])->name('masuk');
-        Route::get('/kembali', [MasukAishiiController::class, 'kembali'])->name('kembali');
-    });
+// rahasia klien OIDC kosong, kelimanya menjawab 404. `/kembali` sengaja tanpa
+// `guest`: ia juga alamat balik pintu pengelola (AU5), yang boleh ditempuh
+// pemilik toko yang sedang masuk — penjagaannya di dalam controller.
+//
+// Awalan `aishii` pada pembatas lajunya WAJIB: `throttle:N,M` tanpa awalan
+// berbagi SATU penghitung per alamat pengunjung dengan tiap `throttle` tanpa
+// awalan lain — dan tiap bolak-balik ke akun Aishii (dua permintaan) ikut
+// menghabiskan jatah lima kiriman /daftar di bawah (terukur 7 Okt: 429).
+Route::prefix('auth/aishii')->name('aishii.')->middleware('throttle:20,1,aishii')->group(function () {
+    Route::get('/', [MasukAishiiController::class, 'mulai'])->middleware('guest')->name('masuk');
+    Route::get('/pengelola', [MasukAishiiController::class, 'pengelola'])->name('pengelola');
+    Route::get('/kembali', [MasukAishiiController::class, 'kembali'])->name('kembali');
     Route::middleware('auth')->group(function () {
         Route::get('/konfirmasi/mulai', [MasukAishiiController::class, 'konfirmasiMulai'])->name('konfirmasi.mulai');
         Route::get('/konfirmasi', [MasukAishiiController::class, 'konfirmasi'])->name('konfirmasi');

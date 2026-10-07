@@ -8,6 +8,7 @@ use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Controller;
 use App\Models\Pusat\DirektoriPengguna;
+use App\Models\Pusat\Pengelola;
 use App\Models\User;
 use App\Penyewaan\Penyewaan;
 use App\Services\AuditLogService;
@@ -20,7 +21,9 @@ use Illuminate\Support\Facades\Log;
  * "Masuk dengan akun Aishii" (AU1, dokumen 27 §4 di repo Aishii).
  *
  *   /auth/aishii                  → titik otorisasi Supabase (masuk)
- *   /auth/aishii/kembali          ← kode → sub → toko → sesi Laravel biasa
+ *   /auth/aishii/pengelola        → titik otorisasi (pintu pengelola, AU5)
+ *   /auth/aishii/kembali          ← kode → sub → toko → sesi Laravel biasa,
+ *                                   atau sub → baris `pengelola` (AU5)
  *   /auth/aishii/konfirmasi/mulai → titik otorisasi (konfirmasi `step_up`)
  *   /auth/aishii/konfirmasi       ← kode → `auth.password_confirmed_at`
  *
@@ -54,9 +57,43 @@ class MasukAishiiController extends Controller
         return $this->keAishii($request, 'masuk', self::alamatBalik('kembali'));
     }
 
+    /**
+     * Pintu pengelola layanan (AU5, keputusan pemilik 7 Okt). Tanpa `guest`:
+     * pemilik toko yang sedang masuk di tokonya boleh sekaligus pengelola —
+     * keduanya penjaga yang terpisah.
+     */
+    public function pengelola(Request $request): RedirectResponse
+    {
+        abort_unless($this->klien->aktif(), 404);
+
+        if (Auth::guard('pengelola')->check()) {
+            return redirect()->route('pengelola.index');
+        }
+
+        return $this->keAishii($request, 'pengelola', self::alamatBalik('kembali'));
+    }
+
     public function kembali(Request $request): RedirectResponse
     {
         abort_unless($this->klien->aktif(), 404);
+
+        // Satu alamat balik untuk dua pintu — alamat yang didaftarkan di klien
+        // OAuth (P17) tidak bertambah. Pintu mana yang menekan tombolnya
+        // tercatat di bekal sesi, bukan di kueri yang bisa diketik siapa pun.
+        if (($request->session()->get(self::BEKAL)['tujuan'] ?? null) === 'pengelola') {
+            try {
+                return $this->masukkanPengelola($request, $this->terima($request, 'pengelola'));
+            } catch (GagalMasukAishii $e) {
+                return $this->gagal($e, 'pengelola.masuk');
+            }
+        }
+
+        // Pengganti middleware `guest` yang dulu berdiri di rute ini (ia kini
+        // akan menghadang pemilik toko yang kembali dari pintu pengelola):
+        // yang sudah masuk di tokonya tidak masuk untuk kedua kalinya.
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
 
         try {
             return $this->masukkan($request, $this->terima($request, 'masuk'));
@@ -274,6 +311,59 @@ class MasukAishiiController extends Controller
         );
 
         return redirect()->intended(AuthenticatedSessionController::halamanAwal($pengguna));
+    }
+
+    /**
+     * `sub` → baris `pengelola` (AU5). SIAPA pengelola tetap daftar milik POS
+     * — baris yang dilahirkan `POS_PENGELOLA_SUREL` — bukan pengelola Aishii
+     * Bazar: produk tidak pernah membaca basis data Aishii (kontrak butir 5
+     * dokumen 27). Masuk pertama mengunci baris itu ke `sub`-nya lewat surel
+     * yang terverifikasi, persis seperti akun toko lama di `masukkan()`.
+     *
+     * @param  array<string, mixed>  $klaim
+     */
+    private function masukkanPengelola(Request $request, array $klaim): RedirectResponse
+    {
+        $sub = (string) $klaim['sub'];
+        $email = DirektoriPengguna::normalkan(is_string($klaim['email'] ?? null) ? $klaim['email'] : '');
+        $tautanBaru = false;
+
+        $pengelola = Pengelola::query()->where('aishii_sub', $sub)->first();
+
+        if (! $pengelola && $email !== '' && ($calon = Pengelola::query()->where('email', $email)->first())) {
+            if ($calon->aishii_sub !== null) {
+                throw new GagalMasukAishii(
+                    "Surel {$email} sudah tertaut ke akun Aishii lain sebagai pengelola.",
+                    'pengelola: surel tertaut ke sub lain',
+                );
+            }
+            if (($klaim['email_verified'] ?? false) !== true) {
+                throw self::surelBelumTerverifikasi();
+            }
+            $calon->forceFill(['aishii_sub' => $sub])->save();
+            $pengelola = $calon;
+            $tautanBaru = true;
+        }
+
+        if (! $pengelola) {
+            throw new GagalMasukAishii(
+                'Akun Aishii ini bukan pengelola Aishii POS.',
+                'pengelola: sub dan surel tidak terdaftar',
+            );
+        }
+
+        Auth::guard('pengelola')->login($pengelola);
+        $request->session()->regenerate();
+
+        // Pengelola biasanya orang PERTAMA yang masuk sesudah P17 — angka ini
+        // menjawab H8 tanpa menunggu pemilik toko mana pun.
+        Log::info('Pengelola masuk dengan akun Aishii', [
+            'pengelola_id' => $pengelola->getKey(),
+            'tautan_baru' => $tautanBaru,
+            'umur_auth_time_detik' => is_numeric($klaim['auth_time'] ?? null) ? time() - (int) $klaim['auth_time'] : null,
+        ]);
+
+        return redirect()->route('pengelola.index');
     }
 
     private static function surelBelumTerverifikasi(): GagalMasukAishii
