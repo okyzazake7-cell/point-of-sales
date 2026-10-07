@@ -100,7 +100,8 @@ class LanggananTest extends BanyakTokoTestCase
             'password' => 'sandi-rahasia-1',
             'password_confirmation' => 'sandi-rahasia-1',
             ...$this->botGuardPayload(),
-        ])->assertSessionHasNoErrors()->assertRedirect(route('langganan.index'));
+        ])->assertSessionHasNoErrors()->assertRedirect(route('daftar.menyiapkan'));
+        $this->selesaikanPendaftaran()->assertJsonPath('menuju', route('langganan.index'));
 
         $toko = Toko::query()->where('email_pemilik', 'cempaka@contoh.id')->firstOrFail();
         $this->assertSame($toko->id, session('toko_id'));

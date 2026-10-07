@@ -246,23 +246,21 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                             {processing ? (
                                 <>
                                     <IconLoader2 size={20} className="animate-spin" />
-                                    Menyiapkan toko…
+                                    Mendaftarkan…
                                 </>
                             ) : (
                                 "Daftarkan toko"
                             )}
                         </button>
 
-                        {/* Tiap toko mendapat basis data sendiri; di TiDB membuatnya
-                            terukur ±21 detik (dokumen 25 di repo Aishii). Tanpa kalimat
-                            ini, halaman yang diam setengah menit dibaca sebagai macet —
-                            dan yang memuat ulang mendaftar dua kali. */}
-                        {processing && (
-                            <p role="status" className="text-center text-sm text-slate-600 dark:text-slate-400">
-                                Basis data toko Anda sedang dibuat — bisa sampai setengah menit.
-                                Jangan tutup atau muat ulang halaman ini.
-                            </p>
-                        )}
+                        {/* AU6 (dokumen 28 di repo Aishii): kiriman ini hanya melahirkan
+                            baris toko — basis datanya disiapkan di halaman berikutnya,
+                            yang menampilkan kemajuannya langkah demi langkah. Janji
+                            "setengah menit" yang dulu di sini dicabut: di TiDB sungguhan
+                            satu permintaan yang mengerjakan semuanya tidak berujung. */}
+                        <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                            Sesudah ditekan, halaman berikutnya menunjukkan kemajuan penyiapan toko Anda.
+                        </p>
 
                         <p className="text-center text-sm text-slate-600 dark:text-slate-400">
                             Sudah punya toko?{" "}

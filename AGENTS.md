@@ -212,6 +212,27 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   `bekal.tujuan` picks the door, so `/kembali` has no `guest` middleware (the
   check moved into the controller). Emergency door: empty the OIDC secret and
   set `POS_PENGELOLA_SANDI` — the password path works again.
+- **Store sign-up is STEP-WISE (AU6, document 28 in the Aishii repo).** One
+  registration = 1,313 SQL statements incl. 427 DDL (measured 7 Oct): 2.3 s on
+  MariaDB, 26 s on local TiDB, and in production on TiDB Serverless the single
+  request never finished (Cloudflare cuts unanswered requests at 100 s; Cloud
+  Run throttles CPU afterwards). `POST /daftar` now only creates the `toko` row
+  (`PendaftaranToko::mulai`); the progress page `/daftar/menyiapkan` calls
+  `POST /daftar/lanjut` repeatedly, each call working at most
+  `penyewaan.anggaran_langkah_detik` (20 s) — `buat`, ONE migration file at a
+  time (`PenyediaBasisData::migrasiSatuBerkas`, the same Migrator as
+  `migrate`), `tanam` (seeder in ONE transaction), `setup` (SetupService,
+  then `siap`, then login). One lock per owner email (cache) serialises tabs
+  and resubmissions. A failed step marks the store `gagal`; "Ulangi dari
+  awal" drops and recreates its DB (never for `siap` stores —
+  `email_pemilik` does not follow email changes). Resubmitting `/daftar` for
+  an unfinished store restarts THAT store, never a second one. `daftarkan()`
+  (all at once) stays for tests and `toko:buat`. The session keeps the form
+  with the password ENCRYPTED (SetupService hashes it itself). Log line
+  "Toko siap" carries the real duration. Commands that loop over stores use
+  `PilihToko` (only `siap`), so unfinished stores never block `pos:siapkan`.
+  Playwright cannot intercept requests the POS service worker handles —
+  browser tests that route `/daftar/lanjut` need `serviceWorkers: 'block'`.
 - **Unnamed `throttle:N,M` share ONE counter** per visitor IP (guest) or per
   user id (`ThrottleRequests::resolveRequestSignature`, no route in the key).
   Measured 7 Oct: three Aishii round trips used up `/daftar`'s 5 per 10 min →

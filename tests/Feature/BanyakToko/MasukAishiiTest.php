@@ -293,7 +293,8 @@ class MasukAishiiTest extends BanyakTokoTestCase
             'password' => 'sandi-kiriman-1',
             'password_confirmation' => 'sandi-kiriman-1',
             ...$this->botGuardPayload(),
-        ])->assertSessionHasNoErrors()->assertRedirect(route('langganan.index'));
+        ])->assertSessionHasNoErrors()->assertRedirect(route('daftar.menyiapkan'));
+        $this->selesaikanPendaftaran()->assertJsonPath('menuju', route('langganan.index'));
 
         $this->assertAuthenticated();
         $baris = DirektoriPengguna::query()->find('baru@contoh.id');
@@ -323,7 +324,8 @@ class MasukAishiiTest extends BanyakTokoTestCase
             'jenis_usaha' => 'retail',
             'nama' => 'Bu Baru',
             ...$this->botGuardPayload(),
-        ])->assertSessionHasNoErrors()->assertRedirect(route('langganan.index'));
+        ])->assertSessionHasNoErrors()->assertRedirect(route('daftar.menyiapkan'));
+        $this->selesaikanPendaftaran()->assertJsonPath('menuju', route('langganan.index'));
         $this->assertAuthenticated();
     }
 

@@ -32,6 +32,13 @@ return [
     // yang sama, jadi mengubahnya berarti mengubah GRANT-nya juga.
     'awalan_basis_data' => env('POS_AWALAN_DB', 'aishiipos_'),
 
+    // Detik kerja SATU permintaan pendaftaran bertahap (AU6, dokumen 28 di
+    // repo Aishii): toko baru disiapkan lewat permintaan-permintaan pendek,
+    // sebab Cloudflare memutus yang tidak berjawab dalam 100 detik dan Cloud
+    // Run menahan CPU sesudahnya. Satu langkah selalu berjalan; berkas
+    // migrasi yang sedang berjalan diselesaikan dulu.
+    'anggaran_langkah_detik' => (float) env('POS_ANGGARAN_LANGKAH_DETIK', 20),
+
     // Hanya untuk SQLite (pengembangan dan uji): tempat berkas tiap toko.
     'direktori_sqlite' => env('POS_DIREKTORI_SQLITE', database_path('toko')),
 
