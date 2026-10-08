@@ -33,18 +33,14 @@ return [
     // baru; `profile` untuk nama pemilik di /daftar.
     'cakupan' => 'openid email profile',
 
-    // Penjaga LAMA konfirmasi tindakan penting, dipakai hanya selama migrasi
-    // Aishii 20261156 belum dijalankan: klaim `auth_time` — yang ternyata
-    // saat token terbit, jadi selalu lulus (H8). Penjaga sesungguhnya bukti
-    // di basis data Aishii (`BuktiKonfirmasi`), dengan batas waktu milik
-    // basis data itu: sandi ≤ 5 menit saat dicatat, ≤ 6 menit saat dipakai.
-    'umur_konfirmasi' => 300,
-
     // Kunci publik JWKS disimpan sebentar; `kid` yang tidak dikenal memaksa
     // pengambilan ulang sekali (kunci baru sesudah rotasi).
     'umur_jwks' => 600,
 
-    // Selisih jam yang dimaafkan saat membaca `exp`, `iat`, dan `auth_time`.
+    // Selisih jam yang dimaafkan saat membaca `exp` dan `iat`. Kesegaran
+    // konfirmasi tindakan penting TIDAK dibaca dari token sama sekali —
+    // `auth_time` adalah saat token terbit (H8); batas waktunya milik basis
+    // data Aishii (`BuktiKonfirmasi`: sandi ≤ 5 menit dicatat, ≤ 6 dipakai).
     'kelonggaran_jam' => 60,
 
 ];

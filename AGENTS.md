@@ -216,11 +216,12 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   `auth.jwt()->amr`), and the callback spends it ONCE through
   `pos_pakai_bukti_konfirmasi` with the same anon key + `AISHII_RAHASIA_POS`
   as the shared billing ledger — only AFTER `sub` matched the linked user.
-  Anything but `dipakai` refuses; network errors, a refused secret or an
-  empty config refuse too (a guard that cannot ask never says yes). The one
-  exception is PGRST202 (Aishii migration 20261156 not run yet): it falls
-  back to the old guard (`masukMasihSegar`, which never refuses) with a log
-  warning — remove that branch once the migration is verified. The sign-in
+  Anything but `dipakai` refuses; network errors, a refused secret, an
+  empty config and a missing function (PGRST202) refuse too — a guard that
+  cannot ask never says yes. The temporary PGRST202 fallback to the old
+  `auth_time` guard (`masukMasihSegar`, which never refused) was removed with
+  the guard itself once migration 20261156 was verified (P30, 8 Oct); don't
+  bring back a freshness check read from any token POS receives. The sign-in
   logs still carry `umur_auth_time_detik`/`umur_amr_detik` as witnesses
   should Supabase ever change; never log or store the tokens themselves.
 - **Service admin with the Aishii account (AU5, owner's decision 7 Oct —

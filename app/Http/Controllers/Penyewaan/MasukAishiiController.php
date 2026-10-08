@@ -132,7 +132,7 @@ class MasukAishiiController extends Controller
                     'konfirmasi: sub berbeda dari tautan pengguna #'.$pengguna->getKey(),
                 );
             }
-            $this->periksaBukti($request, (string) $klaim['sub'], $klaim);
+            $this->periksaBukti($request, (string) $klaim['sub']);
         } catch (GagalMasukAishii $e) {
             return $this->gagal($e, 'password.confirm');
         }
@@ -164,25 +164,12 @@ class MasukAishiiController extends Controller
      * Bukti sandi baru dari basis data Aishii, dipakai SEKALI (AV14). Hanya
      * sesudah `sub` terbukti milik pengguna ini — bukti orang lain tidak
      * pernah dihabiskan.
-     *
-     * @param  array<string, mixed>  $klaim
      */
-    private function periksaBukti(Request $request, string $sub, array $klaim): void
+    private function periksaBukti(Request $request, string $sub): void
     {
         $hasil = $this->bukti->pakai($request, $sub);
         if ($hasil === 'dipakai') {
             return;
-        }
-
-        if ($hasil === 'belum_terpasang') {
-            // Migrasi 20261156 belum dijalankan pemilik: penjaga lama — pagar
-            // peramban dan `auth_time` yang selalu lulus (H8) — seperti
-            // sebelum AV14. Dicabut sesudah migrasinya terverifikasi.
-            Log::warning('Bukti konfirmasi Aishii belum terpasang (migrasi 20261156) — konfirmasi hanya dijaga peramban.');
-            if ($this->klien->masukMasihSegar($klaim)) {
-                return;
-            }
-            $hasil = 'tidak_ada';
         }
 
         throw new GagalMasukAishii(match ($hasil) {
