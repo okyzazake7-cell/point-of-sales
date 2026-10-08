@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductWarehouse;
 use App\Models\Unit;
+use App\Models\User;
 use App\Models\Warehouse;
 use App\Services\AuditLogService;
 use App\Services\OutletAccessService;
@@ -124,6 +125,7 @@ class ProductController extends Controller
 
             // ponytail: keep global products.stock and per-warehouse pivot in sync; PUSAT (first active main) is the default warehouse
             $warehouse = Warehouse::find($request->warehouse_id)
+                ?? $this->onlySellingWarehouse($request->user())
                 ?? Warehouse::active()->where('type', 'main')->orderBy('sort_order')->orderBy('code')->first()
                 ?? Warehouse::active()->orderBy('sort_order')->orderBy('code')->first();
 
@@ -308,11 +310,37 @@ class ProductController extends Controller
         return back();
     }
 
+    /**
+     * The warehouse of the store's ONLY selling outlet, when that is
+     * unambiguous and usable by this user. The cashier sells from the
+     * shift's warehouse and shifts open only at selling outlets, so in a
+     * one-outlet store (what Aishii POS sign-up creates: a non-selling PUSAT
+     * plus "Toko Utama") stock parked in PUSAT never reaches the cashier.
+     * Several selling outlets keep the central-warehouse default.
+     */
+    private function onlySellingWarehouse(?User $user): ?Warehouse
+    {
+        $selling = Warehouse::active()
+            ->whereHas('outlet', fn ($q) => $q->where('is_active', true)->where('is_sales_enabled', true))
+            ->limit(2)
+            ->get();
+
+        if ($selling->count() !== 1 || ! $user || ! $this->outletAccessService->canUseWarehouse($user, $selling->first())) {
+            return null;
+        }
+
+        return $selling->first();
+    }
+
     private function compositeRules(): array
     {
         return [
             'is_composite' => 'nullable|boolean',
-            'components' => 'required_if:is_composite,1,true|array|min:1',
+            // The form always posts `components: []`. Exclude it unless the
+            // product is composite; otherwise `array|min:1` still runs on the
+            // empty array and every plain product saved without an image
+            // (a JSON post) is refused.
+            'components' => 'exclude_unless:is_composite,1,true|required|array|min:1',
             'components.*.component_product_id' => 'required|integer|distinct|exists:products,id',
             'components.*.qty' => 'required|integer|min:1',
         ];

@@ -198,7 +198,10 @@ class DaftarController extends Controller
             $request->session()->regenerate();
             $request->session()->put('security.session_started_at', now()->timestamp);
             MasukAishiiController::lupakanIdentitas($request);
-            $request->session()->flash('success', "Toko {$toko->nama} siap. Bayar tagihan pertama untuk mulai berjualan.");
+            // Tanpa awalan "Toko": nama toko kerap sudah diawalinya ("Toko
+            // Toko Melati siap"). Ajakan membayar sudah ada di spanduk
+            // halaman Langganan, tempat kabar ini tampil.
+            $request->session()->flash('success', "Pendaftaran {$toko->nama} selesai.");
 
             return response()->json([
                 'selesai' => true,

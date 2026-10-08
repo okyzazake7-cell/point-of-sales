@@ -3,6 +3,7 @@
 namespace Tests\Feature\Products;
 
 use App\Models\Category;
+use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\ProductWarehouse;
 use App\Models\StockMutation;
@@ -90,6 +91,62 @@ class ProductStoreTest extends TestCase
         $this->assertEquals(100, $mutation->qty);
         $this->assertEquals(0, $mutation->stock_before);
         $this->assertEquals(100, $mutation->stock_after);
+    }
+
+    /**
+     * A store with ONE selling outlet (what Aishii POS sign-up creates: a
+     * non-selling PUSAT plus "Toko Utama") sells only from that outlet's
+     * warehouse — the cashier searches the shift's warehouse. Initial stock
+     * left in PUSAT made every new product invisible at the cashier.
+     */
+    public function test_store_puts_initial_stock_in_the_only_selling_outlets_warehouse(): void
+    {
+        $utama = $this->sellingOutletWithWarehouse('UTAMA');
+
+        $this->post(route('products.store'), $this->validPayload())
+            ->assertRedirect(route('products.index'));
+
+        $product = Product::latest('id')->first();
+        $this->assertDatabaseHas('product_warehouse', [
+            'product_id' => $product->id, 'warehouse_id' => $utama->id, 'stock' => 100,
+        ]);
+        $this->assertDatabaseMissing('product_warehouse', [
+            'product_id' => $product->id, 'warehouse_id' => $this->warehouse->id,
+        ]);
+        $this->assertSame($utama->id, StockMutation::where('reference_type', 'product_create')
+            ->where('product_id', $product->id)->value('warehouse_id'));
+    }
+
+    public function test_store_keeps_the_main_warehouse_when_several_outlets_sell(): void
+    {
+        $this->sellingOutletWithWarehouse('MAL');
+        $this->sellingOutletWithWarehouse('TKB');
+
+        $this->post(route('products.store'), $this->validPayload())
+            ->assertRedirect(route('products.index'));
+
+        $this->assertDatabaseHas('product_warehouse', [
+            'product_id' => Product::latest('id')->value('id'), 'warehouse_id' => $this->warehouse->id, 'stock' => 100,
+        ]);
+    }
+
+    private function sellingOutletWithWarehouse(string $code): Warehouse
+    {
+        $outlet = Outlet::create([
+            'code' => $code,
+            'name' => "Outlet {$code}",
+            'is_active' => true,
+            'is_sales_enabled' => true,
+        ]);
+
+        return Warehouse::create([
+            'outlet_id' => $outlet->id,
+            'code' => $code,
+            'name' => "Gudang {$code}",
+            'type' => 'branch',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
     }
 
     public function test_store_uses_requested_warehouse(): void

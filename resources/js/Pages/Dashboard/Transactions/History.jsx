@@ -34,6 +34,20 @@ const formatCurrency = (value = 0) =>
         minimumFractionDigits: 0,
     }).format(value);
 
+// Sama dengan struk (Print.jsx). `created_at` dari server berbentuk ISO UTC
+// ("2026-10-08T03:28:20.000000Z"); ditampilkan mentah ia terbaca tujuh jam
+// meleset bagi kasir di WIB (AV5).
+const formatDateTime = (value) =>
+    value
+        ? new Date(value).toLocaleString("id-ID", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+          })
+        : "-";
+
 const History = ({ transactions, filters, warehouses = [] }) => {
     const { can } = useAuthorization();
     const canCreateSalesReturn = can("sales-returns-create");
@@ -282,7 +296,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 </span>
                                             </td>
                                             <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">
-                                                {transaction.created_at}
+                                                {formatDateTime(transaction.created_at)}
                                             </td>
                                             <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">
                                                 {transaction.cashier?.name ??
@@ -427,7 +441,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                 {transaction.invoice}
                                             </p>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                {transaction.created_at}
+                                                {formatDateTime(transaction.created_at)}
                                             </p>
                                         </div>
                                         <div className="text-right space-y-2">

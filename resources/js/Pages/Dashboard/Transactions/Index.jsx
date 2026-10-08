@@ -2012,11 +2012,15 @@ export default function Index({
                             )}
 
                         {/* Submit Button - Always visible */}
+                        {/* Pelanggan hanya wajib untuk bayar belakangan — syarat yang
+                            sama dengan handleSubmitTransaction dan server. Tombol yang
+                            menuntutnya untuk tiap penjualan membuat toko baru (belum
+                            punya pelanggan) tidak bisa berjualan (AV4). */}
                         <button
                             onClick={handleSubmitTransaction}
                             disabled={
                                 !carts.length ||
-                                !selectedCustomer ||
+                                (payLater && !selectedCustomer) ||
                                 (!payLater &&
                                     paymentMethod === "cash" &&
                                     cash < payable) ||
@@ -2025,7 +2029,7 @@ export default function Index({
                             }
                             className={`w-full h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
                                 carts.length &&
-                                selectedCustomer &&
+                                (!payLater || selectedCustomer) &&
                                 (paymentMethod !== "cash" || cash >= payable)
                                     && !isLoadingPricing
                                     ? "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg shadow-primary-500/30"
@@ -2040,7 +2044,7 @@ export default function Index({
                                     <span>
                                         {!carts.length
                                             ? "Keranjang Kosong"
-                                            : !selectedCustomer
+                                            : payLater && !selectedCustomer
                                             ? "Pilih Pelanggan"
                                             : paymentMethod === "cash" &&
                                               cash < payable

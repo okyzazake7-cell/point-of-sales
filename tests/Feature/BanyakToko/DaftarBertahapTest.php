@@ -96,6 +96,11 @@ class DaftarBertahapTest extends BanyakTokoTestCase
         $this->assertAuthenticated();
         $this->assertSame($toko->id, session('toko_id'));
         $this->assertNull(session('penyewaan.pendaftaran'));
+        // Nama toko kerap diawali "Toko" — kalimat "Toko {nama} siap" pernah
+        // berbunyi "Toko Toko Cempaka siap" (uji terima AV1, 8 Okt). Ajakan
+        // membayar sudah ada di spanduk halaman Langganan; kabarnya cukup
+        // menyebut pendaftarannya selesai.
+        $this->assertSame('Pendaftaran Toko Cempaka selesai.', session('success'));
         $this->get('/dashboard/langganan')->assertOk()
             ->assertInertia(fn (AssertableInertia $p) => $p->where('toko.nama', 'Toko Cempaka'));
 
