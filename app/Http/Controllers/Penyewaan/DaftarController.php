@@ -56,7 +56,7 @@ class DaftarController extends Controller
             // POS); tanpa identitas, layar ini hanya menawarkan tombol masuknya.
             'akunAishii' => $klien->aktif() ? [
                 'email' => $identitas['email'] ?? null,
-                'nama' => $identitas['nama'] ?? null,
+                'nama' => self::namaLayak($identitas['nama'] ?? null),
                 'masuk' => route('aishii.masuk'),
             ] : null,
         ]);
@@ -248,6 +248,20 @@ class DaftarController extends Controller
         $request->session()->forget(self::PENDAFTARAN);
 
         return $toko ? 'login' : 'daftar';
+    }
+
+    /**
+     * Nama dari akun Aishii yang layak ditawarkan sebagai "Nama Anda" (AV9).
+     * Akun yang mendaftar lewat surel tidak punya nama, dan klaim `name`-nya
+     * berisi surel. Nama itu menjadi nama kasir dan tercetak "Kasir: …" di
+     * struk tiap pembeli, jadi surel tidak ditawarkan: kolomnya kosong, dan
+     * pemiliknya mengetik namanya sendiri.
+     */
+    private static function namaLayak(?string $nama): ?string
+    {
+        $nama = trim((string) $nama);
+
+        return $nama === '' || filter_var($nama, FILTER_VALIDATE_EMAIL) !== false ? null : $nama;
     }
 
     /** Satu kunci per surel pemilik di tembolok pusat — dua jendela tidak pernah bekerja bersamaan. */

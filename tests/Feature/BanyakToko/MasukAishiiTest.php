@@ -275,6 +275,30 @@ class MasukAishiiTest extends BanyakTokoTestCase
 
     // ── Toko baru lahir dari akun Aishii ─────────────────────────────────
 
+    /**
+     * AV9: akun Aishii yang mendaftar lewat surel tidak punya nama, dan klaim
+     * `name`-nya berisi surel. Diisikan ke "Nama Anda", surel itu menjadi
+     * nama kasir — dan tercetak "Kasir: …" di struk tiap pembeli. Nama yang
+     * berbentuk surel tidak ditawarkan; nama sungguhan tetap ditawarkan.
+     */
+    public function test_an_email_shaped_name_claim_is_not_offered_as_the_owners_name(): void
+    {
+        $this->masukLewatAishii(['email' => 'tanpanama@contoh.id', 'name' => 'tanpanama@contoh.id'])
+            ->assertRedirect(route('daftar'));
+        $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
+            ->where('akunAishii.email', 'tanpanama@contoh.id')
+            ->where('akunAishii.nama', null));
+
+        $this->masukLewatAishii(['email' => 'lain@contoh.id', 'name' => ' Lain@Contoh.ID '])
+            ->assertRedirect(route('daftar'));
+        $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p->where('akunAishii.nama', null));
+
+        // Nama yang memuat "@" tetapi bukan surel tetap milik pemiliknya.
+        $this->masukLewatAishii(['email' => 'ani@contoh.id', 'name' => 'Ani @ Toko Melati'])
+            ->assertRedirect(route('daftar'));
+        $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p->where('akunAishii.nama', 'Ani @ Toko Melati'));
+    }
+
     public function test_an_aishii_account_without_a_store_registers_one_without_a_password(): void
     {
         $this->masukLewatAishii(['email' => 'baru@contoh.id', 'name' => 'Bu Baru'])->assertRedirect(route('daftar'));
