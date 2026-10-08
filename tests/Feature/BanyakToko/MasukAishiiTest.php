@@ -14,6 +14,7 @@ use Illuminate\Http\Client\Request as PermintaanHttp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Testing\TestResponse;
 use Inertia\Testing\AssertableInertia;
 use Tests\BanyakTokoTestCase;
@@ -38,6 +39,9 @@ class MasukAishiiTest extends BanyakTokoTestCase
     private \OpenSSLAsymmetricKey $kunciPrivat;
 
     private string $tokenId = '';
+
+    /** Token akses yang dipulangkan titik token tiruan; kosong = string buram lama. */
+    private string $tokenAkses = '';
 
     /** @var array<string, string> kueri permintaan otorisasi terakhir */
     private array $kueri = [];
@@ -67,7 +71,7 @@ class MasukAishiiTest extends BanyakTokoTestCase
                 'x' => self::b64($ec['x']), 'y' => self::b64($ec['y']),
             ]]]),
             self::PENERBIT.'/oauth/token' => fn () => Http::response([
-                'access_token' => 'akses-uji', 'token_type' => 'bearer', 'expires_in' => 3600,
+                'access_token' => $this->tokenAkses !== '' ? $this->tokenAkses : 'akses-uji', 'token_type' => 'bearer', 'expires_in' => 3600,
                 'refresh_token' => 'segar-uji', 'id_token' => $this->tokenId,
             ]),
         ]);
@@ -417,6 +421,55 @@ class MasukAishiiTest extends BanyakTokoTestCase
 
     // ── Konfirmasi tindakan penting (`step_up`) lewat akun Aishii ────────
 
+    /**
+     * H10 (AV14): `auth_time` token ID terbukti cap TERBIT (H8 salah, P18
+     * butir 5), jadi yang diukur kini cap `amr` TOKEN AKSES — dicatat di log,
+     * belum memutuskan apa pun, dan tokennya tidak disimpan.
+     */
+    public function test_sign_in_logs_the_age_of_the_access_token_amr(): void
+    {
+        $this->buatTokoAishii('Toko Bakung', 'b@contoh.id', self::SUB);
+        $this->tokenAkses = $this->tokenAksesSah(['amr' => [['method' => 'password', 'timestamp' => time() - 4000]]]);
+        Log::spy();
+
+        $this->masukLewatAishii(['email' => 'b@contoh.id'])->assertRedirect();
+        $this->assertAuthenticated();
+
+        Log::shouldHaveReceived('info')->withArgs(fn ($pesan, $konteks = []) => $pesan === 'Masuk dengan akun Aishii'
+            && is_int($konteks['umur_amr_detik'] ?? null) && abs($konteks['umur_amr_detik'] - 4000) <= 5
+            && ($konteks['amr_token_akses'][0]['metode'] ?? null) === 'password')->once();
+    }
+
+    /**
+     * Cap `amr` hanya dipercaya dari token akses yang tanda tangannya SAH dan
+     * milik akun yang sama: kelak pagar konfirmasi berdiri di atasnya.
+     */
+    public function test_a_forged_or_foreign_access_token_is_never_measured(): void
+    {
+        $this->buatTokoAishii('Toko Bakung', 'b@contoh.id', self::SUB);
+        $amr = ['amr' => [['method' => 'password', 'timestamp' => time() - 4000]]];
+        $kunciLain = openssl_pkey_new(['private_key_type' => OPENSSL_KEYTYPE_EC, 'curve_name' => 'prime256v1']);
+
+        foreach ([
+            'tanda tangan' => $this->tokenAksesSah($amr, $kunciLain),
+            'iss/sub' => $this->tokenAksesSah([...$amr, 'sub' => self::SUB_LAIN]),
+            'tidak ada' => 'akses-buram',
+        ] as $sebab => $token) {
+            // Tiap putaran mulai sebagai tamu: `/auth/aishii` dijaga `guest`.
+            Auth::logout();
+            $this->flushSession();
+            $this->tokenAkses = $token;
+            Log::spy();
+
+            $this->masukLewatAishii(['email' => 'b@contoh.id'])->assertRedirect();
+            $this->assertAuthenticated();
+
+            Log::shouldHaveReceived('info')->withArgs(fn ($pesan, $konteks = []) => $pesan === 'Masuk dengan akun Aishii'
+                && array_key_exists('umur_amr_detik', $konteks) && $konteks['umur_amr_detik'] === null
+                && ($konteks['amr_token_akses']['galat'] ?? null) === $sebab)->once();
+        }
+    }
+
     public function test_a_linked_owner_confirms_sensitive_actions_with_a_fresh_aishii_sign_in(): void
     {
         // Akun LAMA yang sandinya diketahui, lalu tertaut lewat masuk pertama:
@@ -699,6 +752,22 @@ class MasukAishiiTest extends BanyakTokoTestCase
         ], fn ($nilai) => $nilai !== null);
 
         return $this->tandaTangan($isi, $kepala, $kunci ?? $this->kunciPrivat);
+    }
+
+    /** Token akses bentuk Supabase: tanpa `nonce`, `aud` = authenticated. */
+    private function tokenAksesSah(array $klaim = [], ?\OpenSSLAsymmetricKey $kunci = null): string
+    {
+        return $this->tandaTangan([
+            'iss' => self::PENERBIT,
+            'sub' => self::SUB,
+            'aud' => 'authenticated',
+            'exp' => time() + 3600,
+            'iat' => time(),
+            'role' => 'authenticated',
+            'client_id' => 'klien-pos-uji',
+            'session_id' => 'sesi-uji',
+            ...$klaim,
+        ], [], $kunci ?? $this->kunciPrivat);
     }
 
     private function tandaTangan(array $isi, array $kepala, \OpenSSLAsymmetricKey $kunci): string
