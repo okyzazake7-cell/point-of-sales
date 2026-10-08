@@ -247,6 +247,14 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
 
 `product_warehouse.stock` is the operational source of truth. `products.stock` is maintained as a global aggregate — both must be updated in the same DB transaction for every mutation. Always prefer locking `product_warehouse` rows with `lockForUpdate()` before decrementing. Use `inventory:reconcile --fix` to align global stock after data repairs.
 
+**Initial stock of a new product** goes to the request's `warehouse_id`;
+without it, to the warehouse of the store's ONLY selling outlet (when the user
+may use it), else to the first active `main` warehouse. The cashier searches
+the open shift's warehouse and shifts open only at selling outlets, so in a
+one-outlet store — what Aishii POS sign-up creates: a non-selling PUSAT plus
+"Toko Utama" — stock parked in PUSAT never reached the cashier (AV3, 8 Oct).
+Stores with several selling outlets keep the central warehouse + transfers.
+
 ## Critical Gotchas
 
 1. **Permission cache stale after seed** — logout + login again. Seeder resets cache but session still holds old permissions.
@@ -299,6 +307,13 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
 - Attach warehouse stock: `$warehouse->products()->attach($product->id, ['stock' => N])` or `$product->warehouses()->attach($warehouse->id, ['stock' => N])`
 - Open shift: `app(CashierShiftService::class)->openShift($cashier, $cashier, $openingCash, null, $warehouse->id)`
 - **PHPUnit 12: no `$faker` property** — use `static int $seq = 0` counters or `uniqid()` for unique values
+- **Tests that mimic a form must send what the form sends.** Inertia posts JSON
+  when no file is attached, empty arrays included; `post()` form-encodes and
+  DROPS empty arrays, which is how `components: []` failing every plain
+  product without an image went unseen (AV2). Use
+  `json('POST', $uri, $data, ['X-Inertia' => 'true', 'Accept' => 'text/html, application/xhtml+xml'])`.
+- **A sale needs a customer only when it is pay-later** — server, cashier
+  button, and receipt ("Umum") agree since AV4. A new store has no customers.
 - For API tests: `Sanctum::actingAs($user, ['*'])` — explicit abilities required; TransientToken does not bypass `abilities` middleware
 
 ## API Ability System
