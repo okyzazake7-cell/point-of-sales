@@ -46,6 +46,17 @@ class MasukAishiiTest extends BanyakTokoTestCase
     /** @var array<string, string> kueri permintaan otorisasi terakhir */
     private array $kueri = [];
 
+    /**
+     * Jawaban `pos_pakai_bukti_konfirmasi` tiruan (AV14): isi JSON, atau
+     * 'pra' (fungsi belum ada), 'galat' (500), 'putus' (jaringan).
+     *
+     * @var array<string, mixed>|string
+     */
+    private array|string $jawabanBukti = ['status' => 'dipakai'];
+
+    /** @var list<array<string, mixed>> isi tiap panggilan bukti */
+    private array $panggilanBukti = [];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -54,6 +65,10 @@ class MasukAishiiTest extends BanyakTokoTestCase
             'akun_aishii.penerbit' => self::PENERBIT,
             'akun_aishii.id_klien' => 'klien-pos-uji',
             'akun_aishii.rahasia_klien' => 'rahasia-uji',
+            // Pintu `pos_*` basis data Aishii — yang sama dengan buku tagihan.
+            'langganan.buku_tagihan.url' => 'https://akun.uji',
+            'langganan.buku_tagihan.kunci_anon' => 'kunci-anon-uji',
+            'langganan.buku_tagihan.rahasia' => 'rahasia-pos-uji',
         ]);
 
         $this->kunciPrivat = openssl_pkey_new(['private_key_type' => OPENSSL_KEYTYPE_EC, 'curve_name' => 'prime256v1']);
@@ -74,6 +89,16 @@ class MasukAishiiTest extends BanyakTokoTestCase
                 'access_token' => $this->tokenAkses !== '' ? $this->tokenAkses : 'akses-uji', 'token_type' => 'bearer', 'expires_in' => 3600,
                 'refresh_token' => 'segar-uji', 'id_token' => $this->tokenId,
             ]),
+            'https://akun.uji/rest/v1/rpc/pos_pakai_bukti_konfirmasi' => function (PermintaanHttp $permintaan) {
+                $this->panggilanBukti[] = $permintaan->data();
+
+                return match ($this->jawabanBukti) {
+                    'pra' => Http::response(['code' => 'PGRST202', 'message' => 'Could not find the function public.pos_pakai_bukti_konfirmasi'], 404),
+                    'galat' => Http::response(['message' => 'galat server'], 500),
+                    'putus' => (Http::failedConnection())($permintaan),
+                    default => Http::response($this->jawabanBukti),
+                };
+            },
         ]);
     }
 
@@ -470,7 +495,7 @@ class MasukAishiiTest extends BanyakTokoTestCase
         }
     }
 
-    public function test_a_linked_owner_confirms_sensitive_actions_with_a_fresh_aishii_sign_in(): void
+    public function test_a_linked_owner_confirms_sensitive_actions_only_with_a_proof_from_aishii(): void
     {
         // Akun LAMA yang sandinya diketahui, lalu tertaut lewat masuk pertama:
         // hanya dengan sandi yang benar penolakan sandi toko di bawah berarti.
@@ -478,29 +503,94 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->masukLewatAishii()->assertSessionHasNoErrors();
         $this->assertSame(self::SUB, DirektoriPengguna::query()->find('a@contoh.id')->aishii_sub);
 
-        $this->get('/confirm-password')->assertInertia(fn (AssertableInertia $p) => $p
-            ->where('konfirmasiAishii', AkunTertaut::alamatKonfirmasi()));
-        $this->assertSame(
-            config('brand.parent.url').'/masuk-ulang?lanjut='.rawurlencode(rtrim(config('app.url'), '/').'/auth/aishii/konfirmasi/mulai'),
-            AkunTertaut::alamatKonfirmasi(),
+        // Tautannya membawa kode pengikat sesi ini, dan kodenya bertahan
+        // sampai terpakai — dua tab konfirmasi tidak saling membatalkan.
+        $tautan = $this->tautanKonfirmasi();
+        $this->assertStringStartsWith(
+            config('brand.parent.url').'/masuk-ulang?lanjut='.rawurlencode(rtrim(config('app.url'), '/').'/auth/aishii/konfirmasi/mulai').'&kode=',
+            $tautan,
         );
+        $kode = self::kodeDari($tautan);
+        $this->assertMatchesRegularExpression('/^[A-Za-z0-9]{40}$/', $kode);
+        $this->assertSame($tautan, $this->tautanKonfirmasi());
+
         // Sandi toko tidak bisa dipakai mengonfirmasi akun yang tertaut.
         $this->post('/confirm-password', ['password' => 'sandi-rahasia-1'])->assertSessionHasErrors('password');
         $this->assertNull(session('auth.password_confirmed_at'));
 
-        // Sandi akun Aishii dimasukkan 10 menit lalu: basi.
-        $this->konfirmasiLewatAishii(['auth_time' => time() - 600])->assertSessionHasErrors('aishii');
-        $this->assertNull(session('auth.password_confirmed_at'));
-        // Tanpa `auth_time` sama sekali: tidak bisa dibuktikan, maka basi.
-        $this->konfirmasiLewatAishii(['auth_time' => null])->assertSessionHasErrors('aishii');
-        // Akun Aishii lain.
+        // `auth_time` selalu segar (H8) — yang memutuskan bukti di basis data
+        // Aishii. Tanpa bukti yang bisa dipakai: ditolak.
+        foreach (['tidak_ada', 'basi', 'sudah_dipakai'] as $status) {
+            $this->jawabanBukti = ['status' => $status];
+            $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
+            $this->assertNull(session('auth.password_confirmed_at'), $status);
+        }
+        // Yang ditanyakan: rahasia POS, akun yang tertaut, dan kode sesi ini.
+        $this->assertSame(['p_rahasia' => 'rahasia-pos-uji', 'p_sub' => self::SUB, 'p_kode' => $kode], end($this->panggilanBukti));
+
+        // Akun Aishii lain: ditolak SEBELUM bukti siapa pun dihabiskan.
+        $sebelum = count($this->panggilanBukti);
+        $this->jawabanBukti = ['status' => 'dipakai', 'cara' => 'password', 'umur_detik' => 20];
         $this->konfirmasiLewatAishii(['sub' => self::SUB_LAIN])->assertSessionHasErrors('aishii');
+        $this->assertCount($sebelum, $this->panggilanBukti);
         $this->assertNull(session('auth.password_confirmed_at'));
 
-        // Baru dimasukkan: lolos, dan alamat baliknya alamat konfirmasi.
-        $this->konfirmasiLewatAishii(['auth_time' => time() - 30])->assertSessionHasNoErrors()->assertRedirect();
+        // Bukti ada: lolos, dan alamat baliknya alamat konfirmasi.
+        $this->konfirmasiLewatAishii()->assertSessionHasNoErrors()->assertRedirect();
         $this->assertSame(rtrim(config('app.url'), '/').'/auth/aishii/konfirmasi', $this->kueri['redirect_uri']);
         $this->assertEqualsWithDelta(time(), session('auth.password_confirmed_at'), 5);
+
+        // Kode yang terpakai tidak ditawarkan lagi.
+        $this->assertNotSame($kode, self::kodeDari($this->tautanKonfirmasi()));
+    }
+
+    public function test_a_confirmation_without_a_code_from_this_session_never_asks_aishii(): void
+    {
+        $this->buatToko('Toko Anggrek', 'a@contoh.id');
+        $this->masukLewatAishii()->assertSessionHasNoErrors();
+
+        // Halaman konfirmasi tidak pernah dibuka di sesi ini: tidak ada kode.
+        $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
+        $this->assertSame([], $this->panggilanBukti);
+        $this->assertNull(session('auth.password_confirmed_at'));
+    }
+
+    public function test_a_proof_that_cannot_be_checked_never_confirms(): void
+    {
+        $this->buatToko('Toko Anggrek', 'a@contoh.id');
+        $this->masukLewatAishii()->assertSessionHasNoErrors();
+        $this->tautanKonfirmasi();
+
+        foreach (['galat', 'putus', ['status' => 'rahasia_salah'], ['status' => 'belum_disiapkan'], ['tak' => 'dikenal']] as $jawaban) {
+            $this->jawabanBukti = $jawaban;
+            $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
+            $this->assertNull(session('auth.password_confirmed_at'), json_encode($jawaban));
+        }
+
+        // Rahasia POS kosong di server ini: tidak bertanya, dan tidak lolos.
+        config(['langganan.buku_tagihan.rahasia' => null]);
+        $sebelum = count($this->panggilanBukti);
+        $this->jawabanBukti = ['status' => 'dipakai'];
+        $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
+        $this->assertCount($sebelum, $this->panggilanBukti);
+        $this->assertNull(session('auth.password_confirmed_at'));
+    }
+
+    public function test_before_the_aishii_migration_the_old_guard_answers_and_says_so(): void
+    {
+        $this->buatToko('Toko Anggrek', 'a@contoh.id');
+        $this->masukLewatAishii()->assertSessionHasNoErrors();
+        $this->tautanKonfirmasi();
+        $this->jawabanBukti = 'pra';
+        Log::spy();
+
+        // Penjaga lama apa adanya: `auth_time` basi ditolak, yang segar lolos.
+        $this->konfirmasiLewatAishii(['auth_time' => time() - 600])->assertSessionHasErrors('aishii');
+        $this->assertNull(session('auth.password_confirmed_at'));
+        $this->konfirmasiLewatAishii(['auth_time' => time() - 30])->assertSessionHasNoErrors();
+        $this->assertNotNull(session('auth.password_confirmed_at'));
+
+        Log::shouldHaveReceived('warning')->withArgs(fn ($pesan) => str_contains((string) $pesan, 'belum terpasang (migrasi 20261156)'))->atLeast()->once();
     }
 
     public function test_a_password_account_keeps_confirming_with_its_password(): void
@@ -717,6 +807,25 @@ class MasukAishiiTest extends BanyakTokoTestCase
         return $this->get('/auth/aishii/kembali?'.http_build_query([
             'code' => 'kode-uji', 'state' => $this->kueri['state'], ...$kueri,
         ]));
+    }
+
+    /** Tautan "Konfirmasi dengan akun Aishii" di halaman konfirmasi sesi ini. */
+    private function tautanKonfirmasi(): string
+    {
+        $tautan = null;
+        $this->get('/confirm-password')->assertInertia(function (AssertableInertia $p) use (&$tautan) {
+            $tautan = $p->toArray()['props']['konfirmasiAishii'];
+        });
+        $this->assertIsString($tautan);
+
+        return $tautan;
+    }
+
+    private static function kodeDari(string $tautan): string
+    {
+        parse_str((string) parse_url($tautan, PHP_URL_QUERY), $kueri);
+
+        return (string) ($kueri['kode'] ?? '');
     }
 
     private function konfirmasiLewatAishii(array $klaim = []): TestResponse

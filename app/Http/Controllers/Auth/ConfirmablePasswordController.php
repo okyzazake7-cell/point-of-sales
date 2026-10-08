@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\AkunAishii\AkunTertaut;
+use App\AkunAishii\BuktiKonfirmasi;
 use App\Http\Controllers\Controller;
 use App\Services\AuditLogService;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,9 @@ class ConfirmablePasswordController extends Controller
             'challenge' => session('security.step_up_context'),
             // AU1 — D2: akun yang tertaut ke akun Aishii tidak punya sandi
             // POS; konfirmasinya pun lewat akun Aishii.
-            'konfirmasiAishii' => AkunTertaut::pengguna($request->user()) ? AkunTertaut::alamatKonfirmasi() : null,
+            'konfirmasiAishii' => AkunTertaut::pengguna($request->user())
+                ? AkunTertaut::alamatKonfirmasi(app(BuktiKonfirmasi::class)->kode($request))
+                : null,
         ]);
     }
 

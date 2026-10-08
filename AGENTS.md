@@ -195,7 +195,7 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   `AISHII_OIDC_ID_KLIEN`/`AISHII_OIDC_RAHASIA_KLIEN` are empty. The central
   directory row carries `aishii_sub`; a linked account can NOT sign in (web or
   API) or confirm `step_up` with a POS password (decision D2) — step-up goes
-  through `{AISHII_URL}/masuk-ulang` and the callback checks `auth_time`.
+  through `{AISHII_URL}/masuk-ulang` and the callback spends a proof (below).
   Cashiers stay local password accounts (D1b). New stores at `/daftar` are
   born from an Aishii identity (email from the verified token, random password).
   ID tokens are verified ES256-only against the JWKS, never with a shared
@@ -204,14 +204,25 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   up with email (Aishii stores no name). Never offer it as a person's name:
   the owner's name becomes the cashier name printed on every receipt
   ("Kasir: …"). `DaftarController::namaLayak` drops email-shaped names (AV9).
-  Supabase's ID-token `auth_time` is the ISSUE time, not when the password
-  was typed (H8 measured false, 8 Oct: 0–1 s in every production log line,
-  even 75 min after the last password). So `KlienAishii::masukMasihSegar`
-  (step-up on `auth_time`) never refuses anything; until AV14 is fixed, the
-  confirmation is guarded only by the Aishii pages in the browser. The
-  access token's `amr` is MEASURED (H10): `KlienAishii::ringkasAmr` reads it
-  only from a validly signed token for the same `sub`, and the sign-in logs
-  carry `umur_amr_detik`. Never log or store the token itself.
+  NO token POS receives says when the password was typed: the ID token's
+  `auth_time` (H8) and the access token's `amr` (H10,
+  `oauth_provider/authorization_code`) are both stamped at ISSUE time —
+  measured false in production, 8 Oct. So step-up is guarded by a PROOF in
+  the Aishii database (AV14, document 29 in the Aishii repo):
+  `App\AkunAishii\BuktiKonfirmasi` puts a 40-char binding code in the
+  session, the confirm link carries it (`AkunTertaut::alamatKonfirmasi`),
+  `/masuk-ulang` records the proof with the browser's own session token
+  (`catat_bukti_konfirmasi`, password/Google ≤ 5 min, read from
+  `auth.jwt()->amr`), and the callback spends it ONCE through
+  `pos_pakai_bukti_konfirmasi` with the same anon key + `AISHII_RAHASIA_POS`
+  as the shared billing ledger — only AFTER `sub` matched the linked user.
+  Anything but `dipakai` refuses; network errors, a refused secret or an
+  empty config refuse too (a guard that cannot ask never says yes). The one
+  exception is PGRST202 (Aishii migration 20261156 not run yet): it falls
+  back to the old guard (`masukMasihSegar`, which never refuses) with a log
+  warning — remove that branch once the migration is verified. The sign-in
+  logs still carry `umur_auth_time_detik`/`umur_amr_detik` as witnesses
+  should Supabase ever change; never log or store the tokens themselves.
 - **Service admin with the Aishii account (AU5, owner's decision 7 Oct —
   reverses D4)**: while AU1 is on, `/pengelola/masuk` shows only "Masuk dengan
   akun Aishii" (`/auth/aishii/pengelola`) and the password POST is refused for

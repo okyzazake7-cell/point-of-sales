@@ -35,12 +35,14 @@ class AkunTertaut
 
     /**
      * Konfirmasi tindakan penting lewat akun Aishii: `/masuk-ulang` di
-     * Aishii meminta sandinya lagi, lalu mengantar ke sini untuk meminta
-     * otorisasi berakhiran `/konfirmasi`.
+     * Aishii meminta sandinya lagi, mencatat bukti atas `kode` (AV14,
+     * `BuktiKonfirmasi`), lalu mengantar ke sini untuk meminta otorisasi
+     * berakhiran `/konfirmasi`.
      */
-    public static function alamatKonfirmasi(): string
+    public static function alamatKonfirmasi(string $kode): string
     {
         return config('brand.parent.url').'/masuk-ulang?lanjut='
-            .rawurlencode(rtrim((string) config('app.url'), '/').'/auth/aishii/konfirmasi/mulai');
+            .rawurlencode(rtrim((string) config('app.url'), '/').'/auth/aishii/konfirmasi/mulai')
+            .'&kode='.rawurlencode($kode);
     }
 }
