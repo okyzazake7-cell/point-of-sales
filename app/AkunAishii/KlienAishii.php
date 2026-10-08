@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use OpenSSLAsymmetricKey;
+use Throwable;
 
 /**
  * Klien OIDC "Masuk dengan akun Aishii" (AU1, dokumen 27 §4 di repo Aishii).
@@ -22,6 +23,13 @@ class KlienAishii
     public const KALIMAT_ULANGI = 'Masuk dengan akun Aishii belum berhasil. Coba sekali lagi.';
 
     public const KALIMAT_PUTUS = 'Server akun Aishii belum bisa dihubungi. Periksa sinyal, lalu coba lagi.';
+
+    /**
+     * Kunci ringkasan `amr` token akses di klaim yang dipulangkan `tukar()`
+     * (H10, AV14). Bergaris bawah supaya tidak pernah bertabrakan dengan
+     * klaim Supabase yang sungguhan.
+     */
+    public const AMR_TOKEN_AKSES = '_amr_token_akses';
 
     public function aktif(): bool
     {
@@ -93,7 +101,74 @@ class KlienAishii
             throw new GagalMasukAishii(self::KALIMAT_ULANGI, 'token: HTTP '.$jawaban->status().' '.Str::limit($jawaban->body(), 300));
         }
 
-        return $this->verifikasi($tokenId, $bekal['nonce']);
+        $klaim = $this->verifikasi($tokenId, $bekal['nonce']);
+
+        // H10 (AV14): `auth_time` token ID terbukti cap TERBIT (H8 salah, P18
+        // butir 5), jadi pemeriksaan konfirmasi di atasnya tidak menjaga. Cap
+        // `amr` token akses mungkin membawa saat sandi yang ASLI. Di sini ia
+        // hanya DIUKUR untuk dicatat di log — tidak memutuskan apa pun, dan
+        // tokennya sendiri tetap tidak disimpan.
+        $klaim[self::AMR_TOKEN_AKSES] = $this->ringkasAmr($jawaban->json('access_token'), (string) $klaim['sub']);
+
+        return $klaim;
+    }
+
+    /**
+     * `amr` token akses → `[['metode' => …, 'umur_detik' => …], …]`, atau
+     * `['galat' => sebab]` bila tokennya tidak ada, tidak sah, atau milik
+     * akun lain. Hanya token yang tanda tangannya SAH yang dibaca: kelak
+     * pagar konfirmasi berdiri di atas angka ini. TIDAK PERNAH melempar —
+     * pengukuran tidak boleh menggagalkan masuk.
+     *
+     * @return array<int|string, mixed>
+     */
+    public function ringkasAmr(mixed $jwt, string $sub): array
+    {
+        try {
+            if (! is_string($jwt) || substr_count($jwt, '.') !== 2) {
+                return ['galat' => 'tidak ada'];
+            }
+            [$kepala64, $isi64, $tanda64] = explode('.', $jwt);
+            $kepala = json_decode(self::dariB64url($kepala64), true);
+            $klaim = json_decode(self::dariB64url($isi64), true);
+            if (! is_array($kepala) || ! is_array($klaim) || ($kepala['alg'] ?? null) !== 'ES256') {
+                return ['galat' => 'alg'];
+            }
+            $tanda = self::dariB64url($tanda64);
+            if (strlen($tanda) !== 64
+                || openssl_verify("{$kepala64}.{$isi64}", self::derEcdsa($tanda), $this->kunci((string) ($kepala['kid'] ?? '')), OPENSSL_ALGO_SHA256) !== 1) {
+                return ['galat' => 'tanda tangan'];
+            }
+            if (($klaim['iss'] ?? null) !== config('akun_aishii.penerbit') || ($klaim['sub'] ?? null) !== $sub) {
+                return ['galat' => 'iss/sub'];
+            }
+
+            $sekarang = time();
+
+            return collect(is_array($klaim['amr'] ?? null) ? $klaim['amr'] : [])
+                ->filter(fn ($a) => is_array($a) && is_numeric($a['timestamp'] ?? null))
+                ->map(fn (array $a) => ['metode' => (string) ($a['method'] ?? '?'), 'umur_detik' => $sekarang - (int) $a['timestamp']])
+                ->values()
+                ->all();
+        } catch (Throwable $e) {
+            return ['galat' => class_basename($e)];
+        }
+    }
+
+    /**
+     * Umur autentikasi PALING BARU di ringkasan `amr`, atau null bila tidak
+     * ada yang terbaca (H10, AV14).
+     *
+     * @param  array<string, mixed>  $klaim  klaim hasil `tukar()`
+     */
+    public static function umurAmr(array $klaim): ?int
+    {
+        $ringkas = $klaim[self::AMR_TOKEN_AKSES] ?? null;
+        if (! is_array($ringkas) || isset($ringkas['galat']) || $ringkas === []) {
+            return null;
+        }
+
+        return min(array_column($ringkas, 'umur_detik'));
     }
 
     /**

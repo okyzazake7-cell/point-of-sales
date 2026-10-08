@@ -300,6 +300,11 @@ class MasukAishiiController extends Controller
         // pertama, dan pemeriksaan konfirmasi di bawah benar-benar menjaga.
         Log::info('Masuk dengan akun Aishii', [
             'umur_auth_time_detik' => is_numeric($klaim['auth_time'] ?? null) ? time() - (int) $klaim['auth_time'] : null,
+            // H10 (AV14): H8 terbukti salah (`auth_time` = cap terbit). Angka
+            // besar di sini sesudah lama tidak memasukkan sandi = cap `amr`
+            // token akses membawa saat sandi yang asli.
+            'umur_amr_detik' => KlienAishii::umurAmr($klaim),
+            'amr_token_akses' => $klaim[KlienAishii::AMR_TOKEN_AKSES] ?? null,
         ]);
 
         $this->audit->log(
@@ -361,6 +366,8 @@ class MasukAishiiController extends Controller
             'pengelola_id' => $pengelola->getKey(),
             'tautan_baru' => $tautanBaru,
             'umur_auth_time_detik' => is_numeric($klaim['auth_time'] ?? null) ? time() - (int) $klaim['auth_time'] : null,
+            'umur_amr_detik' => KlienAishii::umurAmr($klaim),
+            'amr_token_akses' => $klaim[KlienAishii::AMR_TOKEN_AKSES] ?? null,
         ]);
 
         return redirect()->route('pengelola.index');

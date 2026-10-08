@@ -204,6 +204,14 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   up with email (Aishii stores no name). Never offer it as a person's name:
   the owner's name becomes the cashier name printed on every receipt
   ("Kasir: …"). `DaftarController::namaLayak` drops email-shaped names (AV9).
+  Supabase's ID-token `auth_time` is the ISSUE time, not when the password
+  was typed (H8 measured false, 8 Oct: 0–1 s in every production log line,
+  even 75 min after the last password). So `KlienAishii::masukMasihSegar`
+  (step-up on `auth_time`) never refuses anything; until AV14 is fixed, the
+  confirmation is guarded only by the Aishii pages in the browser. The
+  access token's `amr` is MEASURED (H10): `KlienAishii::ringkasAmr` reads it
+  only from a validly signed token for the same `sub`, and the sign-in logs
+  carry `umur_amr_detik`. Never log or store the token itself.
 - **Service admin with the Aishii account (AU5, owner's decision 7 Oct —
   reverses D4)**: while AU1 is on, `/pengelola/masuk` shows only "Masuk dengan
   akun Aishii" (`/auth/aishii/pengelola`) and the password POST is refused for
