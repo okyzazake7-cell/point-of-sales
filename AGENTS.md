@@ -200,6 +200,10 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   born from an Aishii identity (email from the verified token, random password).
   ID tokens are verified ES256-only against the JWKS, never with a shared
   secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
+  The token's `name` claim is the EMAIL for every Aishii account that signed
+  up with email (Aishii stores no name). Never offer it as a person's name:
+  the owner's name becomes the cashier name printed on every receipt
+  ("Kasir: …"). `DaftarController::namaLayak` drops email-shaped names (AV9).
 - **Service admin with the Aishii account (AU5, owner's decision 7 Oct —
   reverses D4)**: while AU1 is on, `/pengelola/masuk` shows only "Masuk dengan
   akun Aishii" (`/auth/aishii/pengelola`) and the password POST is refused for

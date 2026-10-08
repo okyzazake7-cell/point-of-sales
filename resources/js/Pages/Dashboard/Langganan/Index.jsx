@@ -354,9 +354,17 @@ export default function Index({
 
                 <section className={kartu}>
                     <StatusLangganan ringkasan={ringkasan} />
-                    <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
-                        Outlet berjualan: <span className="font-semibold text-slate-900 dark:text-white">{ringkasan.kursi_terpakai}</span>{" "}
-                        dari <span className="font-semibold text-slate-900 dark:text-white">{ringkasan.kursi_dibayar}</span> yang dibayar.
+                    {/* `kursi_dibayar` bernilai 1 sejak toko lahir, jadi toko yang belum
+                        pernah membayar dulu berkata "1 dari 1 yang dibayar" (AV8). */}
+                    <p data-kursi-langganan className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+                        Outlet berjualan: <span className="font-semibold text-slate-900 dark:text-white">{ringkasan.kursi_terpakai}</span>
+                        {ringkasan.pernah_aktif ? (
+                            <>
+                                {" "}dari <span className="font-semibold text-slate-900 dark:text-white">{ringkasan.kursi_dibayar}</span> yang dibayar.
+                            </>
+                        ) : (
+                            " — belum ada yang dibayar."
+                        )}
                     </p>
                     {!konfirmasiOtomatis && (
                         <p className="mt-3 flex gap-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
