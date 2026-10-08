@@ -131,6 +131,81 @@ class CompositeProductTest extends TestCase
         ]);
     }
 
+    /**
+     * The product form posts JSON whenever no image is attached, and its
+     * useForm state always carries `components: []`. A plain product must
+     * still save — the old rule ran `array|min:1` on the empty array.
+     */
+    public function test_store_saves_plain_product_posted_like_the_form_without_image(): void
+    {
+        $this->actingAs($this->admin)
+            ->json('POST', route('products.store'), $this->formJson([
+                'title' => 'Teh Tanpa Foto',
+            ]), $this->inertiaHeaders())
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('products.index'));
+
+        $product = Product::where('title', 'Teh Tanpa Foto')->firstOrFail();
+        $this->assertFalse($product->is_composite);
+        $this->assertSame(0, $product->components()->count());
+    }
+
+    public function test_update_saves_plain_product_posted_like_the_form_without_image(): void
+    {
+        $product = $this->createComponent('Teh Lama');
+
+        $this->actingAs($this->admin)
+            ->json('POST', route('products.update', $product), $this->formJson([
+                '_method' => 'PUT',
+                'barcode' => $product->barcode,
+                'sku' => $product->sku,
+                'title' => 'Teh Baru',
+                'sell_price' => '6000',
+            ]), $this->inertiaHeaders())
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('products.index'));
+
+        $this->assertSame('Teh Baru', $product->fresh()->title);
+    }
+
+    public function test_store_still_rejects_composite_with_empty_components_posted_like_the_form(): void
+    {
+        $this->actingAs($this->admin)
+            ->from(route('products.create'))
+            ->json('POST', route('products.store'), $this->formJson([
+                'is_composite' => true,
+            ]), $this->inertiaHeaders())
+            ->assertSessionHasErrors('components');
+    }
+
+    /** The exact JSON shape Create.jsx sends when no image is picked. */
+    protected function formJson(array $overrides = []): array
+    {
+        return array_merge([
+            'image' => '',
+            'barcode' => 'BRCD-'.Str::upper(Str::random(10)),
+            'sku' => 'SKU-'.Str::upper(Str::random(10)),
+            'title' => 'Produk Formulir',
+            'category_id' => $this->category->id,
+            'description' => '',
+            'buy_price' => '3000',
+            'sell_price' => '5000',
+            'stock' => '10',
+            'min_stock' => '',
+            'max_stock' => '',
+            'tax_type' => 'exclusive',
+            'tax_rate' => '0',
+            'is_composite' => false,
+            'components' => [],
+            'units' => [],
+        ], $overrides);
+    }
+
+    protected function inertiaHeaders(): array
+    {
+        return ['X-Inertia' => 'true', 'Accept' => 'text/html, application/xhtml+xml'];
+    }
+
     public function test_store_rejects_composite_without_components(): void
     {
         $this->actingAs($this->admin)

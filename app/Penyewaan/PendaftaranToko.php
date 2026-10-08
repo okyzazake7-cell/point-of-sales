@@ -16,9 +16,17 @@ use Illuminate\Validation\ValidationException;
  *
  * Tanpa masa coba (keputusan pemilik 3 Okt): `aktif_sampai` dibiarkan
  * kosong, jadi toko lahir terkunci sampai tagihan pertamanya lunas.
+ *
+ * Dua jalan, langkah yang sama (AU6, dokumen 28 di repo Aishii):
+ * `daftarkan()` sekaligus — uji dan baris perintah; `mulai()` + `lanjut()`
+ * bertahap — /daftar di server, sebab satu pendaftaran = 427 DDL dan di TiDB
+ * satu permintaan yang mengerjakan semuanya tidak pernah berujung.
  */
 class PendaftaranToko
 {
+    /** Urutan tahap pendaftaran bertahap; `selesai` = pemiliknya boleh masuk. */
+    public const TAHAP = ['buat', 'migrasi', 'tanam', 'setup', 'selesai'];
+
     public function __construct(
         private readonly Penyewaan $penyewaan,
         private readonly PenyediaBasisData $penyedia,
@@ -33,10 +41,121 @@ class PendaftaranToko
      */
     public function daftarkan(array $isian): array
     {
-        $email = DirektoriPengguna::normalkan($isian['email']);
+        $this->pastikanBelumTerdaftar($isian);
+        $toko = $this->lahirkan($isian);
+        $this->penyedia->siapkan($toko);
+        $pengguna = $this->setup($toko, $isian);
+
+        return [$toko->refresh(), $pengguna];
+    }
+
+    /**
+     * Langkah pertama jalan bertahap: baris toko `menyiapkan` saja — basis
+     * datanya disiapkan `lanjut()`, sedikit demi sedikit.
+     *
+     * Satu orang, satu toko: toko BELUM JADI milik surel ini diulang dari
+     * awal (basis datanya belum pernah dipakai siapa pun), tidak dikembari.
+     * Yang sudah `siap` tidak pernah disentuh — `email_pemilik` tidak ikut
+     * berganti saat surel pemiliknya diganti.
+     *
+     * @param  array{nama_toko: string, jenis_usaha: string, nama: string, email: string, password: string, telepon?: string|null, aishii_sub?: string|null}  $isian
+     */
+    public function mulai(array $isian): Toko
+    {
+        $this->pastikanBelumTerdaftar($isian);
+
+        $toko = Toko::query()
+            ->where('email_pemilik', DirektoriPengguna::normalkan($isian['email']))
+            ->where('status_basis_data', '!=', 'siap')
+            ->latest('id')
+            ->first();
+
+        if (! $toko) {
+            return $this->lahirkan($isian);
+        }
+
+        $this->ulangi($toko);
+        $toko->forceFill(['nama' => $isian['nama_toko']])->save();
+
+        return $toko;
+    }
+
+    /**
+     * Menjalankan tahap demi tahap sampai `$sampai` (microtime) lewat —
+     * paling sedikit SATU langkah, jadi tiap panggilan pasti maju. Berkas
+     * migrasi yang sedang berjalan selalu diselesaikan dulu.
+     *
+     * @return array{tahap: string, langkah: int, dari: int}
+     */
+    public function lanjut(Toko $toko, array $isian, string $tahap, float $sampai): array
+    {
+        do {
+            $tahap = match ($tahap) {
+                'buat' => $this->tahapBuat($toko),
+                'migrasi' => $this->penyedia->migrasiSatuBerkas($toko) ? 'migrasi' : 'tanam',
+                'tanam' => $this->tahapTanam($toko),
+                'setup' => $this->tahapSetup($toko, $isian),
+            };
+        } while ($tahap !== 'selesai' && microtime(true) < $sampai);
+
+        return ['tahap' => $tahap, 'langkah' => $this->langkah($toko, $tahap), 'dari' => $this->dari()];
+    }
+
+    /** Toko yang gagal atau tersendat disiapkan ulang dari basis data kosong. */
+    public function ulangi(Toko $toko): void
+    {
+        if ($toko->siap()) {
+            throw new \LogicException("Toko #{$toko->getKey()} sudah siap — basis datanya tidak boleh dibuang.");
+        }
+
+        $this->penyedia->hapus($toko);
+        $toko->forceFill(['status_basis_data' => 'menyiapkan'])->save();
+    }
+
+    /** Penyebut "langkah X dari Y": buat + tiap berkas migrasi + tanam + setup. */
+    public function dari(): int
+    {
+        return $this->penyedia->jumlahBerkasMigrasi() + 3;
+    }
+
+    public function langkah(Toko $toko, string $tahap): int
+    {
+        return match ($tahap) {
+            'buat' => 0,
+            'migrasi' => 1 + $this->penyedia->jumlahMigrasiBerjalan($toko),
+            'tanam' => $this->dari() - 2,
+            'setup' => $this->dari() - 1,
+            'selesai' => $this->dari(),
+        };
+    }
+
+    private function tahapBuat(Toko $toko): string
+    {
+        $this->penyedia->buat($toko);
+
+        return 'migrasi';
+    }
+
+    private function tahapTanam(Toko $toko): string
+    {
+        $this->penyedia->tanam($toko);
+
+        return 'setup';
+    }
+
+    private function tahapSetup(Toko $toko, array $isian): string
+    {
+        $this->setup($toko, $isian);
+
+        return 'selesai';
+    }
+
+    /** @param  array{email: string, aishii_sub?: string|null}  $isian */
+    private function pastikanBelumTerdaftar(array $isian): void
+    {
         $sub = $isian['aishii_sub'] ?? null;
 
-        if (DirektoriPengguna::query()->whereKey($email)->exists()) {
+        if (DirektoriPengguna::query()->whereKey(DirektoriPengguna::normalkan($isian['email']))->exists()) {
             throw ValidationException::withMessages([
                 'email' => 'Surel ini sudah terdaftar di Aishii POS. Masuk, atau pakai surel lain.',
             ]);
@@ -48,16 +167,29 @@ class PendaftaranToko
                 'email' => 'Akun Aishii ini sudah punya toko di Aishii POS. Masuk saja.',
             ]);
         }
+    }
 
-        $toko = Toko::query()->create([
+    /** @param  array{nama_toko: string, email: string}  $isian */
+    private function lahirkan(array $isian): Toko
+    {
+        return Toko::query()->create([
             'kode' => Toko::kodeBaru($isian['nama_toko']),
             'nama' => $isian['nama_toko'],
-            'email_pemilik' => $email,
+            'email_pemilik' => DirektoriPengguna::normalkan($isian['email']),
             'status_basis_data' => 'menyiapkan',
             'kursi_outlet' => 1,
         ]);
+    }
 
-        $this->penyedia->siapkan($toko);
+    /**
+     * Wizard `/setup` hulu (satu transaksi) → toko `siap` → tautan akun
+     * Aishii di direktori. `siap` SESUDAH pemiliknya ada: toko siap tanpa
+     * pemilik adalah toko yang tidak bisa dimasuki siapa pun.
+     */
+    private function setup(Toko $toko, array $isian): User
+    {
+        $email = DirektoriPengguna::normalkan($isian['email']);
+        $sub = $isian['aishii_sub'] ?? null;
 
         $pengguna = $this->penyewaan->denganToko($toko, fn () => app(SetupService::class)->run([
             'store_name' => $isian['nama_toko'],
@@ -85,13 +217,15 @@ class PendaftaranToko
             ]],
         ]));
 
+        $toko->forceFill(['status_basis_data' => 'siap'])->save();
+
         // Baris direktorinya ditulis SinkronDirektori sesudah transaksi toko
         // jadi; tautannya menyusul di baris yang sama.
         if ($sub !== null) {
             DirektoriPengguna::query()->whereKey($email)->update(['aishii_sub' => $sub]);
         }
 
-        return [$toko->refresh(), $pengguna];
+        return $pengguna;
     }
 
     /**

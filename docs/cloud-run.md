@@ -46,6 +46,12 @@ peramban ── pos.aishiierp.com ──▶ Worker Cloudflare (cloudflare/proksi
 2. Apache. Gagal di langkah mana pun = instans tidak pernah menerima
    permintaan, dan Cloud Run tetap melayani revisi lama.
 
+**Toko baru disiapkan BERTAHAP (AU6)**, bukan saat menyala dan bukan dalam
+satu permintaan: halaman `/daftar/menyiapkan` memanggil `/daftar/lanjut`
+berulang, tiap panggilan paling lama ±20 detik kerja. Toko yang belum `siap`
+dilewati `pos:siapkan` dan penjadwal (`PilihToko`). Lamanya terbaca di log:
+cari `Toko siap` (`detik`, `langkah`).
+
 **TANPA `config:cache` dan `route:cache`**, sama dengan hulu dan panduan
 VPS: `config/scramble.php` menyimpan objek yang tidak bisa diserialkan
 (`config:cache` gagal dengan "value at scramble.security_strategy.1.scheme
@@ -114,6 +120,7 @@ sesi dan tembolok `database`, `APP_TIMEZONE=Asia/Jakarta`,
 | `MAIL_*` | SMTP Resend |
 | `POS_PENGELOLA_SUREL` | surel akun Aishii pengelola layanan (AU5) — BUKAN rahasia, boleh menetap. Diisi SESUDAH `AISHII_OIDC_*` terisi. Variabel ini hanya MELAHIRKAN: mengosongkannya tidak mencabut siapa pun — yang mencabut, menghapus barisnya di tabel `pengelola` |
 | `POS_PENGELOLA_SANDI` | hanya pintu darurat ketika akun Aishii dimatikan (rahasia klien OIDC dikosongkan) — SEMENTARA, dihapus lagi sesudah masuk |
+| `POS_ANGGARAN_LANGKAH_DETIK` | opsional, bawaan 20 — detik kerja tiap permintaan pendaftaran bertahap (AU6). Jangan dinaikkan mendekati 100: Cloudflare memutus permintaan yang tidak berjawab dalam 100 detik |
 
 Pengaturan layanan: CPU 1, memori 512 MiB, **konkurensi 10** (sama dengan
 `MaxRequestWorkers` di `docker/mpm_prefork.conf`), instans minimum 0,

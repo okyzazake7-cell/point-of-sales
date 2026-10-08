@@ -212,6 +212,27 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   `bekal.tujuan` picks the door, so `/kembali` has no `guest` middleware (the
   check moved into the controller). Emergency door: empty the OIDC secret and
   set `POS_PENGELOLA_SANDI` — the password path works again.
+- **Store sign-up is STEP-WISE (AU6, document 28 in the Aishii repo).** One
+  registration = 1,313 SQL statements incl. 427 DDL (measured 7 Oct): 2.3 s on
+  MariaDB, 26 s on local TiDB, and in production on TiDB Serverless the single
+  request never finished (Cloudflare cuts unanswered requests at 100 s; Cloud
+  Run throttles CPU afterwards). `POST /daftar` now only creates the `toko` row
+  (`PendaftaranToko::mulai`); the progress page `/daftar/menyiapkan` calls
+  `POST /daftar/lanjut` repeatedly, each call working at most
+  `penyewaan.anggaran_langkah_detik` (20 s) — `buat`, ONE migration file at a
+  time (`PenyediaBasisData::migrasiSatuBerkas`, the same Migrator as
+  `migrate`), `tanam` (seeder in ONE transaction), `setup` (SetupService,
+  then `siap`, then login). One lock per owner email (cache) serialises tabs
+  and resubmissions. A failed step marks the store `gagal`; "Ulangi dari
+  awal" drops and recreates its DB (never for `siap` stores —
+  `email_pemilik` does not follow email changes). Resubmitting `/daftar` for
+  an unfinished store restarts THAT store, never a second one. `daftarkan()`
+  (all at once) stays for tests and `toko:buat`. The session keeps the form
+  with the password ENCRYPTED (SetupService hashes it itself). Log line
+  "Toko siap" carries the real duration. Commands that loop over stores use
+  `PilihToko` (only `siap`), so unfinished stores never block `pos:siapkan`.
+  Playwright cannot intercept requests the POS service worker handles —
+  browser tests that route `/daftar/lanjut` need `serviceWorkers: 'block'`.
 - **Unnamed `throttle:N,M` share ONE counter** per visitor IP (guest) or per
   user id (`ThrottleRequests::resolveRequestSignature`, no route in the key).
   Measured 7 Oct: three Aishii round trips used up `/daftar`'s 5 per 10 min →
@@ -225,6 +246,14 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
 ## Inventory Model
 
 `product_warehouse.stock` is the operational source of truth. `products.stock` is maintained as a global aggregate — both must be updated in the same DB transaction for every mutation. Always prefer locking `product_warehouse` rows with `lockForUpdate()` before decrementing. Use `inventory:reconcile --fix` to align global stock after data repairs.
+
+**Initial stock of a new product** goes to the request's `warehouse_id`;
+without it, to the warehouse of the store's ONLY selling outlet (when the user
+may use it), else to the first active `main` warehouse. The cashier searches
+the open shift's warehouse and shifts open only at selling outlets, so in a
+one-outlet store — what Aishii POS sign-up creates: a non-selling PUSAT plus
+"Toko Utama" — stock parked in PUSAT never reached the cashier (AV3, 8 Oct).
+Stores with several selling outlets keep the central warehouse + transfers.
 
 ## Critical Gotchas
 
@@ -278,6 +307,13 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
 - Attach warehouse stock: `$warehouse->products()->attach($product->id, ['stock' => N])` or `$product->warehouses()->attach($warehouse->id, ['stock' => N])`
 - Open shift: `app(CashierShiftService::class)->openShift($cashier, $cashier, $openingCash, null, $warehouse->id)`
 - **PHPUnit 12: no `$faker` property** — use `static int $seq = 0` counters or `uniqid()` for unique values
+- **Tests that mimic a form must send what the form sends.** Inertia posts JSON
+  when no file is attached, empty arrays included; `post()` form-encodes and
+  DROPS empty arrays, which is how `components: []` failing every plain
+  product without an image went unseen (AV2). Use
+  `json('POST', $uri, $data, ['X-Inertia' => 'true', 'Accept' => 'text/html, application/xhtml+xml'])`.
+- **A sale needs a customer only when it is pay-later** — server, cashier
+  button, and receipt ("Umum") agree since AV4. A new store has no customers.
 - For API tests: `Sanctum::actingAs($user, ['*'])` — explicit abilities required; TransientToken does not bypass `abilities` middleware
 
 ## API Ability System

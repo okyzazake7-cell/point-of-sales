@@ -71,6 +71,72 @@ class PenyediaBasisData
         });
     }
 
+    /**
+     * SATU berkas migrasi toko yang belum berjalan, lewat Migrator yang SAMA
+     * dengan `migrate` (AU6). Memigrasi seluruh toko dalam satu permintaan
+     * melewati batas waktu di TiDB: 427 DDL, terukur 7 Okt. Pulang `false`
+     * bila tidak ada lagi yang tersisa.
+     */
+    public function migrasiSatuBerkas(Toko $toko): bool
+    {
+        return $this->penyewaan->denganToko($toko, function () {
+            $migrator = app('migrator');
+
+            return $migrator->usingConnection($this->penyewaan->koneksiToko(), function () use ($migrator) {
+                if (! $migrator->repositoryExists()) {
+                    $migrator->getRepository()->createRepository();
+                }
+
+                $sudah = array_flip($migrator->getRepository()->getRan());
+                foreach ($migrator->getMigrationFiles([database_path('migrations')]) as $nama => $jalur) {
+                    if (! isset($sudah[$nama])) {
+                        $migrator->requireFiles([$jalur]);
+                        $migrator->runPending([$jalur]);
+
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        });
+    }
+
+    /** Berkas migrasi toko yang sudah berjalan — pembilang kemajuan pendaftaran. */
+    public function jumlahMigrasiBerjalan(Toko $toko): int
+    {
+        return $this->penyewaan->denganToko($toko, function () {
+            $migrator = app('migrator');
+
+            return $migrator->usingConnection(
+                $this->penyewaan->koneksiToko(),
+                fn () => $migrator->repositoryExists() ? count($migrator->getRepository()->getRan()) : 0,
+            );
+        });
+    }
+
+    public function jumlahBerkasMigrasi(): int
+    {
+        return count(app('migrator')->getMigrationFiles([database_path('migrations')]));
+    }
+
+    /**
+     * Peran, izin, pengaturan, dan gudang PUSAT dalam SATU transaksi (AU6):
+     * semuanya DML, jadi permintaan yang terputus tidak meninggalkan separuh.
+     */
+    public function tanam(Toko $toko): void
+    {
+        $this->penyewaan->denganToko($toko, function () {
+            $koneksi = $this->penyewaan->koneksiToko();
+
+            DB::connection($koneksi)->transaction(fn () => Artisan::call('db:seed', [
+                '--database' => $koneksi,
+                '--class' => DatabaseSeeder::class,
+                '--force' => true,
+            ]));
+        });
+    }
+
     /** Hanya untuk toko yang belum pernah membayar — dipanggil pengelola. */
     public function hapus(Toko $toko): void
     {

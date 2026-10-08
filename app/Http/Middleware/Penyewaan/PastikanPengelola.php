@@ -22,8 +22,13 @@ class PastikanPengelola
             return $next($request);
         }
 
+        // `route()`, BUKAN `guest()`: `url.intended` dipakai BERSAMA penjaga
+        // toko. Pemilik yang juga pengelola membuka /pengelola, masuk sebagai
+        // pengelola, lalu masuk ke tokonya — dan `intended()` di pintu toko
+        // mengantarnya ke halaman Pengelola (P21, 7 Okt). Pintu ini cuma
+        // punya satu halaman, jadi tidak ada tujuan yang perlu diingat.
         return $request->expectsJson()
             ? response()->json(['message' => 'Unauthenticated.'], 401)
-            : redirect()->guest(route('pengelola.masuk'));
+            : redirect()->route('pengelola.masuk');
     }
 }

@@ -9,6 +9,7 @@ use App\Penyewaan\PenyediaBasisData;
 use App\Penyewaan\Penyewaan;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Testing\TestResponse;
 
 /**
  * Dasar uji mode banyak toko (dokumen 24 di repo Aishii).
@@ -130,6 +131,22 @@ abstract class BanyakTokoTestCase extends TestCase
             'password' => $sandi,
             ...$this->botGuardPayload(),
         ]);
+    }
+
+    /**
+     * Pendaftaran bertahap (AU6): panggil /daftar/lanjut seperti halaman
+     * kemajuan, sampai selesai atau gagal. Batasnya penjaga uji yang macet.
+     */
+    protected function selesaikanPendaftaran(int $batas = 500): TestResponse
+    {
+        for ($i = 0; $i < $batas; $i++) {
+            $jawaban = $this->postJson('/daftar/lanjut')->assertOk();
+            if ($jawaban->json('selesai') || $jawaban->json('gagal')) {
+                return $jawaban;
+            }
+        }
+
+        $this->fail("Pendaftaran belum selesai sesudah {$batas} panggilan.");
     }
 
     protected function diToko(Toko $toko, callable $kerja): mixed

@@ -22,6 +22,18 @@ Route::middleware('guest')->group(function () {
     Route::post('/daftar', [DaftarController::class, 'store'])
         ->middleware(['bot.guard', 'throttle:5,10'])
         ->name('daftar.store');
+
+    // Pendaftaran bertahap (AU6): halaman kemajuan memanggil /lanjut
+    // berulang-ulang, tiap panggilan paling lama ±20 detik kerja. Pembatas
+    // lajunya berawalan sendiri — tanpa awalan ia berbagi penghitung dengan
+    // kiriman /daftar di atas (lihat grup auth/aishii).
+    Route::get('/daftar/menyiapkan', [DaftarController::class, 'menyiapkan'])->name('daftar.menyiapkan');
+    Route::post('/daftar/lanjut', [DaftarController::class, 'lanjut'])
+        ->middleware('throttle:60,1,daftar-lanjut')
+        ->name('daftar.lanjut');
+    Route::post('/daftar/ulangi', [DaftarController::class, 'ulangi'])
+        ->middleware('throttle:10,10,daftar-ulangi')
+        ->name('daftar.ulangi');
 });
 
 // "Masuk dengan akun Aishii" (AU1, dokumen 27 di repo Aishii). Selama ID dan
