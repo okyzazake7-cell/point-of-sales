@@ -33,8 +33,11 @@ return [
     // baru; `profile` untuk nama pemilik di /daftar.
     'cakupan' => 'openid email profile',
 
-    // Konfirmasi tindakan penting (`step_up`) menuntut sandi akun Aishii
-    // dimasukkan dalam rentang ini — diperiksa dari klaim `auth_time`.
+    // Penjaga LAMA konfirmasi tindakan penting, dipakai hanya selama migrasi
+    // Aishii 20261156 belum dijalankan: klaim `auth_time` — yang ternyata
+    // saat token terbit, jadi selalu lulus (H8). Penjaga sesungguhnya bukti
+    // di basis data Aishii (`BuktiKonfirmasi`), dengan batas waktu milik
+    // basis data itu: sandi ≤ 5 menit saat dicatat, ≤ 6 menit saat dipakai.
     'umur_konfirmasi' => 300,
 
     // Kunci publik JWKS disimpan sebentar; `kid` yang tidak dikenal memaksa

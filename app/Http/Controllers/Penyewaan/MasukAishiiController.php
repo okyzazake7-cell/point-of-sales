@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Penyewaan;
 
 use App\AkunAishii\AkunTertaut;
+use App\AkunAishii\BuktiKonfirmasi;
 use App\AkunAishii\GagalMasukAishii;
 use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -30,8 +31,10 @@ use Illuminate\Support\Facades\Log;
  * Kedua alamat balik WAJIB didaftarkan persis begitu di klien OAuth Supabase
  * (langkah pemilik P17). Alamat balik berakhiran `/konfirmasi` dikenali
  * halaman persetujuan Aishii sebagai permintaan konfirmasi: yang sandinya
- * tidak dimasukkan dalam lima menit terakhir ditolak di sana — dan di sini
- * `auth_time`-nya diperiksa lagi, sebab pagar di peramban bukan pagar.
+ * tidak dimasukkan dalam lima menit terakhir ditolak di sana. Pagar di
+ * peramban bukan pagar, dan token yang sampai ke sini tidak membawa saat
+ * sandi dimasukkan (H8, H10) — yang menjaga di sini bukti yang dicatat basis
+ * data Aishii dan dipakai SEKALI (`BuktiKonfirmasi`, AV14).
  */
 class MasukAishiiController extends Controller
 {
@@ -48,6 +51,7 @@ class MasukAishiiController extends Controller
         private readonly KlienAishii $klien,
         private readonly Penyewaan $penyewaan,
         private readonly AuditLogService $audit,
+        private readonly BuktiKonfirmasi $bukti,
     ) {}
 
     public function mulai(Request $request): RedirectResponse
@@ -128,12 +132,7 @@ class MasukAishiiController extends Controller
                     'konfirmasi: sub berbeda dari tautan pengguna #'.$pengguna->getKey(),
                 );
             }
-            if (! $this->klien->masukMasihSegar($klaim)) {
-                throw new GagalMasukAishii(
-                    'Kata sandi akun Aishii belum dimasukkan lagi. Tekan "Konfirmasi dengan akun Aishii", lalu masukkan sandinya.',
-                    'konfirmasi: auth_time '.json_encode($klaim['auth_time'] ?? null).' lebih tua dari batas',
-                );
-            }
+            $this->periksaBukti($request, (string) $klaim['sub'], $klaim);
         } catch (GagalMasukAishii $e) {
             return $this->gagal($e, 'password.confirm');
         }
@@ -159,6 +158,39 @@ class MasukAishiiController extends Controller
         );
 
         return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Bukti sandi baru dari basis data Aishii, dipakai SEKALI (AV14). Hanya
+     * sesudah `sub` terbukti milik pengguna ini — bukti orang lain tidak
+     * pernah dihabiskan.
+     *
+     * @param  array<string, mixed>  $klaim
+     */
+    private function periksaBukti(Request $request, string $sub, array $klaim): void
+    {
+        $hasil = $this->bukti->pakai($request, $sub);
+        if ($hasil === 'dipakai') {
+            return;
+        }
+
+        if ($hasil === 'belum_terpasang') {
+            // Migrasi 20261156 belum dijalankan pemilik: penjaga lama — pagar
+            // peramban dan `auth_time` yang selalu lulus (H8) — seperti
+            // sebelum AV14. Dicabut sesudah migrasinya terverifikasi.
+            Log::warning('Bukti konfirmasi Aishii belum terpasang (migrasi 20261156) — konfirmasi hanya dijaga peramban.');
+            if ($this->klien->masukMasihSegar($klaim)) {
+                return;
+            }
+            $hasil = 'tidak_ada';
+        }
+
+        throw new GagalMasukAishii(match ($hasil) {
+            'tanpa_kode' => 'Permintaan konfirmasi ini sudah kedaluwarsa. Tekan "Konfirmasi dengan akun Aishii" sekali lagi.',
+            'basi' => 'Konfirmasinya lewat dari lima menit. Tekan "Konfirmasi dengan akun Aishii", lalu masukkan sandinya lagi.',
+            'tak_terjangkau' => 'Konfirmasi belum bisa diperiksa — server Aishii tidak terjangkau. Coba lagi sebentar lagi.',
+            default => 'Kata sandi akun Aishii belum dimasukkan lagi. Tekan "Konfirmasi dengan akun Aishii", lalu masukkan sandinya.',
+        }, 'konfirmasi: bukti '.$hasil.' untuk pengguna #'.$request->user()->getKey());
     }
 
     /**
