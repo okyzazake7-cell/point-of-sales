@@ -552,6 +552,23 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->assertSame($a->id, session('toko_id'));
     }
 
+    public function test_the_service_admin_door_never_redirects_a_later_store_sign_in(): void
+    {
+        // P21 (7 Okt): pemilik yang juga pengelola membuka /pengelola, masuk
+        // sebagai pengelola, lalu masuk ke tokonya — dan mendarat di halaman
+        // Pengelola, sebab `url.intended` dipakai bersama kedua penjaga.
+        $this->buatTokoAishii('Toko Anggrek', 'a@contoh.id', self::SUB);
+        $this->buatPengelola('a@contoh.id');
+
+        $this->get('/pengelola')->assertRedirect(route('pengelola.masuk'));
+        $this->assertNull(session('url.intended'));
+        $this->pengelolaLewatAishii(['email' => 'a@contoh.id'])->assertRedirect(route('pengelola.index'));
+
+        $tujuan = (string) $this->masukLewatAishii(['email' => 'a@contoh.id'])->headers->get('Location');
+        $this->assertAuthenticated('web');
+        $this->assertStringNotContainsString('/pengelola', $tujuan);
+    }
+
     public function test_a_signed_in_store_user_is_not_signed_in_twice(): void
     {
         // `/kembali` kehilangan middleware `guest`-nya demi pintu pengelola;
