@@ -230,25 +230,6 @@ class KlienAishii
         return $klaim;
     }
 
-    /**
-     * Sandi (atau Google) akun Aishii dimasukkan cukup baru untuk
-     * mengonfirmasi tindakan penting. `auth_time` yang tidak ada dianggap
-     * BASI — konfirmasi yang tidak bisa dibuktikan bukan konfirmasi.
-     *
-     * @param  array<string, mixed>  $klaim
-     */
-    public function masukMasihSegar(array $klaim): bool
-    {
-        $waktu = $klaim['auth_time'] ?? null;
-        if (! is_numeric($waktu)) {
-            return false;
-        }
-        $sekarang = time();
-
-        return $waktu <= $sekarang + (int) config('akun_aishii.kelonggaran_jam')
-            && $sekarang - $waktu <= (int) config('akun_aishii.umur_konfirmasi');
-    }
-
     /** Kunci publik untuk `kid` ini; kunci yang belum dikenal memaksa JWKS dibaca ulang SEKALI. */
     private function kunci(string $kid): OpenSSLAsymmetricKey
     {

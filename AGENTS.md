@@ -198,6 +198,14 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   through `{AISHII_URL}/masuk-ulang` and the callback spends a proof (below).
   Cashiers stay local password accounts (D1b). New stores at `/daftar` are
   born from an Aishii identity (email from the verified token, random password).
+  Before the visitor has one, `/daftar` offers TWO doors (AY1, 9 Oct): "Buat
+  akun Aishii — gratis" → `AkunTertaut::alamatDaftar()`
+  (`{AISHII_URL}/register?redirect=/pos?buka=1`), and "Masuk dengan akun
+  Aishii" for existing accounts. Never route a NEW person through the sign-in
+  button: Aishii requires email confirmation, and an OAuth request created
+  before the account exists outlives the 600 s session bekal while the email
+  is being confirmed. Aishii's `/pos?buka=1` opens a FRESH `/auth/aishii` once
+  the account is active.
   ID tokens are verified ES256-only against the JWKS, never with a shared
   secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
   The token's `name` claim is the EMAIL for every Aishii account that signed
@@ -216,11 +224,12 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   `auth.jwt()->amr`), and the callback spends it ONCE through
   `pos_pakai_bukti_konfirmasi` with the same anon key + `AISHII_RAHASIA_POS`
   as the shared billing ledger — only AFTER `sub` matched the linked user.
-  Anything but `dipakai` refuses; network errors, a refused secret or an
-  empty config refuse too (a guard that cannot ask never says yes). The one
-  exception is PGRST202 (Aishii migration 20261156 not run yet): it falls
-  back to the old guard (`masukMasihSegar`, which never refuses) with a log
-  warning — remove that branch once the migration is verified. The sign-in
+  Anything but `dipakai` refuses; network errors, a refused secret, an
+  empty config and a missing function (PGRST202) refuse too — a guard that
+  cannot ask never says yes. The temporary PGRST202 fallback to the old
+  `auth_time` guard (`masukMasihSegar`, which never refused) was removed with
+  the guard itself once migration 20261156 was verified (P30, 8 Oct); don't
+  bring back a freshness check read from any token POS receives. The sign-in
   logs still carry `umur_auth_time_detik`/`umur_amr_detik` as witnesses
   should Supabase ever change; never log or store the tokens themselves.
 - **Service admin with the Aishii account (AU5, owner's decision 7 Oct —

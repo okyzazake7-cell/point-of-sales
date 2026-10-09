@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Penyewaan;
 
+use App\AkunAishii\AkunTertaut;
 use App\AkunAishii\KlienAishii;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\SetupController;
@@ -53,11 +54,13 @@ class DaftarController extends Controller
             'hargaPerOutlet' => Harga::perOutlet(),
             'botGuard' => BotGuard::payload(),
             // AU1: hidup → toko lahir dari akun Aishii (tanpa surel dan sandi
-            // POS); tanpa identitas, layar ini hanya menawarkan tombol masuknya.
+            // POS); tanpa identitas, layar ini menawarkan dua pintu: membuat
+            // akun Aishii (orang baru, AY1) atau masuk dengannya.
             'akunAishii' => $klien->aktif() ? [
                 'email' => $identitas['email'] ?? null,
                 'nama' => self::namaLayak($identitas['nama'] ?? null),
                 'masuk' => route('aishii.masuk'),
+                'daftar' => AkunTertaut::alamatDaftar(),
             ] : null,
         ]);
     }

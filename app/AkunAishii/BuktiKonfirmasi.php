@@ -25,11 +25,12 @@ use Throwable;
  * yang segar ia tidak bisa mencatat apa pun, tanpa rahasia POS ia tidak bisa
  * memakai apa pun.
  *
- * Fungsinya belum ada (PGRST202: migrasi 20261156 belum dijalankan pemilik)
- * → `belum_terpasang`, dan pemanggilnya jatuh ke penjaga lama. Galat lain
- * (jaringan, rahasia ditolak, konfigurasi kosong) → `tak_terjangkau`, dan
- * pemanggilnya MENOLAK: penjaga yang tidak bisa bertanya tidak boleh
- * menjawab "boleh".
+ * Galat apa pun (jaringan, rahasia ditolak, konfigurasi kosong, fungsi yang
+ * hilang) → `tak_terjangkau`, dan pemanggilnya MENOLAK: penjaga yang tidak
+ * bisa bertanya tidak boleh menjawab "boleh". Fungsi yang hilang (PGRST202)
+ * dulu jatuh ke penjaga lama selama migrasi 20261156 belum dijalankan; sejak
+ * migrasinya terverifikasi (P30, 8 Okt) cabang itu dicabut, sebab penjaga
+ * lama — `auth_time` — selalu lulus (H8).
  */
 class BuktiKonfirmasi
 {
@@ -55,7 +56,7 @@ class BuktiKonfirmasi
     /**
      * Pakai bukti untuk akun Aishii `$sub` SEKALI.
      *
-     * @return 'dipakai'|'basi'|'sudah_dipakai'|'tidak_ada'|'tanpa_kode'|'belum_terpasang'|'tak_terjangkau'
+     * @return 'dipakai'|'basi'|'sudah_dipakai'|'tidak_ada'|'tanpa_kode'|'tak_terjangkau'
      */
     public function pakai(Request $request, string $sub): string
     {
@@ -88,9 +89,6 @@ class BuktiKonfirmasi
         }
 
         if (! $jawaban->successful()) {
-            if ($jawaban->json('code') === 'PGRST202') {
-                return 'belum_terpasang';
-            }
             Log::warning('Bukti konfirmasi Aishii menolak panggilan.', ['status' => $jawaban->status(), 'kode' => $jawaban->json('code')]);
 
             return 'tak_terjangkau';

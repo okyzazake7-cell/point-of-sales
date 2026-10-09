@@ -384,9 +384,14 @@ class MasukAishiiTest extends BanyakTokoTestCase
 
     public function test_registering_without_an_aishii_identity_is_refused_while_on(): void
     {
+        // AY1: orang baru mendaftar akun Aishii DULU, lalu kembali lewat
+        // Aishii `/pos?buka=1` yang membuka permintaan masuk BARU — bukan
+        // menumpang permintaan masuk yang kedaluwarsa selama surelnya
+        // dikonfirmasi.
         $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
             ->where('akunAishii.email', null)
-            ->where('akunAishii.masuk', route('aishii.masuk')));
+            ->where('akunAishii.masuk', route('aishii.masuk'))
+            ->where('akunAishii.daftar', config('brand.parent.url').'/register?redirect=%2Fpos%3Fbuka%3D1'));
 
         $this->post('/daftar', [
             'nama_toko' => 'Toko Cempaka',
@@ -561,7 +566,10 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->masukLewatAishii()->assertSessionHasNoErrors();
         $this->tautanKonfirmasi();
 
-        foreach (['galat', 'putus', ['status' => 'rahasia_salah'], ['status' => 'belum_disiapkan'], ['tak' => 'dikenal']] as $jawaban) {
+        // 'pra' = fungsinya hilang (PGRST202). Sejak migrasi 20261156
+        // terverifikasi (P30) ia bukan "belum dipasang" lagi, dan `auth_time`
+        // yang selalu segar (H8) tidak boleh menggantikannya.
+        foreach (['galat', 'putus', 'pra', ['status' => 'rahasia_salah'], ['status' => 'belum_disiapkan'], ['tak' => 'dikenal']] as $jawaban) {
             $this->jawabanBukti = $jawaban;
             $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
             $this->assertNull(session('auth.password_confirmed_at'), json_encode($jawaban));
@@ -574,23 +582,6 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->konfirmasiLewatAishii()->assertSessionHasErrors('aishii');
         $this->assertCount($sebelum, $this->panggilanBukti);
         $this->assertNull(session('auth.password_confirmed_at'));
-    }
-
-    public function test_before_the_aishii_migration_the_old_guard_answers_and_says_so(): void
-    {
-        $this->buatToko('Toko Anggrek', 'a@contoh.id');
-        $this->masukLewatAishii()->assertSessionHasNoErrors();
-        $this->tautanKonfirmasi();
-        $this->jawabanBukti = 'pra';
-        Log::spy();
-
-        // Penjaga lama apa adanya: `auth_time` basi ditolak, yang segar lolos.
-        $this->konfirmasiLewatAishii(['auth_time' => time() - 600])->assertSessionHasErrors('aishii');
-        $this->assertNull(session('auth.password_confirmed_at'));
-        $this->konfirmasiLewatAishii(['auth_time' => time() - 30])->assertSessionHasNoErrors();
-        $this->assertNotNull(session('auth.password_confirmed_at'));
-
-        Log::shouldHaveReceived('warning')->withArgs(fn ($pesan) => str_contains((string) $pesan, 'belum terpasang (migrasi 20261156)'))->atLeast()->once();
     }
 
     public function test_a_password_account_keeps_confirming_with_its_password(): void
