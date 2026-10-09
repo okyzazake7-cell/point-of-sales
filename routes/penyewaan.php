@@ -34,6 +34,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/daftar/ulangi', [DaftarController::class, 'ulangi'])
         ->middleware('throttle:10,10,daftar-ulangi')
         ->name('daftar.ulangi');
+    // AY3: melepas identitas akun Aishii yang tertahan di sesi pendaftaran.
+    Route::post('/daftar/keluar', [DaftarController::class, 'keluar'])->name('daftar.keluar');
 });
 
 // "Masuk dengan akun Aishii" (AU1, dokumen 27 di repo Aishii). Selama ID dan

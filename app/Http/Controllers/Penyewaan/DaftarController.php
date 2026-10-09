@@ -61,8 +61,30 @@ class DaftarController extends Controller
                 'nama' => self::namaLayak($identitas['nama'] ?? null),
                 'masuk' => route('aishii.masuk'),
                 'daftar' => AkunTertaut::alamatDaftar(),
+                // AY3: identitas yang tertahan di sesi bisa dilepas — tanpanya
+                // akun yang salah menempel di layar ini sampai 30 menit.
+                'keluar' => $identitas ? route('daftar.keluar') : null,
             ] : null,
         ]);
+    }
+
+    /**
+     * Keluar dari pendaftaran yang memegang identitas akun Aishii (AY3).
+     *
+     * Identitas akun Aishii yang belum punya toko tersimpan di sesi
+     * (`MasukAishiiController::identitas`, 30 menit), dan /daftar dulu tidak
+     * menawarkan satu pun jalan untuk melepasnya: pemilik yang masuk dengan
+     * akun yang salah "terjebak di pendaftaran toko". Sesinya dibuang utuh,
+     * sama seperti keluar biasa. Akun Aishii di aishiierp.com tidak ikut
+     * keluar — dua aplikasi, dua sesi.
+     */
+    public function keluar(Request $request): RedirectResponse
+    {
+        MasukAishiiController::lupakanIdentitas($request);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('daftar');
     }
 
     public function store(Request $request, PendaftaranToko $pendaftaran, KlienAishii $klien): RedirectResponse
