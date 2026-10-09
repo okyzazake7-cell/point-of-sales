@@ -55,7 +55,7 @@ class DaftarController extends Controller
             'botGuard' => BotGuard::payload(),
             // AU1: hidup → toko lahir dari akun Aishii (tanpa surel dan sandi
             // POS); tanpa identitas, layar ini menawarkan dua pintu: membuat
-            // akun Aishii (orang baru, AW1) atau masuk dengannya.
+            // akun Aishii (orang baru, AY1) atau masuk dengannya.
             'akunAishii' => $klien->aktif() ? [
                 'email' => $identitas['email'] ?? null,
                 'nama' => self::namaLayak($identitas['nama'] ?? null),

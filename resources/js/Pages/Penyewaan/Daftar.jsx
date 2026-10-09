@@ -14,7 +14,7 @@ import { rupiah } from "@/Utils/rupiah";
  * "Masuk dengan akun Aishii" hidup (AU1, `akunAishii` terisi): toko lahir
  * dari akun Aishii — surel diambil dari akun itu dan TIDAK ada sandi toko
  * (keputusan D2). Sebelum orangnya masuk, layar ini menawarkan DUA pintu
- * (AW1): "Buat akun Aishii" untuk orang baru — mendaftar dulu, lalu kembali
+ * (AY1): "Buat akun Aishii" untuk orang baru — mendaftar dulu, lalu kembali
  * lewat aishiierp.com/pos?buka=1 dengan permintaan masuk yang baru — dan
  * "Masuk dengan akun Aishii" untuk yang sudah punya. Menyuruh orang baru
  * menekan "Masuk" membuat pendaftarannya menumpang permintaan masuk yang

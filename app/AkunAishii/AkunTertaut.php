@@ -34,7 +34,7 @@ class AkunTertaut
     }
 
     /**
-     * Pintu ORANG BARU (AW1): mendaftar akun Aishii lebih dulu, lalu kembali
+     * Pintu ORANG BARU (AY1): mendaftar akun Aishii lebih dulu, lalu kembali
      * lewat `aishiierp.com/pos?buka=1`, yang membuka `/auth/aishii` di sini
      * dengan permintaan masuk yang baru lahir saat akunnya sudah aktif.
      * Tombol "Masuk dengan akun Aishii" tidak cukup untuk orang baru:

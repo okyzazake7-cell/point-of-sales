@@ -198,7 +198,7 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   through `{AISHII_URL}/masuk-ulang` and the callback spends a proof (below).
   Cashiers stay local password accounts (D1b). New stores at `/daftar` are
   born from an Aishii identity (email from the verified token, random password).
-  Before the visitor has one, `/daftar` offers TWO doors (AW1, 9 Oct): "Buat
+  Before the visitor has one, `/daftar` offers TWO doors (AY1, 9 Oct): "Buat
   akun Aishii — gratis" → `AkunTertaut::alamatDaftar()`
   (`{AISHII_URL}/register?redirect=/pos?buka=1`), and "Masuk dengan akun
   Aishii" for existing accounts. Never route a NEW person through the sign-in
