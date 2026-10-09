@@ -198,6 +198,14 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   through `{AISHII_URL}/masuk-ulang` and the callback spends a proof (below).
   Cashiers stay local password accounts (D1b). New stores at `/daftar` are
   born from an Aishii identity (email from the verified token, random password).
+  Before the visitor has one, `/daftar` offers TWO doors (AW1, 9 Oct): "Buat
+  akun Aishii — gratis" → `AkunTertaut::alamatDaftar()`
+  (`{AISHII_URL}/register?redirect=/pos?buka=1`), and "Masuk dengan akun
+  Aishii" for existing accounts. Never route a NEW person through the sign-in
+  button: Aishii requires email confirmation, and an OAuth request created
+  before the account exists outlives the 600 s session bekal while the email
+  is being confirmed. Aishii's `/pos?buka=1` opens a FRESH `/auth/aishii` once
+  the account is active.
   ID tokens are verified ES256-only against the JWKS, never with a shared
   secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
   The token's `name` claim is the EMAIL for every Aishii account that signed
