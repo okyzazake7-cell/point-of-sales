@@ -205,7 +205,13 @@ untouched — isolation comes from the connection, not from a `toko_id` column.
   button: Aishii requires email confirmation, and an OAuth request created
   before the account exists outlives the 600 s session bekal while the email
   is being confirmed. Aishii's `/pos?buka=1` opens a FRESH `/auth/aishii` once
-  the account is active.
+  the account is active. Once an identity is pending (30 min in the POS
+  session), `/daftar` shows "Bukan akun Anda? Keluar" (AY3): `POST
+  /daftar/keluar` invalidates the WHOLE POS session but never signs the
+  person out of Aishii — Bazar shares that account, and signing out at
+  aishiierp.com never reaches POS's session either. The button sits INSIDE
+  the sign-up `<form>`, so it must stay an Inertia `<Link as="button">`
+  (rendered `type="button"`); a bare `<button>` would submit the form.
   ID tokens are verified ES256-only against the JWKS, never with a shared
   secret; tests use a generated key (`tests/Feature/BanyakToko/MasukAishiiTest.php`).
   The token's `name` claim is the EMAIL for every Aishii account that signed

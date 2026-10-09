@@ -406,6 +406,25 @@ class MasukAishiiTest extends BanyakTokoTestCase
         $this->assertSame(0, Toko::query()->count());
     }
 
+    public function test_a_pending_aishii_identity_can_leave_the_store_registration(): void
+    {
+        // AY3: identitas akun Aishii yang belum punya toko menempel 30 menit
+        // di sesi, dan /daftar dulu tidak menawarkan satu pun jalan keluar —
+        // pemilik "terjebak di pendaftaran toko" dengan akun yang salah.
+        $this->masukLewatAishii(['email' => 'baru@contoh.id', 'name' => 'Bu Baru'])->assertRedirect(route('daftar'));
+        $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
+            ->where('akunAishii.email', 'baru@contoh.id')
+            ->where('akunAishii.keluar', route('daftar.keluar')));
+
+        $this->post('/daftar/keluar')->assertRedirect(route('daftar'));
+
+        $this->assertNull(session('akun_aishii.identitas'));
+        $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
+            ->where('akunAishii.email', null)
+            ->where('akunAishii.keluar', null));
+        $this->assertSame(0, Toko::query()->count());
+    }
+
     // ── D2: sandi tidak lagi membuka akun yang tertaut ───────────────────
 
     public function test_password_login_is_refused_for_a_linked_account_but_not_for_its_cashier(): void

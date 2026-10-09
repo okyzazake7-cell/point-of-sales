@@ -155,6 +155,25 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                                 {(errors.email || galatHalaman.aishii) && (
                                     <p className="mt-1 text-sm text-danger-500">{errors.email || galatHalaman.aishii}</p>
                                 )}
+                                {/* AY3: tanpa pintu ini, akun yang salah menempel di
+                                    layar pendaftaran sampai identitasnya basi (30 menit). */}
+                                {akunAishii.keluar && (
+                                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                                        Bukan akun Anda?{" "}
+                                        <Link
+                                            href={akunAishii.keluar}
+                                            method="post"
+                                            as="button"
+                                            data-daftar-keluar
+                                            className="font-semibold text-primary-600 hover:text-primary-700"
+                                        >
+                                            Keluar
+                                        </Link>
+                                        <span className="block text-xs text-slate-500 dark:text-slate-400">
+                                            Untuk memakai akun Aishii lain, keluar juga dari aishiierp.com.
+                                        </span>
+                                    </p>
+                                )}
                             </div>
                         )}
 
