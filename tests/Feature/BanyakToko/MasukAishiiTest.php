@@ -384,9 +384,14 @@ class MasukAishiiTest extends BanyakTokoTestCase
 
     public function test_registering_without_an_aishii_identity_is_refused_while_on(): void
     {
+        // AW1: orang baru mendaftar akun Aishii DULU, lalu kembali lewat
+        // Aishii `/pos?buka=1` yang membuka permintaan masuk BARU — bukan
+        // menumpang permintaan masuk yang kedaluwarsa selama surelnya
+        // dikonfirmasi.
         $this->get('/daftar')->assertInertia(fn (AssertableInertia $p) => $p
             ->where('akunAishii.email', null)
-            ->where('akunAishii.masuk', route('aishii.masuk')));
+            ->where('akunAishii.masuk', route('aishii.masuk'))
+            ->where('akunAishii.daftar', config('brand.parent.url').'/register?redirect=%2Fpos%3Fbuka%3D1'));
 
         $this->post('/daftar', [
             'nama_toko' => 'Toko Cempaka',

@@ -13,8 +13,12 @@ import { rupiah } from "@/Utils/rupiah";
  *
  * "Masuk dengan akun Aishii" hidup (AU1, `akunAishii` terisi): toko lahir
  * dari akun Aishii — surel diambil dari akun itu dan TIDAK ada sandi toko
- * (keputusan D2). Sebelum orangnya masuk, layar ini hanya menawarkan
- * tombolnya; yang belum punya akun Aishii didaftarkan di sana lalu kembali.
+ * (keputusan D2). Sebelum orangnya masuk, layar ini menawarkan DUA pintu
+ * (AW1): "Buat akun Aishii" untuk orang baru — mendaftar dulu, lalu kembali
+ * lewat aishiierp.com/pos?buka=1 dengan permintaan masuk yang baru — dan
+ * "Masuk dengan akun Aishii" untuk yang sudah punya. Menyuruh orang baru
+ * menekan "Masuk" membuat pendaftarannya menumpang permintaan masuk yang
+ * kedaluwarsa selama surelnya dikonfirmasi.
  */
 function Kolom({ label, galat, petunjuk, children }) {
     return (
@@ -100,8 +104,8 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         >
                             <p className="text-sm text-slate-700 dark:text-slate-300">
                                 Toko dibuat untuk akun Aishii Anda — akun yang sama untuk Aishii Bazar dan
-                                produk Aishii lainnya. Belum punya? Tombol ini juga membawa Anda mendaftar,
-                                gratis, lalu kembali ke sini.
+                                produk Aishii lainnya. Belum punya? Buat dulu, gratis. Sesudah surelnya
+                                dikonfirmasi, Anda kembali ke sini untuk mengisi nama toko.
                             </p>
                             {(galatHalaman.aishii || galatHalaman.email) && (
                                 <div
@@ -112,10 +116,18 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                                 </div>
                             )}
                             <a
-                                href={akunAishii.masuk}
+                                href={akunAishii.daftar}
+                                data-daftar-buat-akun
                                 className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-600 font-semibold text-white shadow-lg shadow-primary-600/25 transition-colors hover:bg-primary-700"
                             >
-                                Masuk dengan akun Aishii
+                                Buat akun Aishii — gratis
+                            </a>
+                            <a
+                                href={akunAishii.masuk}
+                                data-daftar-sudah-punya
+                                className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 font-semibold text-slate-700 transition-colors hover:border-primary-500 hover:text-primary-700 dark:border-slate-700 dark:text-slate-200"
+                            >
+                                Sudah punya akun Aishii? Masuk
                             </a>
                             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
                                 Sudah punya toko?{" "}

@@ -34,6 +34,19 @@ class AkunTertaut
     }
 
     /**
+     * Pintu ORANG BARU (AW1): mendaftar akun Aishii lebih dulu, lalu kembali
+     * lewat `aishiierp.com/pos?buka=1`, yang membuka `/auth/aishii` di sini
+     * dengan permintaan masuk yang baru lahir saat akunnya sudah aktif.
+     * Tombol "Masuk dengan akun Aishii" tidak cukup untuk orang baru:
+     * permintaan masuknya lahir SEBELUM akunnya ada, dan kedaluwarsa selama
+     * surelnya dikonfirmasi (bekal sesi 600 detik).
+     */
+    public static function alamatDaftar(): string
+    {
+        return config('brand.parent.url').'/register?redirect='.rawurlencode('/pos?buka=1');
+    }
+
+    /**
      * Konfirmasi tindakan penting lewat akun Aishii: `/masuk-ulang` di
      * Aishii meminta sandinya lagi, mencatat bukti atas `kode` (AV14,
      * `BuktiKonfirmasi`), lalu mengantar ke sini untuk meminta otorisasi
