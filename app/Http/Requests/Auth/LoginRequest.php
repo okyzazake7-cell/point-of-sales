@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\AkunAishii\AkunTertaut;
+use App\AkunAishii\KlienAishii;
 use App\Models\User;
 use App\Penyewaan\Penyewaan;
 use App\Services\AuditLogService;
@@ -80,8 +81,11 @@ class LoginRequest extends FormRequest
                 );
             }
 
+            // Pemilik toko yang lahir dari akun Aishii kerap mengetik sandi
+            // akun Aishii-nya di formulir kasir; selama pintu itu menyala,
+            // jawaban yang SAMA untuk semua orang menunjukkan tombolnya.
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => trans(app(KlienAishii::class)->aktif() ? 'auth.failed_aishii' : 'auth.failed'),
             ]);
         }
 
