@@ -264,7 +264,7 @@ export default function ProductGrid({
             </div>
 
             {/* Category Tabs */}
-            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
+            <div data-tour="pos-categories" className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
                 <div className="flex gap-2">
                     <CategoryTab
                         category={{ id: null, name: "Semua" }}
@@ -286,7 +286,7 @@ export default function ProductGrid({
             </div>
 
             {/* Products Grid */}
-            <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
+            <div data-tour="pos-grid" className="flex-1 overflow-y-auto p-4 scrollbar-thin">
                 {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {filteredProducts.map((product) => (

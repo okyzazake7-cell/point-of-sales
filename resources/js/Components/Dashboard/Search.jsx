@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import { IconSearch } from '@tabler/icons-react';
 import React from 'react'
-export default function Search({ url, placeholder }) {
+export default function Search({ url, placeholder, "data-tour": tour }) {
 
     // define use form inertia
     const { data, setData, get } = useForm({
@@ -16,7 +16,7 @@ export default function Search({ url, placeholder }) {
     }
 
     return (
-        <form onSubmit={searchData}>
+        <form data-tour={tour} onSubmit={searchData}>
             <div className='relative'>
                 <input
                     type='text'

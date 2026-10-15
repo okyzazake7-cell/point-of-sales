@@ -1,0 +1,292 @@
+{
+    "Dashboard/Index": [
+        {
+            "key": "dashboard",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "menu",
+                    "el": "nav-sidebar"
+                },
+                {
+                    "id": "toggle",
+                    "el": "nav-menu"
+                },
+                {
+                    "id": "new_sale",
+                    "el": "dashboard-new-sale"
+                },
+                {
+                    "id": "checklist",
+                    "el": "dashboard-checklist"
+                },
+                {
+                    "id": "stats",
+                    "el": "dashboard-stats"
+                },
+                {
+                    "id": "info",
+                    "el": "dashboard-info"
+                },
+                {
+                    "id": "chart",
+                    "el": "dashboard-chart"
+                },
+                {
+                    "id": "widgets",
+                    "el": "dashboard-widgets"
+                },
+                {
+                    "id": "recent",
+                    "el": "dashboard-recent"
+                },
+                {
+                    "id": "lowstock",
+                    "el": "dashboard-lowstock"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "notif",
+                    "el": "nav-notif"
+                },
+                {
+                    "id": "help",
+                    "el": "nav-help"
+                },
+                {
+                    "id": "account",
+                    "el": "nav-account"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Products/Create": [
+        {
+            "key": "products_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "image",
+                    "el": "products-form-image"
+                },
+                {
+                    "id": "category",
+                    "el": "products-form-category"
+                },
+                {
+                    "id": "barcode",
+                    "el": "products-form-barcode"
+                },
+                {
+                    "id": "sku",
+                    "el": "products-form-sku"
+                },
+                {
+                    "id": "name",
+                    "el": "products-form-name"
+                },
+                {
+                    "id": "description",
+                    "el": "products-form-description"
+                },
+                {
+                    "id": "composite",
+                    "el": "products-form-composite"
+                },
+                {
+                    "id": "prices",
+                    "el": "products-form-prices"
+                },
+                {
+                    "id": "stock_now",
+                    "el": "products-form-stock-now"
+                },
+                {
+                    "id": "minmax",
+                    "el": "products-form-minmax"
+                },
+                {
+                    "id": "tax",
+                    "el": "products-form-tax"
+                },
+                {
+                    "id": "profit",
+                    "el": "products-form-profit"
+                },
+                {
+                    "id": "units",
+                    "el": "products-form-units"
+                },
+                {
+                    "id": "components",
+                    "el": "products-form-components"
+                },
+                {
+                    "id": "submit",
+                    "el": "products-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Products/Edit": "Dashboard/Products/Create",
+    "Dashboard/Products/Index": [
+        {
+            "key": "products",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "actions",
+                    "el": "products-actions"
+                },
+                {
+                    "id": "search",
+                    "el": "products-search"
+                },
+                {
+                    "id": "view",
+                    "el": "products-view"
+                },
+                {
+                    "id": "list",
+                    "el": "products-list"
+                },
+                {
+                    "id": "row",
+                    "el": "products-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "products-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "products-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Transactions/Index": [
+        {
+            "key": "pos_buka_shift",
+            "if": "pos-shift-form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "cash",
+                    "el": "pos-shift-cash"
+                },
+                {
+                    "id": "notes",
+                    "el": "pos-shift-notes"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "pos-shift-warehouse"
+                },
+                {
+                    "id": "open",
+                    "el": "pos-shift-open"
+                },
+                {
+                    "id": "history",
+                    "el": "pos-shift-history"
+                }
+            ]
+        },
+        {
+            "key": "pos",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "menu",
+                    "el": "pos-menu"
+                },
+                {
+                    "id": "search",
+                    "el": "pos-search"
+                },
+                {
+                    "id": "categories",
+                    "el": "pos-categories"
+                },
+                {
+                    "id": "grid",
+                    "el": "pos-grid"
+                },
+                {
+                    "id": "tab_cart",
+                    "el": "pos-tab-cart",
+                    "klik": true
+                },
+                {
+                    "id": "customer",
+                    "el": "pos-customer"
+                },
+                {
+                    "id": "held",
+                    "el": "pos-held"
+                },
+                {
+                    "id": "hold",
+                    "el": "pos-hold"
+                },
+                {
+                    "id": "cart",
+                    "el": "pos-cart"
+                },
+                {
+                    "id": "paylater",
+                    "el": "pos-paylater"
+                },
+                {
+                    "id": "order",
+                    "el": "pos-order"
+                },
+                {
+                    "id": "method",
+                    "el": "pos-method"
+                },
+                {
+                    "id": "cash",
+                    "el": "pos-cash"
+                },
+                {
+                    "id": "summary",
+                    "el": "pos-summary"
+                },
+                {
+                    "id": "submit",
+                    "el": "pos-submit"
+                },
+                {
+                    "id": "nav",
+                    "el": "pos-nav"
+                },
+                {
+                    "id": "shift",
+                    "el": "pos-shift"
+                },
+                {
+                    "id": "help",
+                    "el": "pos-help"
+                }
+            ]
+        }
+    ]
+}

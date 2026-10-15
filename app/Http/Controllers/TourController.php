@@ -8,11 +8,41 @@ use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
-    public const TOURS = ['dashboard', 'pos', 'products', 'cashier_shifts', 'reports'];
+    /**
+     * Kunci panduan yang boleh ditandai selesai. Dibaca dari daftar panduan
+     * yang SAMA dengan yang dipakai React (`resources/js/Panduan/daftar.json`):
+     * setiap halaman punya panduannya sendiri, dan halaman baru tidak perlu
+     * didaftarkan dua kali — kunci di sini tidak bisa menyimpang darinya.
+     *
+     * @return list<string>
+     */
+    public static function tours(): array
+    {
+        static $kunci = null;
+
+        if ($kunci === null) {
+            $daftar = json_decode(
+                file_get_contents(resource_path('js/Panduan/daftar.json')),
+                true,
+                flags: JSON_THROW_ON_ERROR,
+            );
+
+            $kunci = [];
+            foreach ($daftar as $panduan) {
+                // Nilai teks = rujukan ke komponen lain (Tambah/Ubah berbagi formulir).
+                foreach (is_array($panduan) ? $panduan : [] as $varian) {
+                    $kunci[] = $varian['key'];
+                }
+            }
+            $kunci = array_values(array_unique($kunci));
+        }
+
+        return $kunci;
+    }
 
     public function complete(Request $request, string $tour): JsonResponse
     {
-        abort_unless(in_array($tour, self::TOURS, true), 404);
+        abort_unless(in_array($tour, self::tours(), true), 404);
 
         /** @var User $user */
         $user = $request->user();

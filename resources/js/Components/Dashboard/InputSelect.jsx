@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Listbox } from '@headlessui/react'
 import { IconChevronDown, IconCircle, IconCircleFilled } from '@tabler/icons-react'
 
-export default function InputSelect({ selected, data, setSelected, label, errors, placeholder, multiple = false, searchable = false, displayKey = 'name' }) {
+export default function InputSelect({ selected, data, setSelected, label, errors, placeholder, multiple = false, searchable = false, displayKey = 'name', "data-tour": tour }) {
     const [search, setSearch] = useState('')
 
     const filteredData = data.filter(item =>
@@ -10,7 +10,7 @@ export default function InputSelect({ selected, data, setSelected, label, errors
     )
 
     return (
-        <div className='flex flex-col gap-2'>
+        <div data-tour={tour} className='flex flex-col gap-2'>
             <label className='text-gray-600 text-sm'>{label}</label>
             <Listbox value={selected} onChange={setSelected} multiple={multiple} by="id">
                 <Listbox.Button className={'w-full px-3 py-1.5 border text-sm rounded-md focus:outline-none focus:ring-0 flex justify-between items-center gap-8 bg-white text-gray-700 focus:border-gray-200 border-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-gray-700 dark:border-gray-800'}>

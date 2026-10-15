@@ -50,6 +50,7 @@ export default function Button({
         <>
             {type === "link" && href && (
                 <Link
+                    data-tour={props["data-tour"]}
                     href={href}
                     className={`${baseStyles} ${sizeStyles} ${className}`}
                 >
@@ -63,6 +64,7 @@ export default function Button({
             )}
             {type === "link" && !href && (
                 <button
+                    data-tour={props["data-tour"]}
                     type="button"
                     onClick={props.onClick}
                     className={`${baseStyles} ${sizeStyles} ${className}`}

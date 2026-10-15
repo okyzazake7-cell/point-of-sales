@@ -1,8 +1,8 @@
 import React from "react";
 
-export default function Input({ label, type, className, errors, icon, ...props }) {
+export default function Input({ label, type, className, errors, icon, "data-tour": tour, ...props }) {
     return (
-        <div className="flex flex-col gap-2">
+        <div data-tour={tour} className="flex flex-col gap-2">
             {label && (
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                     {label}

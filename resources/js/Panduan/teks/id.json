@@ -1,0 +1,272 @@
+{
+    "dashboard": {
+        "intro": {
+            "title": "Selamat datang di Aishii POS",
+            "desc": "Ini halaman <b>Dashboard</b> — ringkasan toko Anda. Panduan singkat ini menunjukkan letak bagian-bagian penting.<br><br>Tekan <b>Berikutnya</b> untuk lanjut, <b>Sebelumnya</b> untuk mundur, atau <b>×</b> untuk menutup. Setiap halaman punya panduannya sendiri, jadi tidak perlu menghafal semuanya sekarang."
+        },
+        "menu": {
+            "title": "Menu utama",
+            "desc": "Semua halaman ada di menu ini, dikelompokkan menurut pekerjaan:<ul><li><b>Master Data</b> — kategori, produk (barang), pelanggan, supplier (pemasok).</li><li><b>Penjualan</b> — layar kasir, riwayat, retur, dan piutang (utang pelanggan).</li><li><b>Inventori</b> dan <b>Pengadaan</b> — stok gudang dan belanja ke supplier.</li><li><b>Laporan</b>, <b>Operasional</b>, dan <b>Pengaturan</b> di bagian bawah — gulir menu ke bawah.</li></ul>Yang tampil hanya menu yang boleh Anda buka."
+        },
+        "toggle": {
+            "title": "Tombol menu (☰)",
+            "desc": "Di ponsel, menu utama tersembunyi — tekan tombol ini untuk membukanya, lalu pilih halaman yang dituju. Di layar lebar, tombol ini mengecilkan menu supaya ruang kerja lebih luas."
+        },
+        "new_sale": {
+            "title": "Transaksi Baru",
+            "desc": "Jalan pintas ke <b>layar kasir</b> untuk mulai berjualan. Bila shift kasir belum dibuka, Anda akan diminta membukanya dulu."
+        },
+        "checklist": {
+            "title": "Checklist Persiapan Toko",
+            "desc": "Langkah-langkah agar toko siap berjualan: lengkapi profil toko, buat kategori, tambah produk, daftarkan pelanggan, lalu selesaikan transaksi pertama. Ketuk langkah yang belum dicentang untuk langsung ke halamannya. Kotak ini hilang sendiri setelah semua langkah selesai."
+        },
+        "stats": {
+            "title": "Angka hari ini",
+            "desc": "<ul><li><b>Penjualan Hari Ini</b> — total uang dari penjualan hari ini.</li><li><b>Profit Hari Ini</b> — keuntungan: harga jual dikurangi harga beli (modal) barang.</li><li><b>Target Bulan Ini</b> — seberapa jauh penjualan bulan ini dari target. Atur targetnya di <b>Pengaturan → Target Penjualan</b>; selama belum diatur, angkanya 0%.</li><li><b>Transaksi Hari Ini</b> — berapa kali Anda berjualan hari ini.</li></ul>"
+        },
+        "info": {
+            "title": "Jumlah data",
+            "desc": "Banyaknya kategori, produk, transaksi, dan pelanggan yang sudah tercatat di toko ini sejak awal."
+        },
+        "chart": {
+            "title": "Tren Pendapatan",
+            "desc": "Grafik pendapatan untuk melihat naik-turunnya penjualan. Arahkan atau ketuk titik di grafik untuk melihat angkanya. Grafik kosong berarti belum ada penjualan."
+        },
+        "widgets": {
+            "title": "Pantauan cepat",
+            "desc": "<ul><li><b>Shift Aktif</b> — kasir yang sedang bekerja dan uang yang seharusnya ada di lacinya.</li><li><b>Produk Terlaris</b> — barang yang paling banyak terjual.</li><li><b>Slow Moving</b> — barang yang tidak terjual 30 hari; pertimbangkan promo.</li><li><b>Pelanggan Terbaik</b> — pelanggan yang paling sering berbelanja.</li><li><b>Lokasi Terbanyak</b> — kelurahan asal pelanggan terbanyak.</li></ul>"
+        },
+        "recent": {
+            "title": "Transaksi Terbaru",
+            "desc": "Lima penjualan terakhir: nomor nota (invoice), tanggal, pelanggan, dan totalnya. Daftar lengkapnya ada di menu <b>Riwayat Transaksi</b>."
+        },
+        "lowstock": {
+            "title": "Stok Menipis",
+            "desc": "Barang yang stoknya kurang dari 10. Segera belanja ulang ke supplier (menu <b>Purchase Order</b>) supaya tidak kehabisan saat ada pembeli."
+        },
+        "outlet": {
+            "title": "Pilih outlet",
+            "desc": "Bila toko punya beberapa cabang (outlet), pilih cabang yang sedang Anda kelola di sini. Data penjualan dan stok yang tampil mengikuti cabang yang dipilih."
+        },
+        "notif": {
+            "title": "Notifikasi",
+            "desc": "Lonceng ini memberi tahu hal yang perlu perhatian, misalnya stok menipis, piutang pelanggan, atau hutang ke supplier yang hampir jatuh tempo. Angka merah = jumlah pemberitahuan baru."
+        },
+        "help": {
+            "title": "Tombol panduan (?)",
+            "desc": "Tekan tombol <b>?</b> kapan saja untuk membuka panduan <b>halaman yang sedang dibuka</b>. Setiap halaman — Produk, Kasir, Laporan, Pengaturan, dan lainnya — punya panduannya sendiri."
+        },
+        "account": {
+            "title": "Menu akun",
+            "desc": "Lingkaran berisi huruf depan nama Anda. Di sini ada <b>Profil</b> (ganti nama, foto, kata sandi), <b>Putar Ulang Panduan</b> (memunculkan lagi semua panduan), dan <b>Keluar</b>. Di ponsel, menu ini juga berisi <b>Panduan Penggunaan</b> dan pilihan bahasa."
+        },
+        "next": {
+            "title": "Langkah berikutnya",
+            "desc": "Toko baru? Urutan yang disarankan:<ol><li><b>Pengaturan → Profil Toko</b>: nama, alamat, logo untuk struk.</li><li><b>Kategori</b>: kelompok barang, misalnya Minuman dan Makanan.</li><li><b>Produk</b>: barang yang dijual beserta harga dan stoknya.</li><li><b>Transaksi Baru</b>: buka shift, lalu mulai berjualan.</li></ol>"
+        }
+    },
+    "pos": {
+        "intro": {
+            "title": "Layar Kasir",
+            "desc": "Di sini Anda mencatat penjualan. Urutannya selalu sama:<ol><li>Pilih barang yang dibeli.</li><li>Periksa jumlahnya di keranjang.</li><li>Pilih cara bayar dan masukkan uang yang diterima.</li><li>Tekan <b>Selesaikan Transaksi</b>, lalu cetak atau kirim struknya.</li></ol>Panduan ini menunjukkan letak setiap bagian."
+        },
+        "menu": {
+            "title": "Menu ☰",
+            "desc": "Di ponsel, tombol ini membuka menu: <b>Dashboard</b>, <b>Riwayat Transaksi</b>, <b>Profil</b>, <b>Panduan Penggunaan</b>, layar penuh, dan <b>Keluar</b>."
+        },
+        "search": {
+            "title": "Cari barang",
+            "desc": "Ketik sebagian nama barang, misalnya <i>kopi</i> — daftar di bawah langsung menyaring. Punya alat scan barcode? Scan kode batang barang dan barangnya langsung masuk ke keranjang. Di komputer, tekan <kbd>/</kbd> untuk langsung mengetik di kotak ini."
+        },
+        "categories": {
+            "title": "Kategori",
+            "desc": "Ketuk nama kategori untuk menampilkan barang dalam kelompok itu saja. <b>Semua</b> menampilkan seluruh barang lagi."
+        },
+        "grid": {
+            "title": "Daftar barang",
+            "desc": "Ketuk barang untuk memasukkannya ke keranjang — setiap ketukan menambah 1. Tanda pada barang:<ul><li><b>Habis</b> — stok 0, tidak bisa dijual.</li><li><b>Sisa 3</b> — stok tinggal sedikit.</li><li>Label merah — barang sedang promo.</li></ul>Barang yang dijual dalam beberapa satuan (pcs, box) menampilkan tombol satuan kecil di bawah harganya: pilih satuannya dulu, lalu ketuk barangnya."
+        },
+        "tab_cart": {
+            "title": "Buka keranjang",
+            "desc": "Di ponsel, daftar barang dan keranjang ada di dua tab. Angka di tab <b>Keranjang</b> menunjukkan jumlah barang yang sudah dipilih. Tekan <b>Berikutnya</b> — panduan membuka tab Keranjang untuk Anda."
+        },
+        "customer": {
+            "title": "Pelanggan (boleh dilewati)",
+            "desc": "Untuk pembeli biasa yang membayar langsung, biarkan kosong — struknya tertulis <b>Umum</b>. Pilih pelanggan bila ingin mencatat siapa pembelinya, memberi poin member, atau mencatat utang (<b>Bayar Belakangan</b>). Pelanggan baru bisa didaftarkan di tempat lewat <b>Tambah pelanggan</b>."
+        },
+        "held": {
+            "title": "Transaksi ditahan",
+            "desc": "Penjualan yang sedang ditahan menunggu di sini. Ketuk salah satunya untuk melanjutkan."
+        },
+        "hold": {
+            "title": "Tahan",
+            "desc": "Pembeli masih memilih barang, sementara pembeli lain sudah menunggu? Tekan <b>Tahan</b>: isi keranjang disimpan dan keranjang dikosongkan untuk pembeli berikutnya. Lanjutkan nanti dari daftar <b>Transaksi Ditahan</b>."
+        },
+        "cart": {
+            "title": "Keranjang",
+            "desc": "Barang yang dipilih muncul di sini beserta harganya. Tekan <b>+</b> atau <b>−</b> untuk mengubah jumlah, dan ikon tempat sampah untuk membuang barang yang batal dibeli."
+        },
+        "paylater": {
+            "title": "Bayar Belakangan (Nota Barang)",
+            "desc": "Nyalakan bila pembeli <b>berutang</b> (membayar nanti). Pelanggan dan tanggal jatuh tempo wajib diisi. Utangnya tercatat di menu <b>Piutang</b>, dan pelunasannya dicatat di sana saat pelanggan membayar."
+        },
+        "order": {
+            "title": "Detail Pesanan",
+            "desc": "<ul><li><b>Tipe Pesanan</b>: Di Tempat, Bawa Pulang, atau Diantar (muncul isian ongkos kirim).</li><li><b>Diskon Manual</b>: potongan harga dalam rupiah, misalnya 2000. Bila pemilik menetapkan batas diskon, diskon yang lebih besar menunggu persetujuan di menu <b>Approval Diskon</b>.</li><li><b>Catatan</b>: pesan khusus, misalnya <i>tanpa gula</i>.</li></ul>Semuanya boleh dibiarkan seperti semula."
+        },
+        "method": {
+            "title": "Metode Pembayaran",
+            "desc": "Pilih cara pembeli membayar: <b>Tunai</b>, atau <b>Transfer Bank</b> dan pembayaran online bila sudah diaktifkan di <b>Pengaturan → Payment Gateway</b>. <b>Split Pembayaran</b> dipakai bila pembeli membayar dengan dua cara, misalnya sebagian tunai dan sebagian transfer."
+        },
+        "cash": {
+            "title": "Uang yang diterima",
+            "desc": "Ketik jumlah uang yang diberikan pembeli, atau ketuk tombol nominal cepat (Rp 10.000, Rp 50.000, …). <b>Uang pas</b> mengisi tepat sebesar tagihan. <b>Kembalian</b> langsung menghitung uang yang harus dikembalikan."
+        },
+        "summary": {
+            "title": "Total",
+            "desc": "Rincian tagihan: harga barang, promo, diskon, ongkos kirim, dan <b>PPN</b> (pajak) bila barangnya dikenai pajak. Angka <b>Total</b> adalah yang harus dibayar pembeli."
+        },
+        "submit": {
+            "title": "Selesaikan Transaksi",
+            "desc": "Tekan setelah uang diterima. Bila tombolnya abu-abu, tulisannya memberi tahu yang kurang — misalnya <b>Kurang Rp 2.000</b> atau <b>Pilih Pelanggan</b>. Setelah berhasil, halaman struk terbuka untuk dicetak atau dikirim."
+        },
+        "nav": {
+            "title": "Dashboard dan Riwayat",
+            "desc": "<b>Dashboard</b> kembali ke ringkasan toko. <b>Riwayat</b> menampilkan penjualan yang sudah tercatat — dari sana struk lama bisa dicetak ulang atau barang dikembalikan (retur)."
+        },
+        "shift": {
+            "title": "Shift aktif",
+            "desc": "Angka ini adalah uang yang seharusnya ada di laci sekarang: modal awal ditambah penjualan tunai. Tekan untuk melihat rincian shift dan <b>menutup shift</b> saat selesai berjaga."
+        },
+        "help": {
+            "title": "Panduan",
+            "desc": "Tombol <b>?</b> ini membuka panduan halaman yang sedang Anda buka. Setiap halaman punya panduannya sendiri."
+        }
+    },
+    "pos_buka_shift": {
+        "intro": {
+            "title": "Buka shift dulu",
+            "desc": "Sebelum bisa berjualan, kasir harus <b>membuka shift</b>. Shift adalah masa kerja kasir — dibuka saat mulai berjaga, ditutup saat selesai. Selama shift berjalan, aplikasi mencatat setiap penjualan dan uang yang masuk ke laci, sehingga di akhir hari uang di laci bisa dicocokkan dengan catatan."
+        },
+        "cash": {
+            "title": "Modal Awal",
+            "desc": "Isi jumlah uang tunai yang ada di laci sebelum mulai berjualan — biasanya uang receh untuk kembalian. Tulis angkanya saja tanpa titik, misalnya <b>100000</b> untuk Rp 100.000. Bila laci kosong, isi <b>0</b>."
+        },
+        "notes": {
+            "title": "Catatan (boleh kosong)",
+            "desc": "Keterangan tambahan bila perlu, misalnya <i>shift pagi</i> atau nama kasir pengganti."
+        },
+        "warehouse": {
+            "title": "Gudang",
+            "desc": "Muncul bila toko punya lebih dari satu gudang. Pilih gudang <b>tempat barang yang dijual diambil</b> — stok barang yang terjual berkurang dari gudang ini."
+        },
+        "open": {
+            "title": "Buka Shift Sekarang",
+            "desc": "Tekan setelah modal awal diisi. Layar kasir langsung terbuka, dan panduan berikutnya menjelaskan cara berjualan."
+        },
+        "history": {
+            "title": "Lihat Histori Shift",
+            "desc": "Membuka daftar shift sebelumnya: kapan dibuka dan ditutup, siapa kasirnya, dan berapa selisih uang di laci saat ditutup."
+        }
+    },
+    "products": {
+        "intro": {
+            "title": "Halaman Produk",
+            "desc": "Daftar semua barang yang dijual toko Anda, lengkap dengan harga dan stoknya. Barang yang ada di sini muncul di layar kasir. Dari sini Anda menambah barang baru, mengubah harga, atau mencetak label barcode."
+        },
+        "actions": {
+            "title": "Tombol di kanan atas",
+            "desc": "<ul><li><b>Tambah Produk</b> — mendaftarkan barang baru.</li><li><b>Cetak All Barcode</b> — mencetak label barcode semua barang di halaman ini untuk ditempel.</li><li><b>Export</b> — mengunduh daftar barang sebagai berkas Excel.</li><li><b>Import</b> — memasukkan banyak barang sekaligus dari berkas Excel.</li></ul>"
+        },
+        "search": {
+            "title": "Cari dan pilih",
+            "desc": "Ketik nama, SKU, atau barcode lalu tekan Enter untuk mencari. Centang <b>Pilih Semua</b> (atau kotak kecil di tiap barang) untuk memilih beberapa barang sekaligus, misalnya untuk mencetak barcode-nya saja."
+        },
+        "view": {
+            "title": "Tampilan",
+            "desc": "Ganti tampilan kotak bergambar atau tabel. Tampilan <b>tabel</b> memperlihatkan harga beli, harga jual, dan stok dalam satu baris, dengan tombol ubah dan hapus yang selalu terlihat. Bila ada barang yang dicentang, tombol <b>Cetak Terpilih</b> muncul di sini."
+        },
+        "list": {
+            "title": "Daftar barang",
+            "desc": "Setiap barang menampilkan kategori, nama, barcode/SKU, <b>harga jual</b> (ungu), <b>modal</b> (harga beli), dan keuntungan per barang (hijau). Label stok: <b>Habis</b> merah, stok sedikit kuning."
+        },
+        "row": {
+            "title": "Ubah atau hapus barang",
+            "desc": "Di tampilan kotak, arahkan atau <b>ketuk gambar barang</b> untuk memunculkan tombol pensil (ubah) dan tempat sampah (hapus). Di tampilan tabel, tombolnya ada di ujung kanan baris. Menghapus barang tidak bisa dibatalkan — barang yang sudah pernah terjual sebaiknya diubah saja, jangan dihapus."
+        },
+        "empty": {
+            "title": "Belum ada barang",
+            "desc": "Toko ini belum punya barang. Tekan <b>Tambah Produk</b> untuk mendaftarkan barang pertama — setelah itu barangnya langsung bisa dijual di layar kasir."
+        },
+        "pagination": {
+            "title": "Halaman berikutnya",
+            "desc": "Barang yang banyak dibagi beberapa halaman. Pakai nomor halaman di sini untuk berpindah, dan pilih berapa barang yang tampil per halaman."
+        }
+    },
+    "products_form": {
+        "intro": {
+            "title": "Mengisi data barang",
+            "desc": "Formulir ini mendaftarkan atau mengubah satu barang. Yang <b>wajib</b> diisi: kategori, barcode, SKU, nama, harga beli, dan harga jual. Isian lain boleh dilewati. Panduan ini menjelaskan setiap bagian beserta contohnya."
+        },
+        "image": {
+            "title": "Gambar barang (boleh kosong)",
+            "desc": "Foto barang membantu kasir menemukan barang lebih cepat di layar kasir. Tekan tombol pilih berkas dan ambil foto dari galeri atau kamera. Tanpa foto pun barang tetap bisa dijual."
+        },
+        "category": {
+            "title": "Kategori",
+            "desc": "Pilih kelompok barang, misalnya <i>Minuman</i>. Kategori belum ada? Buat dulu di menu <b>Kategori</b>, lalu kembali ke sini."
+        },
+        "barcode": {
+            "title": "Barcode",
+            "desc": "Angka di bawah garis-garis hitam pada kemasan. Isi dengan alat scan atau ketik manual. Barang buatan sendiri tanpa barcode? Isi kode bebas yang mudah diingat, misalnya <b>KOPI001</b> — labelnya bisa dicetak dari halaman Produk."
+        },
+        "sku": {
+            "title": "SKU",
+            "desc": "Kode barang <b>milik toko Anda sendiri</b>, untuk membedakan barang yang mirip — misalnya <b>KOPI-SUSU-250</b>. Tidak boleh sama dengan SKU barang lain. Boleh sama dengan barcode bila Anda tidak punya sistem kode sendiri."
+        },
+        "name": {
+            "title": "Nama Produk",
+            "desc": "Nama yang tampil di layar kasir dan di struk, misalnya <i>Kopi Susu Gula Aren</i>. Pakai nama yang mudah dicari kasir."
+        },
+        "description": {
+            "title": "Deskripsi (boleh kosong)",
+            "desc": "Keterangan tambahan untuk Anda sendiri, misalnya ukuran atau rasa. Tidak tercetak di struk."
+        },
+        "composite": {
+            "title": "Produk Komposit (paket)",
+            "desc": "Centang bila barang ini adalah <b>paket</b> dari beberapa barang lain — misalnya <i>Paket Hemat = 1 nasi + 1 teh</i>. Harga jual dan stok paket lalu dihitung otomatis dari barang-barang penyusunnya. Untuk barang biasa, biarkan tidak dicentang."
+        },
+        "prices": {
+            "title": "Harga beli, harga jual, stok",
+            "desc": "<ul><li><b>Harga Beli</b> — modal per barang (harga dari supplier), misalnya 4000. Dipakai menghitung keuntungan.</li><li><b>Harga Jual</b> — harga untuk pembeli, misalnya 8000.</li><li><b>Stok</b> — jumlah barang yang ada sekarang (hanya saat menambah barang baru).</li></ul>Tulis angka saja, tanpa titik atau \"Rp\"."
+        },
+        "stock_now": {
+            "title": "Stok saat ini",
+            "desc": "Saat mengubah barang, stok tidak diketik langsung. Stok berubah lewat penjualan, <b>Penerimaan Barang</b> dari supplier, atau <b>Stock Opname</b> (hitung ulang stok) — supaya setiap perubahan stok tercatat asal-usulnya."
+        },
+        "minmax": {
+            "title": "Stok minimum dan maksimum (boleh kosong)",
+            "desc": "<b>Stok Minimum</b>: batas aman, misalnya 5. Saat stok menyentuh angka ini, sistem menyiapkan draf pesanan pembelian (Purchase Order) ke supplier secara otomatis setiap hari. <b>Stok Maksimum</b>: jumlah paling banyak yang ingin disimpan — dipakai menghitung berapa yang dipesan."
+        },
+        "tax": {
+            "title": "Pajak (PPN)",
+            "desc": "<ul><li><b>Exclusive</b> — pajak <b>ditambahkan</b> di atas harga jual. Harga 8000 dengan pajak 11% menjadi 8880 di kasir.</li><li><b>Inclusive</b> — harga jual <b>sudah termasuk</b> pajak; pembeli tetap membayar 8000.</li></ul>Toko yang tidak memungut PPN: isi <b>Persentase Pajak</b> dengan <b>0</b>."
+        },
+        "profit": {
+            "title": "Perkiraan untung",
+            "desc": "Muncul setelah harga beli dan harga jual diisi: keuntungan per barang dan persentasenya (margin). Periksa di sini sebelum menyimpan supaya tidak salah harga."
+        },
+        "units": {
+            "title": "Satuan (boleh kosong)",
+            "desc": "Untuk barang yang dijual dalam beberapa satuan, misalnya per <b>pcs</b> dan per <b>box</b> isi 12. Tekan <b>+ Tambah Satuan</b>, pilih satuannya, isi <b>Konversi</b> (1 box = 12), harga jual satuan itu, dan barcode-nya bila ada. Barang yang hanya dijual satuan biasa tidak perlu diisi."
+        },
+        "components": {
+            "title": "Komponen paket",
+            "desc": "Muncul bila <b>Produk Komposit</b> dicentang. Tekan <b>+ Tambah Komponen</b>, pilih barang penyusun dan jumlahnya. Saat paket terjual, stok setiap komponen ikut berkurang."
+        },
+        "submit": {
+            "title": "Simpan",
+            "desc": "Tekan <b>Simpan Produk</b>. Bila ada isian yang salah atau kurang, pesannya muncul dengan tulisan merah di bawah isian itu — perbaiki lalu simpan lagi. <b>Batal</b> kembali ke daftar produk tanpa menyimpan."
+        }
+    }
+}

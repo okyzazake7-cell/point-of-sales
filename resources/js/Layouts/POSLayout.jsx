@@ -29,7 +29,7 @@ import {
 export default function POSLayout({ children }) {
     const { auth, storeProfile, activeCashierShift, appVersion } = usePage().props;
     const { darkMode, themeSwitcher } = useTheme();
-    const { start: startTour, isActive: tourActive } = useTour("pos");
+    const { start: startTour, isActive: tourActive, available: tourAvailable } = useTour();
     const [pendingSyncCount, setPendingSyncCount] = useState(0);
     const isOnline = useOnlineStatus();
     const offlineScopeKey = `${auth?.user?.id ?? "guest"}:${activeCashierShift?.warehouse_id ?? "none"}`;
@@ -101,7 +101,9 @@ export default function POSLayout({ children }) {
                 <div className="flex items-center gap-4 lg:gap-6">
                     {/* Mobile Menu Toggle */}
                     <button
+                        data-tour="pos-menu"
                         onClick={() => setShowMobileMenu(!showMobileMenu)}
+                        aria-label={i18n.t("account.toggle_menu")}
                         className="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     >
                         {showMobileMenu ? (
@@ -154,7 +156,7 @@ export default function POSLayout({ children }) {
                 {/* Right Section - Actions & User */}
                 <div className="flex items-center gap-2 lg:gap-3">
                     {/* Quick Actions */}
-                    <nav className="hidden lg:flex items-center gap-1">
+                    <nav data-tour="pos-nav" className="hidden lg:flex items-center gap-1">
                         <Link
                             href={route("dashboard")}
                             className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors"
@@ -190,15 +192,19 @@ export default function POSLayout({ children }) {
                         keluar layar dan membuat seluruh halaman kasir bisa
                         digeser ke samping (diukur: 34–50px).
                     */}
-                    {/* Tour Guide */}
-                    <button
-                        onClick={startTour}
-                        disabled={tourActive}
-                        className="hidden sm:flex p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch items-center justify-center disabled:opacity-50"
-                        title={i18n.t("tour.button")}
-                    >
-                        <IconQuestionMark size={20} className="text-slate-500" />
-                    </button>
+                    {/* Panduan halaman yang sedang dibuka */}
+                    {tourAvailable && (
+                        <button
+                            data-tour="pos-help"
+                            onClick={startTour}
+                            disabled={tourActive}
+                            className="hidden sm:flex p-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors min-w-touch min-h-touch items-center justify-center disabled:opacity-50"
+                            title={i18n.t("tour.button")}
+                            aria-label={i18n.t("tour.button")}
+                        >
+                            <IconQuestionMark size={20} className="text-slate-500" />
+                        </button>
+                    )}
 
                     {/* Fullscreen Toggle */}
                     <button
@@ -236,6 +242,7 @@ export default function POSLayout({ children }) {
                     <div className="hidden sm:flex items-center gap-2 pl-2 lg:pl-3 border-l border-slate-200 dark:border-slate-700">
                         {activeCashierShift && (
                             <Link
+                                data-tour="pos-shift"
                                 href={route("cashier-shifts.show", activeCashierShift.id)}
                                 className="hidden lg:flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/60"
                             >
@@ -330,17 +337,19 @@ export default function POSLayout({ children }) {
                                 <IconUser size={20} />
                                 <span className="font-medium">Profil</span>
                             </Link>
-                            <button
-                                onClick={() => {
-                                    setShowMobileMenu(false);
-                                    startTour();
-                                }}
-                                disabled={tourActive}
-                                className="sm:hidden flex w-full items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
-                            >
-                                <IconQuestionMark size={20} />
-                                <span className="font-medium">{i18n.t("tour.button")}</span>
-                            </button>
+                            {tourAvailable && (
+                                <button
+                                    onClick={() => {
+                                        setShowMobileMenu(false);
+                                        startTour();
+                                    }}
+                                    disabled={tourActive}
+                                    className="sm:hidden flex w-full items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
+                                >
+                                    <IconQuestionMark size={20} />
+                                    <span className="font-medium">{i18n.t("tour.button")}</span>
+                                </button>
+                            )}
                             <button
                                 onClick={() => {
                                     setShowMobileMenu(false);

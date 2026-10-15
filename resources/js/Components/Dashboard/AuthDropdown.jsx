@@ -15,6 +15,7 @@ import MenuLink from "@/Utils/Menu";
 import LinkItem from "./LinkItem";
 import LinkItemDropdown from "./LinkItemDropdown";
 import i18n from "@/i18n";
+import { forgetCompletedTours } from "@/Hooks/useTour";
 export default function AuthDropdown({ auth, isMobile, onStartTour }) {
     // define usefrom
     const { post } = useForm();
@@ -65,7 +66,10 @@ export default function AuthDropdown({ auth, isMobile, onStartTour }) {
         // ponytail: plain axios — Inertia router rejects the JSON-only response
         axios
             .post(route("tours.reset"), {}, { headers: { Accept: "application/json" } })
-            .then(() => router.reload({ only: ["auth"] }));
+            .then(() => {
+                forgetCompletedTours();
+                router.reload({ only: ["auth"] });
+            });
     };
 
     const avatarUrl = auth.user.avatar;

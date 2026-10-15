@@ -34,3 +34,74 @@
         min-width: 0;
     }
 }
+
+/*
+ * Kotak panduan (driver.js). Bawaannya huruf 13px abu-abu dengan tombol
+ * kecil bergaris — terlalu kecil dibaca orang yang baru mengenal aplikasi
+ * kasir, apalagi di ponsel. Isi panduan bisa panjang: bagian isinya
+ * menggulir sendiri supaya tombolnya tidak terdorong keluar layar.
+ *
+ * SENGAJA di luar `@layer`: kelas-kelas ini dibuat driver.js saat panduan
+ * dibuka dan tidak pernah tertulis di berkas yang dipindai Tailwind — di
+ * dalam `@layer components` aturannya dibuang saat build.
+ */
+.driver-popover.panduan-popover {
+    @apply max-w-[min(380px,calc(100vw-24px))] rounded-2xl bg-white p-5 font-sans text-slate-700 shadow-2xl dark:bg-slate-900 dark:text-slate-200;
+    min-width: min(280px, calc(100vw - 24px));
+}
+.panduan-popover .driver-popover-title {
+    @apply pr-6 font-sans text-base font-bold leading-snug text-slate-900 dark:text-white;
+}
+.panduan-popover .driver-popover-description {
+    @apply mt-2 max-h-[45vh] overflow-y-auto font-sans text-sm leading-relaxed text-slate-600 dark:text-slate-300;
+}
+.panduan-popover .driver-popover-description ul,
+.panduan-popover .driver-popover-description ol {
+    @apply my-2 space-y-1 pl-5;
+}
+.panduan-popover .driver-popover-description ul {
+    @apply list-disc;
+}
+.panduan-popover .driver-popover-description ol {
+    @apply list-decimal;
+}
+.panduan-popover .driver-popover-description b {
+    @apply font-semibold text-slate-800 dark:text-white;
+}
+.panduan-popover .driver-popover-description kbd {
+    @apply rounded border border-slate-300 bg-slate-100 px-1.5 py-0.5 font-mono text-xs dark:border-slate-600 dark:bg-slate-800;
+}
+.panduan-popover .panduan-catatan {
+    @apply mt-3 border-t border-slate-200 pt-3 text-xs text-slate-500 dark:border-slate-700 dark:text-slate-400;
+}
+.panduan-popover .driver-popover-footer {
+    @apply mt-4 flex-wrap gap-2;
+}
+.panduan-popover .driver-popover-progress-text {
+    @apply text-xs font-medium text-slate-500 dark:text-slate-400;
+}
+.panduan-popover .driver-popover-navigation-btns {
+    @apply gap-2;
+}
+.panduan-popover .driver-popover-footer button {
+    @apply min-h-[40px] rounded-xl border border-slate-200 bg-white px-4 font-sans text-sm font-semibold text-slate-700 shadow-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200;
+    text-shadow: none;
+}
+.panduan-popover .driver-popover-footer button.driver-popover-next-btn {
+    @apply border-primary-600 bg-primary-600 text-white hover:bg-primary-700 dark:border-primary-500 dark:bg-primary-600;
+}
+.panduan-popover .driver-popover-close-btn {
+    @apply right-1 top-1 h-10 w-10 text-xl text-slate-400 hover:text-slate-700 dark:hover:text-white;
+}
+.panduan-popover .driver-popover-arrow-side-left.driver-popover-arrow {
+    @apply border-l-white dark:border-l-slate-900;
+}
+.panduan-popover .driver-popover-arrow-side-right.driver-popover-arrow {
+    @apply border-r-white dark:border-r-slate-900;
+}
+.panduan-popover .driver-popover-arrow-side-top.driver-popover-arrow {
+    @apply border-t-white dark:border-t-slate-900;
+}
+.panduan-popover .driver-popover-arrow-side-bottom.driver-popover-arrow {
+    @apply border-b-white dark:border-b-slate-900;
+}

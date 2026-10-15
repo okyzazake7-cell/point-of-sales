@@ -84,7 +84,7 @@ export default function Sidebar({ sidebarOpen }) {
             )}
 
             {/* Navigation */}
-            <nav className="dashboard-scrollbar min-h-0 flex-1 overflow-y-auto py-3">
+            <nav data-tour="nav-sidebar" className="dashboard-scrollbar min-h-0 flex-1 overflow-y-auto py-3">
                 {menuNavigation.map((section, index) => {
                     const hasPermission = section.details.some(
                         (detail) => detail.permissions === true

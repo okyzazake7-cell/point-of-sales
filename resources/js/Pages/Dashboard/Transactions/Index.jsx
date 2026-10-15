@@ -900,7 +900,10 @@ export default function Index({
                 <Head title="Buka Shift Kasir" />
 
                 <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-3xl items-center justify-center px-4 py-10">
-                    <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
+                    <div
+                        data-tour="pos-shift-form"
+                        className="w-full rounded-3xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/60 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none"
+                    >
                         <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
                             <IconWallet size={28} />
                         </div>
@@ -912,7 +915,7 @@ export default function Index({
                         </p>
 
                         <div className="mt-6 grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="pos-shift-cash">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Modal Awal
                                 </label>
@@ -928,7 +931,7 @@ export default function Index({
                                     <p className="mt-2 text-xs text-rose-500">{errors.opening_cash}</p>
                                 )}
                             </div>
-                            <div>
+                            <div data-tour="pos-shift-notes">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Catatan
                                 </label>
@@ -943,7 +946,7 @@ export default function Index({
                         </div>
 
                         {warehouses.length > 1 && (
-                            <div className="mt-4">
+                            <div data-tour="pos-shift-warehouse" className="mt-4">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Gudang
                                 </label>
@@ -971,6 +974,7 @@ export default function Index({
                         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                             {canOpenShift && (
                                 <button
+                                    data-tour="pos-shift-open"
                                     type="button"
                                     onClick={handleOpenShift}
                                     className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary-500 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-600"
@@ -980,6 +984,7 @@ export default function Index({
                                 </button>
                             )}
                             <button
+                                data-tour="pos-shift-history"
                                 type="button"
                                 onClick={() => router.visit(route("cashier-shifts.index"))}
                                 className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
@@ -1001,6 +1006,7 @@ export default function Index({
                 {/* Mobile Tab Switcher */}
                 <div className="lg:hidden flex border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                     <button
+                        data-tour="pos-tab-products"
                         onClick={() => setMobileView("products")}
                         className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
                             mobileView === "products"
@@ -1012,6 +1018,7 @@ export default function Index({
                         <span>Produk</span>
                     </button>
                     <button
+                        data-tour="pos-tab-cart"
                         onClick={() => setMobileView("cart")}
                         className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors relative ${
                             mobileView === "cart"
@@ -1083,7 +1090,7 @@ export default function Index({
 
                     {/* Held Transactions & Alerts */}
                     {heldCarts.length > 0 && (
-                        <div className="p-3 border-b border-slate-200 dark:border-slate-800">
+                        <div data-tour="pos-held" className="p-3 border-b border-slate-200 dark:border-slate-800">
                             <HeldTransactions
                                 heldCarts={heldCarts}
                                 hasActiveCart={carts.length > 0}
@@ -1092,10 +1099,10 @@ export default function Index({
                     )}
 
                     {/* Cart Items - Scrollable */}
-                    <div data-tour="pos-cart" className="flex-1 overflow-y-auto min-h-0">
+                    <div className="flex-1 overflow-y-auto min-h-0">
                         {/* Hold Button - at top of cart section */}
                         {carts.length > 0 && (
-                            <div className="p-3 border-b border-slate-200 dark:border-slate-800">
+                            <div data-tour="pos-hold" className="p-3 border-b border-slate-200 dark:border-slate-800">
                                 <HoldButton
                                     hasItems={carts.length > 0}
                                     onHold={handleHoldCart}
@@ -1104,7 +1111,7 @@ export default function Index({
                             </div>
                         )}
 
-                        <div className="p-3 border-b border-slate-200 dark:border-slate-800">
+                        <div data-tour="pos-cart" className="p-3 border-b border-slate-200 dark:border-slate-800">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                                     <IconShoppingCart size={16} />
@@ -1263,9 +1270,9 @@ export default function Index({
                         </div>
 
                         {/* Payment Details - Scrollable */}
-                        <div data-tour="pos-payment" className="p-3 space-y-4">
+                        <div className="p-3 space-y-4">
                             {/* Pay later toggle */}
-                            <div className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
+                            <div data-tour="pos-paylater" className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
                                 <div>
                                     <p className="text-sm font-semibold text-slate-800 dark:text-white">
                                         Bayar Belakangan (Nota Barang)
@@ -1316,7 +1323,7 @@ export default function Index({
                             )}
 
                             {/* Order details */}
-                            <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+                            <div data-tour="pos-order" className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-700 dark:bg-slate-800/40">
                                 <p className="text-sm font-semibold text-slate-800 dark:text-white">
                                     Detail Pesanan
                                 </p>
@@ -1423,7 +1430,7 @@ export default function Index({
                             </div>
 
                             {/* Payment Method Selection */}
-                            <div>
+                            <div data-tour="pos-method">
                                 <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">
                                     Metode Pembayaran
                                 </label>
@@ -1713,7 +1720,7 @@ export default function Index({
 
                             {/* Cash payment stays next to its quick amount actions. */}
                             {isCashPayment && (
-                                <div className="space-y-3 rounded-2xl border border-primary-100 bg-primary-50/50 p-3 dark:border-primary-900/50 dark:bg-primary-950/20">
+                                <div data-tour="pos-cash" className="space-y-3 rounded-2xl border border-primary-100 bg-primary-50/50 p-3 dark:border-primary-900/50 dark:bg-primary-950/20">
                                     <div className="flex items-center justify-between gap-3">
                                         <div>
                                             <p className="text-sm font-semibold text-slate-800 dark:text-white">
@@ -1904,7 +1911,7 @@ export default function Index({
                     </div>
 
                     {/* Summary & Submit - Fixed at bottom */}
-                    <div className="flex-shrink-0 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 p-3">
+                    <div data-tour="pos-summary" className="flex-shrink-0 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 p-3">
                         {/* Summary Row */}
                         <div className="flex justify-between items-center mb-2 text-sm">
                             <span className="text-slate-500">Subtotal Dasar</span>
@@ -2017,6 +2024,7 @@ export default function Index({
                             menuntutnya untuk tiap penjualan membuat toko baru (belum
                             punya pelanggan) tidak bisa berjualan (AV4). */}
                         <button
+                            data-tour="pos-submit"
                             onClick={handleSubmitTransaction}
                             disabled={
                                 !carts.length ||

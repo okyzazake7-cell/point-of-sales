@@ -12,6 +12,7 @@ import {
     IconAlertCircle,
     IconShare,
 } from "@tabler/icons-react";
+import TombolPanduan from "@/Components/Panduan/TombolPanduan";
 import ThermalReceipt, {
     ThermalReceipt58mm,
 } from "@/Components/Receipt/ThermalReceipt";
@@ -317,13 +318,17 @@ export default function Print({ transaction }) {
                 <div className="max-w-4xl mx-auto space-y-6">
                     {/* Action Bar */}
                     <div className="flex flex-wrap items-start justify-between gap-3 print:hidden">
-                        <Link
-                            href={route("transactions.index")}
-                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                        >
-                            <IconArrowLeft size={18} />
-                            Kembali ke kasir
-                        </Link>
+                        <div className="flex flex-wrap items-center gap-2">
+                            <Link
+                                href={route("transactions.index")}
+                                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                            >
+                                <IconArrowLeft size={18} />
+                                Kembali ke kasir
+                            </Link>
+                            {/* Halaman struk tidak punya bilah atas: panduannya dibuka dari sini. */}
+                            <TombolPanduan />
+                        </div>
 
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                             {/* Print Mode Selector */}

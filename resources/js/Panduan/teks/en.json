@@ -1,0 +1,272 @@
+{
+    "dashboard": {
+        "intro": {
+            "title": "Welcome to Aishii POS",
+            "desc": "This is the <b>Dashboard</b> — a summary of your store. This short guide shows where the important parts are.<br><br>Press <b>Next</b> to continue, <b>Previous</b> to go back, or <b>×</b> to close. Every page has its own guide, so there is no need to memorise everything now."
+        },
+        "menu": {
+            "title": "Main menu",
+            "desc": "Every page is in this menu, grouped by task:<ul><li><b>Master Data</b> — categories, products, customers, suppliers.</li><li><b>Sales</b> — the cashier screen, history, returns, and receivables (customer debts).</li><li><b>Inventory</b> and <b>Procurement</b> — warehouse stock and buying from suppliers.</li><li><b>Reports</b>, <b>Operations</b>, and <b>Settings</b> further down — scroll the menu.</li></ul>You only see the menus you are allowed to open."
+        },
+        "toggle": {
+            "title": "Menu button (☰)",
+            "desc": "On a phone the main menu is hidden — press this button to open it, then pick a page. On a wide screen this button shrinks the menu to give you more room."
+        },
+        "new_sale": {
+            "title": "Transaksi Baru (New Transaction)",
+            "desc": "A shortcut to the <b>cashier screen</b> to start selling. If no cashier shift is open yet, you will be asked to open one first."
+        },
+        "checklist": {
+            "title": "Store Setup Checklist",
+            "desc": "The steps to get the store ready to sell: complete the store profile, create a category, add a product, register a customer, then finish the first transaction. Tap an unticked step to go straight to its page. This box disappears once every step is done."
+        },
+        "stats": {
+            "title": "Today's figures",
+            "desc": "<ul><li><b>Penjualan Hari Ini</b> (today's sales) — total money from today's sales.</li><li><b>Profit Hari Ini</b> (today's profit) — selling price minus purchase (cost) price of the items sold.</li><li><b>Target Bulan Ini</b> (this month's target) — how far this month's sales are from the target. Set the target in <b>Settings → Sales Target</b>; until then it shows 0%.</li><li><b>Transaksi Hari Ini</b> (today's transactions) — how many sales you made today.</li></ul>"
+        },
+        "info": {
+            "title": "Record counts",
+            "desc": "How many categories, products, transactions, and customers this store has recorded since the start."
+        },
+        "chart": {
+            "title": "Tren Pendapatan (Revenue Trend)",
+            "desc": "A revenue chart to see sales going up and down. Point at or tap a dot to see its amount. An empty chart means there are no sales yet."
+        },
+        "widgets": {
+            "title": "Quick watch",
+            "desc": "<ul><li><b>Shift Aktif</b> (active shifts) — cashiers at work and the money that should be in their drawer.</li><li><b>Produk Terlaris</b> (best sellers) — the items sold the most.</li><li><b>Slow Moving</b> — items not sold for 30 days; consider a promotion.</li><li><b>Pelanggan Terbaik</b> (top customers) — the customers who buy most often.</li><li><b>Lokasi Terbanyak</b> (top locations) — the neighbourhoods most customers come from.</li></ul>"
+        },
+        "recent": {
+            "title": "Transaksi Terbaru (Recent Transactions)",
+            "desc": "The last five sales: invoice number, date, customer, and total. The full list is in <b>Transaction History</b>."
+        },
+        "lowstock": {
+            "title": "Stok Menipis (Low Stock)",
+            "desc": "Items with fewer than 10 left. Restock from your supplier soon (<b>Purchase Orders</b> menu) so you do not run out when customers come."
+        },
+        "outlet": {
+            "title": "Choose an outlet",
+            "desc": "If the store has several branches (outlets), choose the one you are working on here. The sales and stock you see follow the selected branch."
+        },
+        "notif": {
+            "title": "Notifications",
+            "desc": "This bell tells you what needs attention, such as low stock, customer receivables, or supplier payables that are almost due. The red number shows new notifications."
+        },
+        "help": {
+            "title": "Guide button (?)",
+            "desc": "Press the <b>?</b> button at any time to open the guide for <b>the page you are on</b>. Every page — Products, Cashier, Reports, Settings, and more — has its own guide."
+        },
+        "account": {
+            "title": "Account menu",
+            "desc": "The circle with your initial. It holds <b>Profile</b> (change name, photo, password), <b>Replay Guided Tours</b> (shows every guide again), and <b>Log out</b>. On a phone, it also holds <b>Guided Tour</b> and the language choice."
+        },
+        "next": {
+            "title": "Next steps",
+            "desc": "New store? The suggested order:<ol><li><b>Settings → Store Profile</b>: name, address, logo for receipts.</li><li><b>Categories</b>: groups of items, for example Drinks and Food.</li><li><b>Products</b>: the items you sell with their prices and stock.</li><li><b>Transaksi Baru</b> (New Transaction): open a shift, then start selling.</li></ol>"
+        }
+    },
+    "pos": {
+        "intro": {
+            "title": "Cashier Screen",
+            "desc": "This is where you record sales. The order is always the same:<ol><li>Pick the items being bought.</li><li>Check the quantities in the cart.</li><li>Choose how the customer pays and enter the money received.</li><li>Press <b>Selesaikan Transaksi</b> (Complete Transaction), then print or send the receipt.</li></ol>This guide shows where each part is."
+        },
+        "menu": {
+            "title": "Menu ☰",
+            "desc": "On a phone, this button opens the menu: <b>Dashboard</b>, <b>Riwayat Transaksi</b> (transaction history), <b>Profil</b> (profile), <b>Guided Tour</b>, <b>Layar penuh</b> (full screen), and <b>Keluar</b> (log out)."
+        },
+        "search": {
+            "title": "Find an item",
+            "desc": "Type part of an item's name, for example <i>coffee</i> — the list below filters straight away. Have a barcode scanner? Scan the item's barcode and it goes straight into the cart. On a computer, press <kbd>/</kbd> to start typing in this box."
+        },
+        "categories": {
+            "title": "Categories",
+            "desc": "Tap a category name to show only the items in that group. <b>Semua</b> (all) shows every item again."
+        },
+        "grid": {
+            "title": "Item list",
+            "desc": "Tap an item to put it in the cart — each tap adds 1. Marks on items:<ul><li><b>Habis</b> (sold out) — stock is 0, it cannot be sold.</li><li><b>Sisa 3</b> (3 left) — stock is running low.</li><li>A red label — the item is on promotion.</li></ul>Items sold in several units (pcs, box) show small unit buttons under the price: choose the unit first, then tap the item."
+        },
+        "tab_cart": {
+            "title": "Open the cart",
+            "desc": "On a phone, the item list and the cart are on two tabs. The number on the <b>Keranjang</b> (cart) tab shows how many items you picked. Press <b>Next</b> — the guide opens the Cart tab for you."
+        },
+        "customer": {
+            "title": "Customer (optional)",
+            "desc": "For a walk-in customer who pays now, leave it empty — the receipt says <b>Umum</b> (general). Pick a customer to record who is buying, give member points, or record a debt (<b>Bayar Belakangan</b>, pay later). New customers can be registered on the spot with <b>Tambah pelanggan</b> (add customer)."
+        },
+        "held": {
+            "title": "Transaksi Ditahan (held transactions)",
+            "desc": "Sales that were put on hold wait here. Tap one to continue it."
+        },
+        "hold": {
+            "title": "Tahan (Hold)",
+            "desc": "The customer is still choosing while another is waiting? Press <b>Tahan</b> (hold): the cart is saved and emptied for the next customer. Continue it later from the <b>Transaksi Ditahan</b> (held transactions) list."
+        },
+        "cart": {
+            "title": "Keranjang (Cart)",
+            "desc": "The chosen items appear here with their prices. Press <b>+</b> or <b>−</b> to change the quantity, and the bin icon to remove an item the customer no longer wants."
+        },
+        "paylater": {
+            "title": "Bayar Belakangan (Pay Later)",
+            "desc": "Turn this on when the customer <b>owes</b> the money (pays later). A customer and a due date are required. The debt is recorded under <b>Receivables</b>, where you record the payment when the customer pays."
+        },
+        "order": {
+            "title": "Detail Pesanan (Order Details)",
+            "desc": "<ul><li><b>Tipe Pesanan</b> (order type): Di Tempat (dine in), Bawa Pulang (take away), or Diantar (delivery — a shipping cost field appears).</li><li><b>Diskon Manual</b> (manual discount): a price cut in rupiah, for example 2000. If the owner set a discount limit, a bigger discount waits for approval under <b>Discount Approval</b>.</li><li><b>Catatan</b> (notes): a special request, for example <i>no sugar</i>.</li></ul>You can leave all of them as they are."
+        },
+        "method": {
+            "title": "Metode Pembayaran (Payment Method)",
+            "desc": "Choose how the customer pays: <b>Tunai</b> (cash), or <b>Transfer Bank</b> and online payment once they are enabled in <b>Settings → Payment Gateway</b>. <b>Split Pembayaran</b> (split payment) is for paying two ways, for example part cash and part transfer."
+        },
+        "cash": {
+            "title": "Money received",
+            "desc": "Type the amount the customer hands over, or tap a quick amount button (Rp 10,000, Rp 50,000, …). <b>Uang pas</b> (exact amount) fills in the bill exactly. <b>Kembalian</b> (change) works out the money to give back."
+        },
+        "summary": {
+            "title": "Total",
+            "desc": "The bill breakdown: item prices, promotions, discounts, shipping, and <b>VAT</b> (PPN) when the items are taxed. <b>Total</b> is what the customer has to pay."
+        },
+        "submit": {
+            "title": "Selesaikan Transaksi (Complete Transaction)",
+            "desc": "Press this once the money is received. When the button is grey, its text tells you what is missing — for example <b>Kurang Rp 2.000</b> (short by Rp 2,000) or <b>Pilih Pelanggan</b> (choose a customer). After it succeeds, the receipt page opens for printing or sending."
+        },
+        "nav": {
+            "title": "Dashboard and History",
+            "desc": "<b>Dashboard</b> goes back to the store summary. <b>Riwayat</b> (history) lists recorded sales — from there you can reprint an old receipt or take back returned items."
+        },
+        "shift": {
+            "title": "Active shift",
+            "desc": "This number is the money that should be in the drawer now: the opening cash plus cash sales. Press it to see the shift details and <b>close the shift</b> when you finish."
+        },
+        "help": {
+            "title": "Guide",
+            "desc": "This <b>?</b> button opens the guide for the page you are on. Every page has its own guide."
+        }
+    },
+    "pos_buka_shift": {
+        "intro": {
+            "title": "Open a shift first",
+            "desc": "Before selling, the cashier must <b>open a shift</b>. A shift is the cashier's working period — opened when starting, closed when finishing. While the shift runs, the app records every sale and the money going into the drawer, so the drawer can be checked against the records at the end of the day."
+        },
+        "cash": {
+            "title": "Modal Awal (Opening Cash)",
+            "desc": "Enter the cash in the drawer before you start selling — usually small change. Type the number only, without dots, for example <b>100000</b> for Rp 100,000. If the drawer is empty, enter <b>0</b>."
+        },
+        "notes": {
+            "title": "Catatan (Notes, optional)",
+            "desc": "Extra information if needed, for example <i>morning shift</i> or the name of a stand-in cashier."
+        },
+        "warehouse": {
+            "title": "Gudang (Warehouse)",
+            "desc": "Appears when the store has more than one warehouse. Choose the warehouse <b>the sold items are taken from</b> — the stock of sold items is reduced in this warehouse."
+        },
+        "open": {
+            "title": "Buka Shift Sekarang (Open Shift Now)",
+            "desc": "Press this after entering the opening cash. The cashier screen opens right away, and the next guide explains how to sell."
+        },
+        "history": {
+            "title": "Lihat Histori Shift (View Shift History)",
+            "desc": "Opens the list of earlier shifts: when they were opened and closed, who the cashier was, and any cash difference when they were closed."
+        }
+    },
+    "products": {
+        "intro": {
+            "title": "Products Page",
+            "desc": "The list of everything your store sells, with prices and stock. Items here appear on the cashier screen. From here you add new items, change prices, or print barcode labels."
+        },
+        "actions": {
+            "title": "Top-right buttons",
+            "desc": "<ul><li><b>Tambah Produk</b> (add product) — register a new item.</li><li><b>Cetak All Barcode</b> (print all barcodes) — print barcode labels for every item on this page.</li><li><b>Export</b> — download the item list as an Excel file.</li><li><b>Import</b> — add many items at once from an Excel file.</li></ul>"
+        },
+        "search": {
+            "title": "Search and select",
+            "desc": "Type a name, SKU, or barcode and press Enter to search. Tick <b>Pilih Semua</b> (select all) or the small box on each item to pick several items at once, for example to print only their barcodes."
+        },
+        "view": {
+            "title": "View",
+            "desc": "Switch between picture tiles and a table. The <b>table</b> view shows purchase price, selling price, and stock on one line, with the edit and delete buttons always visible. When items are ticked, a <b>Cetak Terpilih</b> (print selected) button appears here."
+        },
+        "list": {
+            "title": "Item list",
+            "desc": "Each item shows its category, name, barcode/SKU, <b>selling price</b> (purple), <b>cost</b> (purchase price), and profit per item (green). Stock labels: <b>Habis</b> (sold out) in red, low stock in yellow."
+        },
+        "row": {
+            "title": "Edit or delete an item",
+            "desc": "In tile view, point at or <b>tap the item's picture</b> to show the pencil (edit) and bin (delete) buttons. In table view, the buttons are at the right end of the row. Deleting cannot be undone — for items that have already been sold, edit them instead of deleting."
+        },
+        "empty": {
+            "title": "No items yet",
+            "desc": "This store has no items yet. Press <b>Tambah Produk</b> (add product) to register the first one — it can then be sold on the cashier screen straight away."
+        },
+        "pagination": {
+            "title": "More pages",
+            "desc": "Many items are split over several pages. Use the page numbers here to move between them, and choose how many items show per page."
+        }
+    },
+    "products_form": {
+        "intro": {
+            "title": "Filling in an item",
+            "desc": "This form registers or edits one item. <b>Required</b>: category, barcode, SKU, name, purchase price, and selling price. You may skip the other fields. This guide explains each part with examples."
+        },
+        "image": {
+            "title": "Item picture (optional)",
+            "desc": "A photo helps the cashier find the item faster on the cashier screen. Press the file button and pick a photo from your gallery or camera. Items without a photo can still be sold."
+        },
+        "category": {
+            "title": "Kategori (Category)",
+            "desc": "Choose the group, for example <i>Drinks</i>. No category yet? Create one in the <b>Categories</b> menu first, then come back."
+        },
+        "barcode": {
+            "title": "Barcode",
+            "desc": "The number under the black lines on the packaging. Fill it in with a scanner or type it. Home-made items without a barcode? Use any easy code, for example <b>KOPI001</b> — you can print its label from the Products page."
+        },
+        "sku": {
+            "title": "SKU",
+            "desc": "Your store's <b>own</b> item code, to tell similar items apart — for example <b>KOPI-SUSU-250</b>. It must differ from every other item's SKU. It may equal the barcode if you have no coding system of your own."
+        },
+        "name": {
+            "title": "Nama Produk (Product Name)",
+            "desc": "The name shown on the cashier screen and on receipts, for example <i>Palm Sugar Iced Coffee</i>. Use a name the cashier can easily search for."
+        },
+        "description": {
+            "title": "Deskripsi (Description, optional)",
+            "desc": "Extra notes for yourself, such as size or flavour. Not printed on receipts."
+        },
+        "composite": {
+            "title": "Produk Komposit (Composite Product)",
+            "desc": "Tick this when the item is a <b>bundle</b> of other items — for example <i>Value Pack = 1 rice + 1 tea</i>. The bundle's price and stock are then worked out from its parts. Leave it unticked for ordinary items."
+        },
+        "prices": {
+            "title": "Purchase price, selling price, stock",
+            "desc": "<ul><li><b>Harga Beli</b> (purchase price) — your cost per item (the supplier's price), for example 4000. Used to work out profit.</li><li><b>Harga Jual</b> (selling price) — the price for customers, for example 8000.</li><li><b>Stok</b> (stock) — how many you have now (only when adding a new item).</li></ul>Type numbers only, without dots or \"Rp\"."
+        },
+        "stock_now": {
+            "title": "Stok Saat Ini (current stock)",
+            "desc": "When editing an item, stock is not typed in directly. It changes through sales, <b>Goods Receiving</b> from suppliers, or <b>Stock Opname</b> (a stock recount) — so every stock change keeps a record of where it came from."
+        },
+        "minmax": {
+            "title": "Minimum and maximum stock (optional)",
+            "desc": "<b>Stok Minimum</b> (minimum stock): your safety level, for example 5. When stock reaches it, the system prepares a draft Purchase Order to the supplier automatically each day. <b>Stok Maksimum</b> (maximum stock): the most you want to keep — used to work out how much to order."
+        },
+        "tax": {
+            "title": "Tax (VAT)",
+            "desc": "<ul><li><b>Exclusive</b> — tax is <b>added</b> on top of the selling price. A price of 8000 with 11% tax becomes 8880 at the till.</li><li><b>Inclusive</b> — the selling price <b>already includes</b> tax; the customer still pays 8000.</li></ul>Stores that do not charge VAT: set <b>Persentase Pajak</b> (tax percentage) to <b>0</b>."
+        },
+        "profit": {
+            "title": "Estimated profit",
+            "desc": "Appears once both prices are filled in: the profit per item and its percentage (margin). Check it here before saving to avoid pricing mistakes."
+        },
+        "units": {
+            "title": "Satuan (Units, optional)",
+            "desc": "For items sold in several units, for example per <b>pcs</b> and per <b>box</b> of 12. Press <b>+ Tambah Satuan</b> (add unit), choose the unit, fill in the <b>Konversi</b> (conversion: 1 box = 12), that unit's price, and its barcode if any. Items sold one way only need nothing here."
+        },
+        "components": {
+            "title": "Komponen Paket (bundle parts)",
+            "desc": "Appears when <b>Produk Komposit</b> is ticked. Press <b>+ Tambah Komponen</b> (add component), choose each part and its quantity. When the bundle sells, each part's stock goes down too."
+        },
+        "submit": {
+            "title": "Save",
+            "desc": "Press <b>Simpan Produk</b> (save product). If a field is wrong or missing, a red message appears under it — fix it and save again. <b>Batal</b> (cancel) goes back to the product list without saving."
+        }
+    }
+}

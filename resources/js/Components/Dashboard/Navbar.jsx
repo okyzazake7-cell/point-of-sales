@@ -17,7 +17,7 @@ import i18n from "@/i18n";
 
 export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
     const { auth, storeProfile } = usePage().props;
-    const { start: startTour, isActive: tourActive } = useTour("dashboard");
+    const { start: startTour, isActive: tourActive, available: tourAvailable } = useTour();
     const menuNavigation = Menu();
 
     const storeName = storeProfile?.name || "KASIR";
@@ -59,6 +59,7 @@ export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
         >
             {/* Sidebar Toggle */}
             <button
+                data-tour="nav-menu"
                 onClick={toggleSidebar}
                 className="flex shrink-0 p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors"
                 title={i18n.t("account.toggle_menu")}
@@ -99,18 +100,22 @@ export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
                     bahasa ke menu akun. Mode gelap TETAP di sini — ia disentuh
                     justru saat cahaya berubah, yaitu di toko, di ponsel.
                 */}
-                <div className="hidden md:block">
+                <div data-tour="nav-outlet" className="hidden md:block">
                     <OutletSwitcher outlet={auth?.currentOutlet} outlets={auth?.outlets} locked={auth?.outletLocked} />
                 </div>
-                {/* Tour Guide */}
-                <button
-                    onClick={startTour}
-                    disabled={tourActive}
-                    className="hidden md:flex p-2.5 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
-                    title={i18n.t("tour.button")}
-                >
-                    <IconQuestionMark size={20} strokeWidth={1.5} />
-                </button>
+                {/* Panduan halaman yang sedang dibuka */}
+                {tourAvailable && (
+                    <button
+                        data-tour="nav-help"
+                        onClick={startTour}
+                        disabled={tourActive}
+                        className="hidden md:flex p-2.5 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
+                        title={i18n.t("tour.button")}
+                        aria-label={i18n.t("tour.button")}
+                    >
+                        <IconQuestionMark size={20} strokeWidth={1.5} />
+                    </button>
+                )}
 
                 {/* Language Switcher */}
                 <div className="hidden md:block">
@@ -136,17 +141,21 @@ export default function Navbar({ toggleSidebar, themeSwitcher, darkMode }) {
                 </button>
 
                 {/* Notifications */}
-                <Notification />
+                <div data-tour="nav-notif" className="flex">
+                    <Notification />
+                </div>
 
                 {/* Divider */}
                 <div className="hidden md:block w-px h-8 bg-slate-200 dark:bg-slate-700 mx-1" />
 
                 {/* User Dropdown */}
-                <AuthDropdown
-                    auth={auth}
-                    isMobile={isMobile}
-                    onStartTour={startTour}
-                />
+                <div data-tour="nav-account" className="flex">
+                    <AuthDropdown
+                        auth={auth}
+                        isMobile={isMobile}
+                        onStartTour={tourAvailable ? startTour : null}
+                    />
+                </div>
             </div>
         </header>
     );
