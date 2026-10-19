@@ -129,8 +129,9 @@ class PayableController extends Controller
             if ($item->status !== 'paid' && $item->due_date && now()->gt($item->due_date)) {
                 $item->status = 'overdue';
             }
+            // Carbon 3: `now()->diffInDays($lalu)` negatif — dihitung dari jatuh tempo.
             $daysOverdue = $item->status === 'overdue' && $item->due_date
-                ? now()->diffInDays($item->due_date)
+                ? (int) $item->due_date->diffInDays(now())
                 : 0;
 
             $item->aging_bucket = match (true) {
