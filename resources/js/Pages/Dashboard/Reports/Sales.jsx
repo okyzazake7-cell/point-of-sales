@@ -52,6 +52,20 @@ const defaultFilterState = {
     warehouse_id: "",
 };
 
+// Tanggal dari server berupa ISO UTC ("2026-10-08T07:37:52.000000Z");
+// ditampilkan mentah ia sulit dibaca dan tujuh jam meleset bagi toko di WIB
+// — sama seperti Riwayat Transaksi (AV5), yang lebih dulu dibetulkan.
+const formatDateTime = (value) =>
+    value
+        ? new Date(value).toLocaleString("id-ID", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+          })
+        : "-";
+
 const formatCurrency = (value = 0) =>
     new Intl.NumberFormat("id-ID", {
         style: "currency",
@@ -391,7 +405,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                                                 {trx.invoice}
                                             </td>
                                             <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">
-                                                {trx.created_at}
+                                                {formatDateTime(trx.created_at)}
                                             </td>
                                             <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400">
                                                 {trx.customer?.name ?? "-"}
