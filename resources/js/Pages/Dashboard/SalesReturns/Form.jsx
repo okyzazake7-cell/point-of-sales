@@ -75,7 +75,15 @@ export default function SalesReturnForm({
                 restock_to_inventory: true,
             };
             const qtyReturn = Number(current.qty_return || 0);
-            const subtotal = qtyReturn * Number(detail.price || 0);
+            // `price` adalah TOTAL baris penjualan, bukan harga satuan —
+            // bagian yang diretur dihitung seperti di server, supaya retur
+            // bertahap berjumlah persis harga barisnya.
+            const totalBaris = Number(detail.price || 0);
+            const qtyJual = Math.max(1, Number(detail.qty || 0));
+            const sebelumnya = Number(detail.returned_completed_qty || 0);
+            const subtotal =
+                Math.floor((totalBaris * (sebelumnya + qtyReturn)) / qtyJual) -
+                Math.floor((totalBaris * sebelumnya) / qtyJual);
 
             return {
                 ...detail,
