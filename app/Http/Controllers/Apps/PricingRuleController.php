@@ -267,6 +267,17 @@ class PricingRuleController extends Controller
 
     private function validateRule(Request $request): array
     {
+        // Formulir selalu mengirim baris contoh untuk ketiga jenis promo
+        // (tersembunyi bila jenisnya lain). Hanya baris milik jenis yang
+        // dipilih yang diperiksa dan disimpan: baris kosong jenis lain dulu
+        // menggagalkan SETIAP simpanan, tanpa pesan yang terlihat.
+        $kind = $request->input('kind');
+        $request->merge([
+            'qty_breaks' => $kind === PricingRule::KIND_QTY_BREAK ? $request->input('qty_breaks') : [],
+            'bundle_items' => $kind === PricingRule::KIND_BUNDLE_PRICE ? $request->input('bundle_items') : [],
+            'buy_get_items' => $kind === PricingRule::KIND_BUY_X_GET_Y ? $request->input('buy_get_items') : [],
+        ]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'kind' => ['required', Rule::in([
@@ -297,7 +308,8 @@ class PricingRuleController extends Controller
                 PricingRule::TYPE_FIXED_AMOUNT,
                 PricingRule::TYPE_FIXED_PRICE,
             ])],
-            'discount_value' => ['required', 'numeric', 'min:0.01'],
+            // Beli X Gratis Y tidak memakai potongan (kolomnya tidak tampil).
+            'discount_value' => [Rule::requiredIf($kind !== PricingRule::KIND_BUY_X_GET_Y), 'nullable', 'numeric', 'min:0.01'],
             'preview_quantity_multiplier' => ['nullable', 'integer', 'min:1'],
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
@@ -360,7 +372,7 @@ class PricingRuleController extends Controller
 
         if (
             $validated['discount_type'] === PricingRule::TYPE_PERCENTAGE
-            && (float) $validated['discount_value'] > 100
+            && (float) ($validated['discount_value'] ?? 0) > 100
         ) {
             $request->validate(['discount_value' => ['max:100']]);
         }

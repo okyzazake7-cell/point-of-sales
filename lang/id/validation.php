@@ -222,6 +222,20 @@ return [
         'store_phone' => 'telepon toko',
         'store_email' => 'surel toko',
         'store_logo' => 'logo toko',
+        // Promo harga. Galat baris memakai pola `*` ("qty_breaks.0.min_qty").
+        'discount_value' => 'nilai potongan',
+        'priority' => 'prioritas',
+        'starts_at' => 'waktu mulai',
+        'ends_at' => 'waktu berakhir',
+        'qty_breaks' => 'aturan grosir',
+        'qty_breaks.*.min_qty' => 'jumlah minimal grosir',
+        'qty_breaks.*.discount_value' => 'nilai potongan grosir',
+        'bundle_items' => 'isi paket',
+        'bundle_items.*.product_id' => 'produk paket',
+        'bundle_items.*.quantity' => 'jumlah produk paket',
+        'buy_get_items' => 'produk beli/gratis',
+        'buy_get_items.*.product_id' => 'produk beli/gratis',
+        'buy_get_items.*.quantity' => 'jumlah beli/gratis',
     ],
 
 ];

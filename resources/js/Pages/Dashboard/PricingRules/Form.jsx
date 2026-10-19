@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import Button from "@/Components/Dashboard/Button";
 import {
     IconArrowLeft,
@@ -32,6 +33,24 @@ const discountTypeOptions = [
 function InputError({ message }) {
     if (!message) return null;
     return <p className="mt-1 text-xs text-rose-500">{message}</p>;
+}
+
+/*
+ * Galat sebuah baris ("qty_breaks.0.discount_value") ditampilkan di bawah
+ * daftar barisnya. Tanpa ini simpanan yang ditolak tampak seperti tombol
+ * yang tidak bekerja.
+ */
+function galatDaftar(errors, key) {
+    if (errors[key]) return errors[key];
+    const kunci = Object.keys(errors).find((k) => k.startsWith(`${key}.`));
+    return kunci ? errors[kunci] : null;
+}
+
+// Isian yang tidak punya tempat galat sendiri (jadwal, prioritas) tetap
+// memberi tahu mengapa promo belum tersimpan.
+function beriTahuGalat(errors) {
+    const pesan = Object.values(errors)[0];
+    if (pesan) toast.error(pesan);
 }
 
 function CardSection({ title, description, children, "data-tour": tour }) {
@@ -123,11 +142,11 @@ export default function Form({
         event.preventDefault();
 
         if (isEdit) {
-            put(route("pricing-rules.update", rule.id));
+            put(route("pricing-rules.update", rule.id), { onError: beriTahuGalat });
             return;
         }
 
-        post(route("pricing-rules.store"));
+        post(route("pricing-rules.store"), { onError: beriTahuGalat });
     };
 
     const updateArrayRow = (key, index, field, value) => {
@@ -514,7 +533,7 @@ export default function Form({
                                     <IconPlus size={16} />
                                     Tambah Break
                                 </button>
-                                <InputError message={errors.qty_breaks} />
+                                <InputError message={galatDaftar(errors, "qty_breaks")} />
                             </div>
                         </CardSection>
                     )}
@@ -537,6 +556,7 @@ export default function Form({
                                     }
                                     className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
+                                <InputError message={errors.discount_value} />
                             </div>
                             <div className="space-y-3">
                                 {data.bundle_items.map((row, index) => (
@@ -602,6 +622,7 @@ export default function Form({
                                     Tambah Item Bundle
                                 </button>
                             </div>
+                            <InputError message={galatDaftar(errors, "bundle_items")} />
                         </CardSection>
                     )}
 
@@ -689,6 +710,7 @@ export default function Form({
                                     Tambah Item Buy/Get
                                 </button>
                             </div>
+                            <InputError message={galatDaftar(errors, "buy_get_items")} />
                         </CardSection>
                     )}
 
