@@ -223,6 +223,13 @@ class LoyaltyService
             if ($pid && $lineTotal > 0) {
                 $rate = (float) ($productTaxes[$pid] ?? $defaultTaxRate);
                 $type = $productTaxTypes[$pid] ?? 'exclusive';
+                // Harga "inclusive" SUDAH memuat pajaknya. Dulu pajak itu
+                // ditagih lagi di atas harga (Rp8.000 jadi Rp8.793). Hanya
+                // pajak "exclusive" yang menambah tagihan — dan itulah yang
+                // tercetak sebagai PPN, sehingga Subtotal + PPN = Total.
+                if ($type === 'inclusive') {
+                    continue;
+                }
                 $taxResult = $taxService->calculateLineItem($lineTotal, $type, $rate);
                 $taxTotal += $taxResult['tax_amount'];
                 if ($rate > 0) {
