@@ -246,7 +246,7 @@ export default function Index({
                                 {activeShift.transactions_count}
                             </p>
                         </div>
-                        <div data-tour="cashier-shifts-buttons" className="flex items-center justify-end gap-2 md:col-span-4">
+                        <div data-tour="cashier-shifts-buttons" className="flex flex-wrap items-center justify-end gap-2 md:col-span-4">
                             <button
                                 type="button"
                                 onClick={() =>

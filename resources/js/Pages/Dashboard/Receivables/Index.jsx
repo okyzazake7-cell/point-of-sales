@@ -314,11 +314,11 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                             </div>
                         </div>
 
-                        <div data-tour="receivables-pagination" className="flex justify-between items-center text-sm text-slate-500">
+                        <div data-tour="receivables-pagination" className="flex flex-wrap justify-between items-center gap-2 text-sm text-slate-500">
                             <div>
                                 Menampilkan {rows.length} dari {receivables?.total || 0} data
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                                 {receivables?.links?.map((link, idx) => (
                                     <button
                                         key={idx}
