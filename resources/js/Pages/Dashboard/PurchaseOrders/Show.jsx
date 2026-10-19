@@ -84,7 +84,7 @@ export default function Show({ order }) {
                     Kembali ke daftar PO
                 </Link>
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
+                    <div data-tour="purchase-orders-show-header">
                         <div className="mb-2 flex items-center gap-2">
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                                 {order.document_number}
@@ -100,7 +100,7 @@ export default function Show({ order }) {
                     </div>
                     <div className="flex gap-2">
                         {canPlace && (
-                            <Button
+                            <Button data-tour="purchase-orders-show-place"
                                 type="button"
                                 icon={<IconCheck size={18} />}
                                 className="bg-primary-500 hover:bg-primary-600 text-white"
@@ -109,7 +109,7 @@ export default function Show({ order }) {
                             />
                         )}
                         {canCancel && (
-                            <Button
+                            <Button data-tour="purchase-orders-show-cancel"
                                 type="button"
                                 icon={<IconCircleX size={18} />}
                                 className="bg-rose-500 hover:bg-rose-600 text-white"
@@ -118,7 +118,7 @@ export default function Show({ order }) {
                             />
                         )}
                         {canCreateReceiving && ["ordered", "partial_received"].includes(order.status) && (
-                            <Button
+                            <Button data-tour="purchase-orders-show-receive"
                                 type="link"
                                 href={route("goods-receivings.create", { purchase_order_id: order.id })}
                                 icon={<IconTruckDelivery size={18} />}
@@ -132,7 +132,7 @@ export default function Show({ order }) {
 
             <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="purchase-orders-show-items" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                             Item Purchase Order
                         </h2>
@@ -185,7 +185,7 @@ export default function Show({ order }) {
                     </div>
 
                     {order.goods_receivings?.length > 0 && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="purchase-orders-show-receivings" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Riwayat Penerimaan Barang
                             </h2>
@@ -229,7 +229,7 @@ export default function Show({ order }) {
                     )}
 
                     {order.payable && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="purchase-orders-show-payable" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-3 text-lg font-semibold text-slate-900 dark:text-white">Hutang Supplier</h2>
                             <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
@@ -254,7 +254,7 @@ export default function Show({ order }) {
                         </div>
                     )}
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="purchase-orders-show-flow" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Informasi</h2>
                         <div className="space-y-3 text-sm text-slate-500 dark:text-slate-400">
                             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800">

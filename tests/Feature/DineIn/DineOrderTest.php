@@ -18,6 +18,7 @@ use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DineOrderTest extends TestCase
@@ -88,6 +89,38 @@ class DineOrderTest extends TestCase
             'items' => $items,
             'payment_option' => 'pay_at_counter',
         ], $overrides);
+    }
+
+    /**
+     * Menu meja yang dibuka pelanggan dari kode QR. Kuerinya dulu menyaring
+     * `products.is_active`, `categories.is_active`, dan mengurutkan
+     * `categories.sort_order` — tiga kolom yang tidak ada. SQLite membaca
+     * nama kolom yang tidak dikenal sebagai teks biasa (menu kosong tanpa
+     * galat); MySQL/TiDB di produksi menolaknya (500). Uji ini membuka
+     * halamannya, bukan hanya mengirim pesanan.
+     */
+    public function test_menu_page_lists_categories_and_products_in_stock(): void
+    {
+        $tersedia = $this->createProduct(5);
+        $this->createProduct(0);
+        // Produk bersatuan ganda: eager load `units.unit` memanggil relasi
+        // yang tidak ada di Unit — baru meledak begitu ada satuan yang dimuat.
+        $dus = Unit::create(['code' => 'DUS-MENU', 'name' => 'Dus', 'symbol' => 'dus']);
+        $tersedia->units()->attach($dus->id, [
+            'is_base' => false,
+            'conversion_factor' => 12,
+            'buy_price' => 60000,
+            'sell_price' => 120000,
+        ]);
+
+        $this->get(route('dine.menu', $this->table->token))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Public/DineMenu')
+                ->has('categories', 1)
+                ->where('categories.0.name', 'Kategori Test')
+                ->has('products', 1)
+                ->where('products.0.id', $tersedia->id));
     }
 
     public function test_store_rejects_pay_online(): void

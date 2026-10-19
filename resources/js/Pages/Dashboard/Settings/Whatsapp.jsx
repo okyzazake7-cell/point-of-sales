@@ -89,7 +89,7 @@ export default function Whatsapp({ settings, waStatus }) {
                 </div>
 
                 {/* Status Card */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg">
+                <div data-tour="settings-whatsapp-status" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg">
                     <div className="flex items-center gap-3 mb-4">
                         <div className={`w-3 h-3 rounded-full ${status.connected ? "bg-emerald-500" : status.starting ? "bg-amber-400 animate-pulse" : "bg-slate-300"}`} />
                         <span className="font-medium text-slate-800 dark:text-white">
@@ -102,7 +102,7 @@ export default function Whatsapp({ settings, waStatus }) {
                     </div>
 
                     {status.qr && !status.connected && (
-                        <div className="mb-4 text-center">
+                        <div data-tour="settings-whatsapp-qr" className="mb-4 text-center">
                             <img src={status.qr} alt="QR Code" className="mx-auto w-48 h-48" />
                             <p className="text-xs text-slate-400 mt-2">
                                 Scan dengan WhatsApp &gt; Perangkat Tertaut &gt; Perangkat Baru
@@ -111,14 +111,14 @@ export default function Whatsapp({ settings, waStatus }) {
                     )}
 
                     {!status.connected && (
-                        <button onClick={handleConnect} disabled={processing || status.starting}
+                        <button data-tour="settings-whatsapp-connect" onClick={handleConnect} disabled={processing || status.starting}
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition-colors disabled:opacity-50">
                             <IconPlugConnected size={18} />
                             {status.starting ? "Menghubungkan..." : "Hubungkan WhatsApp"}
                         </button>
                     )}
                     {status.connected && (
-                        <button onClick={handleDisconnect} disabled={processing}
+                        <button data-tour="settings-whatsapp-disconnect" onClick={handleDisconnect} disabled={processing}
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-medium transition-colors disabled:opacity-50">
                             <IconPlugConnectedX size={18} />
                             Putuskan Koneksi
@@ -128,7 +128,7 @@ export default function Whatsapp({ settings, waStatus }) {
 
                 {/* Settings Form */}
                 <form onSubmit={handleSave} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-6 max-w-lg">
-                    <div>
+                    <div data-tour="settings-whatsapp-url">
                         <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">URL Service WhatsApp</label>
                         <input type="text" value={data.wa_service_url} onChange={(e) => setData("wa_service_url", e.target.value)}
                             className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm"
@@ -136,13 +136,13 @@ export default function Whatsapp({ settings, waStatus }) {
                         <p className="text-xs text-slate-400 mt-1">Alamat Node.js service whatsapp-web.js</p>
                     </div>
 
-                    <label className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                    <label data-tour="settings-whatsapp-enable" className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" checked={data.wa_enabled} onChange={(e) => setData("wa_enabled", e.target.checked)}
                             className="rounded border-slate-300 text-primary-600 focus:ring-primary-500" />
                         Aktifkan WhatsApp Gateway
                     </label>
 
-                    <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <div data-tour="settings-whatsapp-auto" className="border-t border-slate-100 dark:border-slate-800 pt-4">
                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Kirim Otomatis</h3>
                         <label className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer mb-2">
                             <input type="checkbox" checked={data.wa_auto_reminder} onChange={(e) => setData("wa_auto_reminder", e.target.checked)}
@@ -156,7 +156,7 @@ export default function Whatsapp({ settings, waStatus }) {
                         </label>
                     </div>
 
-                    <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <div data-tour="settings-whatsapp-submit" className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
                         <button type="submit" disabled={processing}
                             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors disabled:opacity-50">
                             Simpan Pengaturan
@@ -166,7 +166,7 @@ export default function Whatsapp({ settings, waStatus }) {
 
                 {/* Test Send */}
                 {status.connected && (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg">
+                    <div data-tour="settings-whatsapp-test" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg">
                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Test Kirim Pesan</h3>
                         <div className="flex gap-2">
                             <input type="text" value={testNumber} onChange={(e) => setTestNumber(e.target.value)}

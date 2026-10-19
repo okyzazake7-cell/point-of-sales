@@ -92,7 +92,7 @@ export default function Index({ vouchers, filters = {} }) {
                         </p>
                     </div>
                     {can("customer-vouchers-create") && (
-                        <Button
+                        <Button data-tour="customer-vouchers-add"
                             type="link"
                             href={route("customer-vouchers.create")}
                             icon={<IconCirclePlus size={18} />}
@@ -102,7 +102,7 @@ export default function Index({ vouchers, filters = {} }) {
                     )}
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="customer-vouchers-filters" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                     <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_220px]">
                         <Search
                             url={route("customer-vouchers.index")}
@@ -126,7 +126,7 @@ export default function Index({ vouchers, filters = {} }) {
                     </div>
                 </div>
 
-                <Table.Card title="Daftar Voucher">
+                <Table.Card data-tour="customer-vouchers-list" title="Daftar Voucher">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -141,7 +141,7 @@ export default function Index({ vouchers, filters = {} }) {
                         <Table.Tbody>
                             {hasData ? (
                                 vouchers.data.map((voucher) => (
-                                    <tr
+                                    <tr data-tour={voucher.id === vouchers.data[0].id ? "customer-vouchers-row" : undefined}
                                         key={voucher.id}
                                         className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
                                     >
@@ -223,7 +223,7 @@ export default function Index({ vouchers, filters = {} }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={6} message="Belum ada voucher customer.">
+                                <Table.Empty data-tour="customer-vouchers-empty" colSpan={6} message="Belum ada voucher customer.">
                                     <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                                         <IconDatabaseOff
                                             size={28}
@@ -236,7 +236,7 @@ export default function Index({ vouchers, filters = {} }) {
                     </Table>
                 </Table.Card>
 
-                {vouchers.last_page > 1 && <Pagination links={vouchers.links} />}
+                {vouchers.last_page > 1 && <Pagination data-tour="customer-vouchers-pagination" links={vouchers.links} />}
             </div>
         </>
     );

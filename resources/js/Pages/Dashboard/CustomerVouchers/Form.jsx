@@ -91,7 +91,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                         </div>
 
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div className="md:col-span-2">
+                            <div data-tour="customer-vouchers-form-customer" className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Pelanggan
                                 </label>
@@ -115,7 +115,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.customer_id} />
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-code">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Kode Voucher
                                 </label>
@@ -134,7 +134,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.code} />
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-name">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Nama Voucher
                                 </label>
@@ -158,7 +158,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                         </h2>
 
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="customer-vouchers-form-type">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Tipe Diskon
                                 </label>
@@ -175,7 +175,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.discount_type} />
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-value">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Nilai Diskon
                                 </label>
@@ -192,7 +192,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.discount_value} />
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-minimum">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Minimum Belanja
                                 </label>
@@ -209,7 +209,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                             </div>
 
                             <div className="flex items-end">
-                                <label className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+                                <label data-tour="customer-vouchers-form-active" className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
                                     <input
                                         type="checkbox"
                                         checked={data.is_active}
@@ -224,7 +224,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 </label>
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-start">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Mulai Berlaku
                                 </label>
@@ -239,7 +239,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.starts_at} />
                             </div>
 
-                            <div>
+                            <div data-tour="customer-vouchers-form-end">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Berakhir Pada
                                 </label>
@@ -254,7 +254,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                                 <InputError message={errors.expires_at} />
                             </div>
 
-                            <div className="md:col-span-2">
+                            <div data-tour="customer-vouchers-form-notes" className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Catatan
                                 </label>
@@ -271,7 +271,7 @@ export default function Form({ mode = "create", voucher = null, customers = [] }
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <div data-tour="customer-vouchers-form-submit" className="flex flex-col gap-3 sm:flex-row sm:justify-end">
                         <Button
                             type="link"
                             href={route("customer-vouchers.index")}

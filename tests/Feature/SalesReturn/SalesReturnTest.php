@@ -416,6 +416,97 @@ class SalesReturnTest extends TestCase
         ]);
     }
 
+    /**
+     * `transaction_details.price` adalah total baris. Retur dulu mengalikan
+     * jumlah yang diretur dengan total baris itu: mengembalikan 2 dari 3
+     * barang @Rp60.000 membayar pelanggan Rp360.000, bukan Rp120.000.
+     */
+    public function test_partial_return_of_a_multi_quantity_line_refunds_only_the_returned_units(): void
+    {
+        $user = $this->createUserWithPermissions([
+            'transactions-access',
+            'sales-returns-access',
+            'sales-returns-create',
+        ]);
+        [$transaction, $detail] = $this->createTransaction($user, qty: 3);
+
+        $this->actingAs($user)
+            ->post(route('sales-returns.store', $transaction), [
+                'return_type' => 'refund_cash',
+                'items' => [[
+                    'transaction_detail_id' => $detail->id,
+                    'qty_return' => 2,
+                    'return_reason' => 'Rusak',
+                    'restock_to_inventory' => true,
+                ]],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $salesReturn = SalesReturn::firstOrFail();
+        $this->assertSame(120000, $salesReturn->total_return_amount);
+        $this->assertSame(120000, $salesReturn->refund_amount);
+        $this->assertDatabaseHas('sales_return_items', [
+            'sales_return_id' => $salesReturn->id,
+            'qty_return' => 2,
+            'unit_price' => 60000,
+            'subtotal' => 120000,
+        ]);
+    }
+
+    /**
+     * Baris berpromo (3 barang Rp100.000) tidak habis dibagi tiga. Retur
+     * bertahap tetap berjumlah persis harga barisnya: 33.333 + 66.667.
+     */
+    public function test_returns_of_a_discounted_line_add_up_to_what_the_line_cost(): void
+    {
+        $user = $this->createUserWithPermissions([
+            'transactions-access',
+            'sales-returns-access',
+            'sales-returns-create',
+        ]);
+        [$transaction, $detail, $product] = $this->createTransaction($user, qty: 3);
+        $detail->update(['price' => 100000]);
+
+        $first = SalesReturn::create([
+            'code' => 'SR-TEST-PROMO',
+            'transaction_id' => $transaction->id,
+            'customer_id' => $transaction->customer_id,
+            'cashier_id' => $user->id,
+            'status' => 'completed',
+            'return_type' => 'refund_cash',
+            'refund_amount' => 33333,
+            'credited_amount' => 0,
+            'total_return_amount' => 33333,
+            'completed_at' => now(),
+        ]);
+        $first->items()->create([
+            'transaction_detail_id' => $detail->id,
+            'product_id' => $product->id,
+            'qty_sold' => 3,
+            'qty_returned_before' => 0,
+            'qty_return' => 1,
+            'unit_price' => 33333,
+            'subtotal' => 33333,
+            'return_reason' => 'Retur pertama',
+            'restock_to_inventory' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->post(route('sales-returns.store', $transaction), [
+                'return_type' => 'refund_cash',
+                'items' => [[
+                    'transaction_detail_id' => $detail->id,
+                    'qty_return' => 2,
+                    'return_reason' => 'Retur kedua',
+                    'restock_to_inventory' => true,
+                ]],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $second = SalesReturn::where('status', 'draft')->firstOrFail();
+        $this->assertSame(66667, $second->total_return_amount);
+    }
+
     private function createUserWithPermissions(array $permissions): User
     {
         $user = User::factory()->create();
@@ -478,11 +569,13 @@ class SalesReturnTest extends TestCase
             'bank_account_id' => null,
         ]);
 
+        // Seperti CheckoutService: `price` adalah TOTAL baris, `unit_price` harga satuan.
         $detail = $transaction->details()->create([
             'product_id' => $product->id,
             'qty' => $qty,
             'conversion_factor' => $conversionFactor,
-            'price' => 60000 * $conversionFactor,
+            'unit_price' => 60000 * $conversionFactor,
+            'price' => 60000 * $conversionFactor * $qty,
         ]);
 
         $transaction->profits()->create([

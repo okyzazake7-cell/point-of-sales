@@ -57,7 +57,7 @@ export default function Show({
                     </Link>
 
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                        <div>
+                        <div data-tour="members-show-header">
                             <div className="mb-2 flex items-center gap-2">
                                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                                     {member.name}
@@ -87,7 +87,7 @@ export default function Show({
                             </p>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div data-tour="members-show-actions" className="flex items-center gap-2">
                             <span className="inline-flex items-center gap-1 rounded-full bg-primary-100 px-3 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-950/40 dark:text-primary-300">
                                 <IconCoins size={14} />
                                 {member.loyalty_points || 0} poin
@@ -105,7 +105,7 @@ export default function Show({
 
                 <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
                     <div className="space-y-6">
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-summary" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Ringkasan Member
                             </h2>
@@ -153,7 +153,7 @@ export default function Show({
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-transactions" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <div className="mb-4 flex items-center gap-2">
                                 <IconReceipt size={18} className="text-primary-500" />
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -191,7 +191,7 @@ export default function Show({
                             )}
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-rewards" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <div className="mb-4 flex items-center gap-2">
                                 <IconGift size={18} className="text-primary-500" />
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -247,7 +247,7 @@ export default function Show({
                     </div>
 
                     <div className="space-y-6">
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-info" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Informasi Member
                             </h2>
@@ -279,7 +279,7 @@ export default function Show({
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-segments" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <div className="mb-4 flex items-center gap-2">
                                 <IconTags size={18} className="text-primary-500" />
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -314,7 +314,7 @@ export default function Show({
                             )}
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-favorites" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Produk Favorit
                             </h2>
@@ -339,7 +339,7 @@ export default function Show({
                             )}
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <section data-tour="members-show-vouchers" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Voucher Member
                             </h2>

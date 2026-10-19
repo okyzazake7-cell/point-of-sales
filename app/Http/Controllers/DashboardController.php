@@ -70,7 +70,7 @@ class DashboardController extends Controller
             ->map(function ($row) {
                 return [
                     'date' => $row->date,
-                    'label' => Carbon::parse($row->date)->format('d M'),
+                    'label' => Carbon::parse($row->date)->translatedFormat('d M'),
                     'total' => (int) $row->total,
                 ];
             })
@@ -155,7 +155,8 @@ class DashboardController extends Controller
             ->map(function ($transaction) {
                 return [
                     'invoice' => $transaction->invoice,
-                    'date' => Carbon::parse($transaction->created_at)->format('d M Y'),
+                    // Nama bulan mengikuti bahasa antarmuka ("15 Okt", bukan "15 Oct").
+                    'date' => Carbon::parse($transaction->created_at)->translatedFormat('d M Y'),
                     'customer' => $transaction->customer?->name ?? '-',
                     'cashier' => $transaction->cashier?->name ?? '-',
                     'total' => (int) $transaction->grand_total,

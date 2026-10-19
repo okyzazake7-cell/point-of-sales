@@ -90,7 +90,7 @@ export default function Create({ orders }) {
 
             <form onSubmit={submit} className="max-w-4xl">
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="goods-receivings-create-po" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Pilih Purchase Order</h2>
                         <select
                             value={selectedPoId}
@@ -108,7 +108,7 @@ export default function Create({ orders }) {
                     </div>
 
                     {selectedOrder && data.items.length > 0 && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="goods-receivings-create-items" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Item Diterima
                             </h2>
@@ -166,7 +166,7 @@ export default function Create({ orders }) {
                     )}
 
                     {selectedOrder && data.items.length > 0 && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="goods-receivings-create-notes" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Catatan Penerimaan</h2>
                             <textarea
                                 value={data.notes}
@@ -186,7 +186,7 @@ export default function Create({ orders }) {
                             Batal
                         </Link>
                         {selectedOrder && data.items.length > 0 && (
-                            <Button
+                            <Button data-tour="goods-receivings-create-submit"
                                 type="submit"
                                 icon={<IconTruckDelivery size={18} />}
                                 className="bg-success-500 hover:bg-success-600 text-white shadow-lg shadow-success-500/30"

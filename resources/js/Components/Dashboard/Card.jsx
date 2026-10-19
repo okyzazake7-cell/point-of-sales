@@ -7,12 +7,13 @@ export default function Card({
     footer,
     className,
     form,
+    "data-tour": tour,
 }) {
     const CardWrapper = form ? "form" : "div";
     const wrapperProps = form ? { onSubmit: form } : {};
 
     return (
-        <CardWrapper {...wrapperProps}>
+        <CardWrapper data-tour={tour} {...wrapperProps}>
             {/* Header */}
             <div
                 className={`px-5 py-4 rounded-t-2xl border border-b-0 ${className} bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800`}

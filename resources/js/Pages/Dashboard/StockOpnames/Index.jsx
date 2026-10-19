@@ -53,7 +53,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
                     </p>
                 </div>
                 {canCreateStockOpnames && (
-                    <Button
+                    <Button data-tour="stock-opnames-new"
                         type="link"
                         href={route("stock-opnames.create")}
                         icon={<IconCirclePlus size={18} strokeWidth={1.5} />}
@@ -63,7 +63,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
                 )}
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-5">
+            <div data-tour="stock-opnames-filters" className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-5">
                 <div className="relative">
                     <input
                         type="text"
@@ -122,7 +122,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
                 </div>
             </div>
 
-            <Table.Card title="Daftar Sesi Stock Opname">
+            <Table.Card data-tour="stock-opnames-list" title="Daftar Sesi Stock Opname">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -137,7 +137,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
                     <Table.Tbody>
                         {stockOpnames.data.length > 0 ? (
                             stockOpnames.data.map((stockOpname) => (
-                                <tr
+                                <tr data-tour={stockOpname.id === stockOpnames.data[0].id ? "stock-opnames-row" : undefined}
                                     key={stockOpname.id}
                                     className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
                                 >
@@ -182,7 +182,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
                                 </tr>
                             ))
                         ) : (
-                            <Table.Empty
+                            <Table.Empty data-tour="stock-opnames-empty"
                                 colSpan={6}
                                 message={
                                     <div className="text-slate-500 dark:text-slate-400">
@@ -200,7 +200,7 @@ export default function Index({ stockOpnames, filters, warehouses = [] }) {
             </Table.Card>
 
             {stockOpnames.last_page > 1 && (
-                <Pagination links={stockOpnames.links} />
+                <Pagination data-tour="stock-opnames-pagination" links={stockOpnames.links} />
             )}
         </>
     );

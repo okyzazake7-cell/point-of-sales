@@ -32,7 +32,7 @@ export default function DiscountApprovals({ pendingTransactions }) {
                 {pendingTransactions.length > 0 ? (
                     <div className="space-y-4">
                         {pendingTransactions.map((tx) => (
-                            <div key={tx.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                            <div data-tour={tx.id === pendingTransactions[0]?.id ? "discount-approvals-card" : undefined} key={tx.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <p className="font-semibold text-slate-800 dark:text-white">{tx.invoice}</p>
@@ -47,7 +47,7 @@ export default function DiscountApprovals({ pendingTransactions }) {
                                     <span className="text-slate-500">Diskon: <strong className="text-danger-500">{formatCurrency(tx.discount)}</strong></span>
                                     <span className="text-slate-500">Total: <strong>{formatCurrency(tx.grand_total)}</strong></span>
                                 </div>
-                                <div className="mt-4 flex gap-3">
+                                <div data-tour={tx.id === pendingTransactions[0]?.id ? "discount-approvals-actions" : undefined} className="mt-4 flex gap-3">
                                     <button onClick={() => confirm("approve", tx)} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-success-500 hover:bg-success-600 text-white text-sm font-medium transition-colors">
                                         <IconCheck size={18} /> Setujui
                                     </button>
@@ -59,7 +59,7 @@ export default function DiscountApprovals({ pendingTransactions }) {
                         ))}
                     </div>
                 ) : (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center">
+                    <div data-tour="discount-approvals-empty" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center">
                         <IconCheck size={48} className="mx-auto text-success-400 mb-3" />
                         <p className="text-slate-500 dark:text-slate-400">Semua transaksi sudah diverifikasi.</p>
                     </div>

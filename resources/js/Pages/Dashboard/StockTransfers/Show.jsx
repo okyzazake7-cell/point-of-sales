@@ -43,13 +43,13 @@ export default function Show({ transfer }) {
                             {transfer.document_number}
                         </h1>
                     </div>
-                    {statusBadge(transfer.status)}
+                    <div data-tour="stock-transfers-show-status" className="flex">{statusBadge(transfer.status)}</div>
                 </div>
 
                 <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Detail Transfer</h2>
-                        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                        <div data-tour="stock-transfers-show-info" className="mt-5 grid gap-4 sm:grid-cols-2">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Gudang Asal</p>
                                 <p className="mt-1 text-sm text-slate-900 dark:text-white">{transfer.source_warehouse?.name || "-"}</p>
@@ -79,7 +79,7 @@ export default function Show({ transfer }) {
                         </div>
 
                         <h3 className="mt-6 text-base font-semibold text-slate-900 dark:text-white">Item Transfer</h3>
-                        <div className="mt-3 overflow-x-auto">
+                        <div data-tour="stock-transfers-show-items" className="mt-3 overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -108,12 +108,12 @@ export default function Show({ transfer }) {
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Aksi</h2>
                                 <div className="mt-4 space-y-3">
                                     {can("stock-transfers-send") && (
-                                        <button onClick={() => confirmAction("send", "mengirim")} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600">
+                                        <button data-tour="stock-transfers-show-send" onClick={() => confirmAction("send", "mengirim")} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600">
                                             <IconSend size={18} /> Kirim Barang
                                         </button>
                                     )}
                                     {can("stock-transfers-cancel") && (
-                                        <button onClick={() => confirmAction("cancel", "membatalkan")} className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/20">
+                                        <button data-tour="stock-transfers-show-cancel" onClick={() => confirmAction("cancel", "membatalkan")} className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/20">
                                             <IconX size={18} /> Batalkan
                                         </button>
                                     )}
@@ -126,12 +126,12 @@ export default function Show({ transfer }) {
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Aksi</h2>
                                 <div className="mt-4 space-y-3">
                                     {can("stock-transfers-receive") && (
-                                        <button onClick={() => confirmAction("receive", "menerima")} className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-600">
+                                        <button data-tour="stock-transfers-show-receive" onClick={() => confirmAction("receive", "menerima")} className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-600">
                                             <IconCheck size={18} /> Terima Barang
                                         </button>
                                     )}
                                     {can("stock-transfers-cancel") && (
-                                        <button onClick={() => confirmAction("cancel", "membatalkan")} className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/20">
+                                        <button data-tour="stock-transfers-show-return" onClick={() => confirmAction("cancel", "membatalkan")} className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 px-4 py-2.5 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 dark:border-rose-900 dark:text-rose-400 dark:hover:bg-rose-950/20">
                                             <IconX size={18} /> Batalkan & Kembalikan
                                         </button>
                                     )}

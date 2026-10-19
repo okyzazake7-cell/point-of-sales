@@ -135,7 +135,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                             </h1>
                         </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div data-tour="receivables-show-actions" className="flex flex-wrap items-center gap-2">
                         {canCreateCrmCampaign && (
                             <Link
                                 href={route(
@@ -168,7 +168,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                         ref={printRef}
                         className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4 print:border-0 print:shadow-none"
                     >
-                        <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div data-tour="receivables-show-customer" className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                                 <p className="text-slate-500">Pelanggan</p>
                                 <p className="font-semibold text-slate-800 dark:text-white">
@@ -190,7 +190,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                         {/* Di ponsel ketiga angka BERTUMPUK, label di kiri dan nominal di
                             kanan: tiga kotak sejajar di 390px menyisakan ±74px untuk
                             "Rp 754.000" dan angkanya menembus kotaknya. */}
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+                        <div data-tour="receivables-show-amounts" className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
                             <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                 <p className="text-xs text-slate-500">Total</p>
                                 <p className="text-lg font-bold text-slate-900 dark:text-white">
@@ -215,7 +215,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                                 Riwayat Pembayaran
                             </p>
                             {receivable.status !== "paid" && canPayReceivable && (
-                                <button
+                                <button data-tour="receivables-show-add"
                                     onClick={() => setShowForm(!showForm)}
                                     className="px-3 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white transition-colors"
                                 >
@@ -224,7 +224,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                             )}
                         </div>
 
-                        <div className="space-y-2">
+                        <div data-tour="receivables-show-history" className="space-y-2">
                             {receivable.payments?.length ? (
                                 receivable.payments.map((pay) => (
                                     <div
@@ -262,7 +262,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                         <p className="text-sm font-semibold text-slate-800 dark:text-white mb-3">
                             Detail Nota
                         </p>
-                        <div className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                        <div data-tour="receivables-show-detail" className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                             <div className="flex justify-between">
                                 <span>Invoice</span>
                                 <span className="font-semibold text-slate-800 dark:text-white">
@@ -290,7 +290,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                             )}
                         </div>
 
-                        <form onSubmit={submitCollectionNotes} className="mt-4 space-y-3">
+                        <form data-tour="receivables-show-notes" onSubmit={submitCollectionNotes} className="mt-4 space-y-3">
                             <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                                 Catatan Penagihan
                             </label>
@@ -321,7 +321,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
                         </form>
 
                         {showForm && canPayReceivable && (
-                            <form onSubmit={submitPayment} className="mt-4 space-y-3">
+                            <form data-tour="receivables-show-payform" onSubmit={submitPayment} className="mt-4 space-y-3">
                                 <div>
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         Nominal
@@ -423,7 +423,7 @@ export default function ReceivableShow({ receivable, bankAccounts = [] }) {
 
                         <div className="mt-4">
                             <div className="flex flex-col gap-2">
-                                <button
+                                <button data-tour="receivables-show-print"
                                     onClick={() => setShowPreview(true)}
                                     className="w-full h-11 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold flex items-center justify-center gap-2"
                                 >

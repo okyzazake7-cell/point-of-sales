@@ -81,13 +81,13 @@ export default function Index({ orders }) {
                         const pay = PAY_CONFIG[order.payment_option] ?? { label: order.payment_option, color: "text-slate-500" };
 
                         return (
-                            <div
+                            <div data-tour={order.id === orders[0].id ? "dine-orders-card" : undefined}
                                 key={order.id}
                                 className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
                             >
                                 <div className="p-4 border-b border-slate-100 dark:border-slate-800">
                                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                        <div>
+                                        <div data-tour={order.id === orders[0].id ? "dine-orders-head" : undefined}>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className="font-semibold text-slate-800 dark:text-slate-200">
                                                     {order.table?.name ?? "Meja"}
@@ -103,7 +103,7 @@ export default function Index({ orders }) {
                                                 <span className={pay.color}>{pay.label}</span>
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div data-tour={order.id === orders.find((o) => o.status === "submitted")?.id ? "dine-orders-actions" : undefined} className="flex gap-2">
                                             {canProcess && order.status === "submitted" && (
                                                 <>
                                                     <Button
@@ -173,7 +173,7 @@ export default function Index({ orders }) {
                     })}
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="dine-orders-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff size={32} className="text-slate-400" strokeWidth={1.5} />
                     </div>

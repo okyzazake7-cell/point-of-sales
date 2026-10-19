@@ -252,7 +252,7 @@ export default function Show({
                 </Link>
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
+                    <div data-tour="stock-opnames-show-header">
                         <div className="mb-2 flex items-center gap-2">
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                                 {stockOpname.code}
@@ -272,7 +272,7 @@ export default function Show({
                             {formatDateTime(stockOpname.created_at)}
                         </p>
                         {!isDraft && (
-                            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            <p data-tour="stock-opnames-show-finalized" className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                 Difinalisasi oleh {stockOpname.finalizer?.name || "-"} •{" "}
                                 {formatDateTime(stockOpname.finalized_at)}
                             </p>
@@ -280,7 +280,7 @@ export default function Show({
                     </div>
 
                     {isDraft && canFinalizeStockOpname && (
-                        <Button
+                        <Button data-tour="stock-opnames-show-finalize"
                             type="button"
                             icon={<IconCheck size={18} />}
                             className="bg-success-500 hover:bg-success-600 text-white shadow-lg shadow-success-500/20 disabled:opacity-50"
@@ -294,7 +294,7 @@ export default function Show({
                 </div>
             </div>
 
-            <div className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div data-tour="stock-opnames-show-summary" className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <SummaryCard label="Total Item" value={summary.totalItems} />
                 <SummaryCard
                     label="Item Sesuai"
@@ -325,7 +325,7 @@ export default function Show({
                                 Item Stock Opname
                             </h2>
                             {canManageDraft && (
-                                <Button
+                                <Button data-tour="stock-opnames-show-add"
                                     type="button"
                                     icon={<IconPlus size={18} />}
                                     className="bg-primary-500 hover:bg-primary-600 text-white"
@@ -335,7 +335,7 @@ export default function Show({
                             )}
                         </div>
 
-                        <Table>
+                        <Table data-tour="stock-opnames-show-items">
                             <Table.Thead>
                                 <tr>
                                     <Table.Th>Produk</Table.Th>
@@ -372,7 +372,7 @@ export default function Show({
                                                     </div>
                                                 </Table.Td>
                                                 <Table.Td>{item.system_stock}</Table.Td>
-                                                <Table.Td>
+                                                <Table.Td data-tour={canManageDraft && item.id === localItems[0].id ? "stock-opnames-show-physical" : undefined}>
                                                     <input
                                                         type="number"
                                                         min="0"
@@ -388,7 +388,7 @@ export default function Show({
                                                         className="h-10 w-24 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                                     />
                                                 </Table.Td>
-                                                <Table.Td>
+                                                <Table.Td data-tour={item.id === localItems[0].id ? "stock-opnames-show-difference" : undefined}>
                                                     <span
                                                         className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
                                                             item.physical_stock === null
@@ -443,7 +443,7 @@ export default function Show({
                                         );
                                     })
                                 ) : (
-                                    <Table.Empty
+                                    <Table.Empty data-tour="stock-opnames-show-empty"
                                         colSpan={6}
                                         message={
                                             <div className="text-slate-500 dark:text-slate-400">
@@ -462,7 +462,7 @@ export default function Show({
                 </div>
 
                 <div className="space-y-6">
-                    <form
+                    <form data-tour="stock-opnames-show-notes"
                         onSubmit={saveNotes}
                         className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                     >

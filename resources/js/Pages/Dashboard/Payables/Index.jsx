@@ -95,11 +95,11 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                 </div>
 
                 {/* Create form */}
-                <form
+                <form data-tour="payables-form"
                     onSubmit={submitCreate}
                     className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 grid grid-cols-1 md:grid-cols-5 gap-3"
                 >
-                    <div>
+                    <div data-tour="payables-form-supplier">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Supplier
                         </label>
@@ -116,7 +116,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             ))}
                         </select>
                     </div>
-                    <div>
+                    <div data-tour="payables-form-number">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Nomor Dokumen
                         </label>
@@ -127,7 +127,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             placeholder="Opsional"
                         />
                     </div>
-                    <div>
+                    <div data-tour="payables-form-total">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Total
                         </label>
@@ -141,7 +141,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                         />
                         {errors.total && <p className="text-xs text-danger-500">{errors.total}</p>}
                     </div>
-                    <div>
+                    <div data-tour="payables-form-due">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Jatuh Tempo
                         </label>
@@ -153,7 +153,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                         />
                     </div>
                     <div className="flex items-end">
-                        <button
+                        <button data-tour="payables-form-save"
                             type="submit"
                             disabled={processing}
                             className="w-full h-11 rounded-xl bg-primary-500 text-white text-sm font-semibold flex items-center justify-center gap-2"
@@ -162,7 +162,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             Simpan
                         </button>
                     </div>
-                    <div className="md:col-span-5">
+                    <div data-tour="payables-form-note" className="md:col-span-5">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Catatan
                         </label>
@@ -177,7 +177,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                 </form>
 
                 {/* Filters */}
-                <form
+                <form data-tour="payables-filters"
                     onSubmit={applyFilter}
                     className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end"
                 >
@@ -233,7 +233,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                 </form>
 
                 {/* Table + Cards */}
-                <div className="bg-transparent border-0 shadow-none rounded-2xl sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-slate-200 sm:dark:border-slate-800 sm:overflow-hidden">
+                <div data-tour="payables-list" className="bg-transparent border-0 shadow-none rounded-2xl sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-slate-200 sm:dark:border-slate-800 sm:overflow-hidden">
                     <div className="w-full overflow-x-auto hidden sm:block">
                         <div className="min-w-[720px]">
                             <div className="grid grid-cols-12 px-3 sm:px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
@@ -246,7 +246,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                             </div>
                             {rows.length ? (
                                 rows.map((item) => (
-                                    <Link
+                                    <Link data-tour={item.id === rows[0].id ? "payables-row" : undefined}
                                         key={item.id}
                                         href={route("payables.show", item.id)}
                                         className="grid grid-cols-12 gap-2 px-3 sm:px-4 py-3 items-center border-b border-slate-100 dark:border-slate-800 hover:bg-primary-50/50 dark:hover:bg-slate-800/50 transition-colors"
@@ -276,7 +276,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                     </Link>
                                 ))
                             ) : (
-                                <div className="p-8 text-center text-slate-500">
+                                <div data-tour="payables-empty" className="p-8 text-center text-slate-500">
                                     <IconAlertCircle
                                         size={28}
                                         className="mx-auto mb-2 text-slate-400"
@@ -291,7 +291,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                     <div className="sm:hidden flex flex-col gap-3 px-1">
                         {rows.length ? (
                             rows.map((item) => (
-                                <Link
+                                <Link data-tour={item.id === rows[0].id ? "payables-row" : undefined}
                                     key={item.id}
                                     href={route("payables.show", item.id)}
                                     className="p-4 space-y-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm"
@@ -337,7 +337,7 @@ export default function PayablesIndex({ payables, filters = {}, suppliers = [] }
                                 </Link>
                             ))
                         ) : (
-                            <div className="p-6 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+                            <div data-tour="payables-empty" className="p-6 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
                                 <IconAlertCircle
                                     size={28}
                                     className="mx-auto mb-2 text-slate-400"

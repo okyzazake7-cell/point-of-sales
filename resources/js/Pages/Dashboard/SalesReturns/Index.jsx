@@ -60,7 +60,7 @@ export default function Index({ salesReturns, filters }) {
                     </p>
                 </div>
 
-                <form
+                <form data-tour="sales-returns-filters"
                     onSubmit={submit}
                     className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 md:grid-cols-2 xl:grid-cols-5 dark:border-slate-800 dark:bg-slate-900"
                 >
@@ -134,7 +134,7 @@ export default function Index({ salesReturns, filters }) {
                     </div>
                 </form>
 
-                <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="sales-returns-list" className="overflow-x-auto rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
                     <table className="w-full text-sm">
                         <thead className="border-b border-slate-100 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
                             <tr>
@@ -151,7 +151,7 @@ export default function Index({ salesReturns, filters }) {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {rows.length > 0 ? (
                                 rows.map((item) => (
-                                    <tr key={item.id}>
+                                    <tr data-tour={item.id === rows[0]?.id ? "sales-returns-row" : undefined} key={item.id}>
                                         <td className="px-4 py-4 font-medium text-slate-900 dark:text-white">
                                             {item.code}
                                         </td>
@@ -202,7 +202,7 @@ export default function Index({ salesReturns, filters }) {
                                 ))
                             ) : (
                                 <tr>
-                                    <td
+                                    <td data-tour="sales-returns-empty"
                                         colSpan={8}
                                         className="px-4 py-16 text-center text-slate-500 dark:text-slate-400"
                                     >
@@ -215,7 +215,7 @@ export default function Index({ salesReturns, filters }) {
                 </div>
 
                 {salesReturns.links?.length > 3 && (
-                    <Pagination links={salesReturns.links} />
+                    <Pagination data-tour="sales-returns-pagination" links={salesReturns.links} />
                 )}
             </div>
         </>

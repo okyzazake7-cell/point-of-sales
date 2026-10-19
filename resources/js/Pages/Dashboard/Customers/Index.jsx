@@ -22,7 +22,7 @@ import { useAuthorization } from "@/Utils/authorization";
 import toast from "react-hot-toast";
 
 // Customer Card for Grid View
-function CustomerCard({ customer, canUpdate, canDelete }) {
+function CustomerCard({ customer, canUpdate, canDelete, tour }) {
     return (
         <div className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
             {/* Avatar & Name */}
@@ -83,7 +83,7 @@ function CustomerCard({ customer, canUpdate, canDelete }) {
 
             {/* Actions */}
             {(canUpdate || canDelete) && (
-                <div className="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div data-tour={tour} className="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
                     {canUpdate && (
                         <Link
                             href={route("customers.edit", customer.id)}
@@ -134,7 +134,7 @@ export default function Index({ customers }) {
                         </p>
                     </div>
                     {canCreateCustomers && (
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div data-tour="customers-actions" className="flex flex-wrap items-center gap-2">
                             <a
                                 href={route("export.customers")}
                                 className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -178,12 +178,12 @@ export default function Index({ customers }) {
             {/* Toolbar */}
             <div className="mb-4 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                 <div className="w-full sm:w-80">
-                    <Search
+                    <Search data-tour="customers-search"
                         url={route("customers.index")}
                         placeholder="Cari pelanggan..."
                     />
                 </div>
-                <div className="flex items-center gap-2">
+                <div data-tour="customers-view" className="flex items-center gap-2">
                     <button
                         onClick={() => setViewMode("grid")}
                         className={`p-2.5 rounded-lg transition-colors ${
@@ -213,19 +213,20 @@ export default function Index({ customers }) {
             {customers.data.length > 0 ? (
                 viewMode === "grid" ? (
                     /* Grid View */
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div data-tour="customers-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {customers.data.map((customer) => (
                             <CustomerCard
                                 key={customer.id}
                                 customer={customer}
                                 canUpdate={canEditCustomers}
                                 canDelete={canDeleteCustomers}
+                                tour={customer.id === customers.data[0].id ? "customers-row" : undefined}
                             />
                         ))}
                     </div>
                 ) : (
                     /* List View */
-                    <Table.Card title={"Data Pelanggan"}>
+                    <Table.Card data-tour="customers-list" title={"Data Pelanggan"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
@@ -300,7 +301,7 @@ export default function Index({ customers }) {
                                                 {customer.address || "-"}
                                             </p>
                                         </Table.Td>
-                                        <Table.Td>
+                                        <Table.Td data-tour={customer.id === customers.data[0].id && (canEditCustomers || canDeleteCustomers) ? "customers-row" : undefined}>
                                             <div className="flex gap-2">
                                                 {canEditCustomers && (
                                                     <Button
@@ -352,7 +353,7 @@ export default function Index({ customers }) {
                 )
             ) : (
                 /* Empty State */
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="customers-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -379,7 +380,7 @@ export default function Index({ customers }) {
             )}
 
             {customers.last_page !== 1 && (
-                <Pagination links={customers.links} />
+                <Pagination data-tour="customers-pagination" links={customers.links} />
             )}
         </>
     );

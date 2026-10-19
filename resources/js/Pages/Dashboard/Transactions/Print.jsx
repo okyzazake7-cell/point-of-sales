@@ -12,6 +12,7 @@ import {
     IconAlertCircle,
     IconShare,
 } from "@tabler/icons-react";
+import TombolPanduan from "@/Components/Panduan/TombolPanduan";
 import ThermalReceipt, {
     ThermalReceipt58mm,
 } from "@/Components/Receipt/ThermalReceipt";
@@ -317,17 +318,21 @@ export default function Print({ transaction }) {
                 <div className="max-w-4xl mx-auto space-y-6">
                     {/* Action Bar */}
                     <div className="flex flex-wrap items-start justify-between gap-3 print:hidden">
-                        <Link
-                            href={route("transactions.index")}
-                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                        >
-                            <IconArrowLeft size={18} />
-                            Kembali ke kasir
-                        </Link>
+                        <div data-tour="transactions-print-nav" className="flex flex-wrap items-center gap-2">
+                            <Link
+                                href={route("transactions.index")}
+                                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                            >
+                                <IconArrowLeft size={18} />
+                                Kembali ke kasir
+                            </Link>
+                            {/* Halaman struk tidak punya bilah atas: panduannya dibuka dari sini. */}
+                            <TombolPanduan />
+                        </div>
 
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                             {/* Print Mode Selector */}
-                            <div className="flex bg-slate-200 dark:bg-slate-800 rounded-xl p-1 w-full sm:w-auto">
+                            <div data-tour="transactions-print-modes" className="flex bg-slate-200 dark:bg-slate-800 rounded-xl p-1 w-full sm:w-auto">
                                 <button
                                     onClick={() => setPrintMode("invoice")}
                                     className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
@@ -386,7 +391,7 @@ export default function Print({ transaction }) {
                                 </button>
                             </div>
 
-                            <button
+                            <button data-tour="transactions-print-thermal"
                                 type="button"
                                 onClick={handleThermalPrint}
                                 className="inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full sm:w-auto"
@@ -396,7 +401,7 @@ export default function Print({ transaction }) {
                             </button>
 
                             {showPaymentLink && (
-                                <a
+                                <a data-tour="transactions-print-pay-link"
                                     href={transaction.payment_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -408,7 +413,7 @@ export default function Print({ transaction }) {
                             )}
 
                             {showQris && (
-                                <div className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-primary-200 dark:border-primary-800 bg-primary-50/60 dark:bg-primary-950/30 w-full sm:w-auto print:hidden">
+                                <div data-tour="transactions-print-qris" className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-primary-200 dark:border-primary-800 bg-primary-50/60 dark:bg-primary-950/30 w-full sm:w-auto print:hidden">
                                     <img
                                         src={route("transactions.qr", transaction.invoice)}
                                         alt="QRIS"
@@ -424,7 +429,7 @@ export default function Print({ transaction }) {
                                 </div>
                             )}
 
-                            <button
+                            <button data-tour="transactions-print-share"
                                 type="button"
                                 onClick={() => {
                                     const url = route("portal.transaction", [transaction.invoice, { token: transaction.access_token }]);
@@ -441,7 +446,7 @@ export default function Print({ transaction }) {
                             {paymentMethodKey === "bank_transfer" &&
                                 paymentStatusKey === "pending" &&
                                 canConfirmPayment && (
-                                    <button
+                                    <button data-tour="transactions-print-confirm"
                                         onClick={() =>
                                             setShowConfirmModal(true)
                                         }
@@ -453,7 +458,7 @@ export default function Print({ transaction }) {
                                 )}
 
                             {printMode === "invoice" && (
-                                <a
+                                <a data-tour="transactions-print-pdf"
                                     href={route("pdf.transactions.invoice", transaction.invoice)}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -465,7 +470,7 @@ export default function Print({ transaction }) {
                             )}
 
                             {(printMode === "thermal80" || printMode === "thermal58") && (
-                                <a
+                                <a data-tour="transactions-print-pdf"
                                     href={route("pdf.transactions.receipt", {
                                         invoice: transaction.invoice,
                                         size: printMode === "thermal58" ? "58" : "80",
@@ -480,7 +485,7 @@ export default function Print({ transaction }) {
                             )}
 
                             {printMode === "shipping" && (
-                                <a
+                                <a data-tour="transactions-print-pdf"
                                     href={route("pdf.transactions.shipping", transaction.invoice)}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -496,7 +501,7 @@ export default function Print({ transaction }) {
                     {/* Thermal Receipt Preview */}
                     {(printMode === "thermal80" || printMode === "thermal58") && (
                         <div className="flex justify-center print:block">
-                            <div className="bg-white rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl p-4 print:shadow-none print:border-0 print:p-0 print:rounded-none">
+                            <div data-tour="transactions-print-receipt" className="bg-white rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl p-4 print:shadow-none print:border-0 print:p-0 print:rounded-none">
                                 {printMode === "thermal80" ? (
                                     <ThermalReceipt
                                         transaction={transaction}
@@ -522,7 +527,7 @@ export default function Print({ transaction }) {
                     {/* Shipping Label Preview */}
 {printMode === "shipping" && (
     <div className="flex justify-center items-center py-10 print:py-0 print:block">
-        <div className="w-full max-w-[150mm] mx-auto transition-all duration-300 transform scale-100 md:scale-110 lg:scale-125 print:scale-100">
+        <div data-tour="transactions-print-label" className="w-full max-w-[150mm] mx-auto transition-all duration-300 transform scale-100 md:scale-110 lg:scale-125 print:scale-100">
             <ShippingLabel
                 transaction={transaction}
                 store={store}
@@ -535,7 +540,7 @@ export default function Print({ transaction }) {
                     {printMode === "invoice" && (
                         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xl print:shadow-none print:border-slate-300">
                             {/* Header */}
-                            <div className="bg-gradient-to-r from-primary-500 to-primary-700 px-4 sm:px-6 py-5 sm:py-6 text-white print:bg-slate-100 print:text-slate-900">
+                            <div data-tour="transactions-print-head" className="bg-gradient-to-r from-primary-500 to-primary-700 px-4 sm:px-6 py-5 sm:py-6 text-white print:bg-slate-100 print:text-slate-900">
                                 <div className="flex flex-col items-center text-center gap-4 sm:gap-5 sm:grid sm:grid-cols-[1.4fr,1fr] sm:text-left sm:items-start">
                                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-3 min-w-0">
                                         <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center p-1 flex-shrink-0">
@@ -604,7 +609,7 @@ export default function Print({ transaction }) {
                             </div>
 
                             {/* Info Grid */}
-                            <div className="grid md:grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-4 sm:py-6 border-b border-slate-100 dark:border-slate-800">
+                            <div data-tour="transactions-print-info" className="grid md:grid-cols-2 gap-4 sm:gap-6 px-4 sm:px-6 py-4 sm:py-6 border-b border-slate-100 dark:border-slate-800">
                                 <div className="bg-slate-50/60 dark:bg-slate-800/40 rounded-xl p-3 sm:p-4">
                                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
                                         Pelanggan
@@ -667,7 +672,7 @@ export default function Print({ transaction }) {
                             {/* Bank Transfer Info */}
                             {paymentMethodKey === "bank_transfer" &&
                                 transaction.bank_account && (
-                                    <div className="mx-6 mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                    <div data-tour="transactions-print-bank" className="mx-6 mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
                                             Silakan Transfer ke Rekening
                                         </p>
@@ -691,7 +696,7 @@ export default function Print({ transaction }) {
                                 )}
 
                             {/* Items Table */}
-                            <div className="px-4 sm:px-6 py-6">
+                            <div data-tour="transactions-print-items" className="px-4 sm:px-6 py-6">
                                 <div className="w-full overflow-x-auto">
                                     <table className="w-full min-w-[620px] text-sm">
                                         <thead>
@@ -796,7 +801,7 @@ export default function Print({ transaction }) {
                             </div>
 
                             {/* Summary */}
-                            <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-6">
+                            <div data-tour="transactions-print-summary" className="bg-slate-50 dark:bg-slate-800/50 px-6 py-6">
                                 <div className="max-w-xs ml-auto space-y-2 text-sm">
                                     <div className="flex justify-between text-slate-600 dark:text-slate-400">
                                         <span>Subtotal</span>

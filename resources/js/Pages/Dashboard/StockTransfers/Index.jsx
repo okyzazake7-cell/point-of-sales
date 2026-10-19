@@ -45,7 +45,7 @@ export default function Index({ transfers }) {
                         </p>
                     </div>
                     {can("stock-transfers-create") && (
-                        <Link
+                        <Link data-tour="stock-transfers-new"
                             href={route("stock-transfers.create")}
                             className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-500/30 transition-colors hover:bg-primary-600"
                         >
@@ -55,7 +55,7 @@ export default function Index({ transfers }) {
                     )}
                 </div>
 
-                <Table.Card title="Daftar Transfer Stok">
+                <Table.Card data-tour="stock-transfers-list" title="Daftar Transfer Stok">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -71,7 +71,7 @@ export default function Index({ transfers }) {
                         <Table.Tbody>
                             {transfers.data.length > 0 ? (
                                 transfers.data.map((t) => (
-                                    <tr key={t.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <tr data-tour={t.id === transfers.data[0].id ? "stock-transfers-row" : undefined} key={t.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
                                         <Table.Td>
                                             <p className="font-semibold text-slate-800 dark:text-slate-200">{t.document_number}</p>
                                         </Table.Td>
@@ -91,13 +91,13 @@ export default function Index({ transfers }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={7} message={<div className="text-slate-500 dark:text-slate-400">Belum ada transfer stok.</div>} />
+                                <Table.Empty data-tour="stock-transfers-empty" colSpan={7} message={<div className="text-slate-500 dark:text-slate-400">Belum ada transfer stok.</div>} />
                             )}
                         </Table.Tbody>
                     </Table>
                 </Table.Card>
 
-                {transfers.last_page > 1 && <Pagination links={transfers.links} />}
+                {transfers.last_page > 1 && <Pagination data-tour="stock-transfers-pagination" links={transfers.links} />}
             </div>
         </>
     );

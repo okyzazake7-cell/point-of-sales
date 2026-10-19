@@ -83,7 +83,7 @@ export default function Form({ mode = "create", segment = null }) {
                         </div>
 
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="customer-segments-form-name">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Nama Segment
                                 </label>
@@ -95,7 +95,7 @@ export default function Form({ mode = "create", segment = null }) {
                                 />
                                 <InputError message={errors.name} />
                             </div>
-                            <div>
+                            <div data-tour="customer-segments-form-type">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Tipe Segment
                                 </label>
@@ -108,7 +108,7 @@ export default function Form({ mode = "create", segment = null }) {
                                     <option value="auto">Auto Segment</option>
                                 </select>
                             </div>
-                            <div className="md:col-span-2">
+                            <div data-tour="customer-segments-form-description" className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Deskripsi
                                 </label>
@@ -119,7 +119,7 @@ export default function Form({ mode = "create", segment = null }) {
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
                             </div>
-                            <label className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+                            <label data-tour="customer-segments-form-active" className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
                                 <input
                                     type="checkbox"
                                     checked={data.is_active}
@@ -133,7 +133,7 @@ export default function Form({ mode = "create", segment = null }) {
                     </div>
 
                     {data.type === "auto" && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="customer-segments-form-auto" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Rule Auto Segment
                             </h2>
@@ -236,7 +236,7 @@ export default function Form({ mode = "create", segment = null }) {
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+                    <div data-tour="customer-segments-form-submit" className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
                         <Button
                             type="link"
                             href={route("customer-segments.index")}

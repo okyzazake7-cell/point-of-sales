@@ -61,7 +61,7 @@ export default function Create() {
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Image */}
-                            <div>
+                            <div data-tour="categories-form-image">
                                 <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                                     <IconPhoto size={16} />
                                     Gambar
@@ -90,7 +90,7 @@ export default function Create() {
 
                             {/* Info */}
                             <div className="space-y-4">
-                                <Input
+                                <Input data-tour="categories-form-name"
                                     type="text"
                                     label="Nama Kategori"
                                     placeholder="Masukkan nama"
@@ -100,7 +100,7 @@ export default function Create() {
                                     }
                                     value={data.name}
                                 />
-                                <Textarea
+                                <Textarea data-tour="categories-form-description"
                                     label="Deskripsi (opsional)"
                                     placeholder="Deskripsi kategori"
                                     errors={errors.description}
@@ -113,7 +113,7 @@ export default function Create() {
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <div data-tour="categories-form-submit" className="flex justify-end gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
                             <Link
                                 href={route("categories.index")}
                                 className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors"

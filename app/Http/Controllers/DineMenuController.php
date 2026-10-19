@@ -25,18 +25,23 @@ class DineMenuController extends Controller
 
         $selfOrderEnabled = Setting::getBool('dine_in_self_order_enabled', true);
 
-        $categories = Category::where('is_active', true)
-            ->orderBy('sort_order')
+        // Kategori dan produk TIDAK punya kolom is_active/sort_order. SQLite
+        // membaca nama kolom yang tidak dikenal sebagai teks (menu kosong
+        // tanpa galat); MySQL/TiDB menolaknya — menu meja jatuh 500.
+        $categories = Category::query()
+            ->orderBy('name')
             ->get();
 
-        $products = Product::where('is_active', true)
+        $products = Product::query()
             ->where(function ($query) use ($outlet) {
                 $query->where('stock', '>', 0);
                 if ($outlet) {
                     $query->orWhereHas('warehouses', fn ($warehouse) => $warehouse->where('outlet_id', $outlet->id)->where('stock', '>', 0));
                 }
             })
-            ->with(['category', 'units.unit'])
+            // `units` sudah berisi model Unit (belongsToMany); `units.unit`
+            // meminta relasi yang tidak ada dan menjatuhkan menu bersatuan ganda.
+            ->with(['category', 'units'])
             ->get();
 
         // ponytail: previewProducts() returns arrays keyed by product id (pricing fields only) — merge the effective price back onto model-shaped payloads the menu page expects (id/title/image/category_id/sell_price)

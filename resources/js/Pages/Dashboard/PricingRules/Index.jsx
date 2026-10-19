@@ -90,7 +90,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                         </p>
                     </div>
                     {can("pricing-rules-create") && (
-                        <Button
+                        <Button data-tour="pricing-rules-add"
                             type="link"
                             href={route("pricing-rules.create")}
                             icon={<IconCirclePlus size={18} />}
@@ -100,7 +100,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                     )}
                 </div>
 
-                <div className="mb-4 grid gap-3 md:grid-cols-4">
+                <div data-tour="pricing-rules-summary" className="mb-4 grid gap-3 md:grid-cols-4">
                     {[
                         { label: "Aktif", value: summary.active || 0 },
                         { label: "Terjadwal", value: summary.scheduled || 0 },
@@ -121,7 +121,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                     ))}
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="pricing-rules-filters" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                     <div className="grid grid-cols-1 gap-3 md:grid-cols-5">
                         <div className="relative md:col-span-2">
                             <input
@@ -176,7 +176,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                     </div>
                 </div>
 
-                <Table.Card title="Daftar Rule Pricing">
+                <Table.Card data-tour="pricing-rules-list" title="Daftar Rule Pricing">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -193,7 +193,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                         <Table.Tbody>
                             {hasData ? (
                                 rules.data.map((rule) => (
-                                    <tr
+                                    <tr data-tour={rule.id === rules.data[0].id ? "pricing-rules-row" : undefined}
                                         key={rule.id}
                                         className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
                                     >
@@ -261,7 +261,7 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty
+                                <Table.Empty data-tour="pricing-rules-empty"
                                     colSpan={8}
                                     message="Belum ada rule promo harga."
                                 >
@@ -277,10 +277,10 @@ export default function Index({ rules, filters, summary = {}, recentAudits = [] 
                     </Table>
                 </Table.Card>
 
-                {rules.last_page > 1 && <Pagination links={rules.links} />}
+                {rules.last_page > 1 && <Pagination data-tour="pricing-rules-pagination" links={rules.links} />}
 
                 {recentAudits.length > 0 && (
-                    <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="pricing-rules-activity" className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="text-base font-semibold text-slate-900 dark:text-white">
                             Aktivitas Promo Terbaru
                         </h2>

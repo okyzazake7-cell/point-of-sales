@@ -11,7 +11,7 @@ import {
  * Handles Laravel paginator links: prev/next (locale-proof), ellipsis,
  * disabled states, and wraps gracefully on mobile.
  */
-export default function Pagination({ links }) {
+export default function Pagination({ links, "data-tour": tour }) {
     if (!links || links.length <= 3) return null;
 
     const [perPage, setPerPage] = useState(
@@ -56,6 +56,7 @@ export default function Pagination({ links }) {
 
     return (
         <nav
+            data-tour={tour}
             aria-label="Pagination"
             className="mt-4 lg:mt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
         >

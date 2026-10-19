@@ -69,7 +69,7 @@ export default function Store({ settings }) {
                 <form onSubmit={submit} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-6">
                     <div className="flex flex-col lg:flex-row gap-6">
                         {/* Logo */}
-                        <div className="lg:w-1/3">
+                        <div data-tour="settings-store-logo" className="lg:w-1/3">
                             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                                 <IconPhoto size={18} />
                                 Logo Toko
@@ -107,21 +107,21 @@ export default function Store({ settings }) {
 
                         {/* Info */}
                         <div className="lg:flex-1 space-y-4">
-                            <Input
+                            <Input data-tour="settings-store-name"
                                 label="Nama Toko"
                                 value={data.store_name}
                                 errors={errors.store_name}
                                 onChange={(e) => setData("store_name", e.target.value)}
                                 placeholder="Nama toko"
                             />
-                            <Textarea
+                            <Textarea data-tour="settings-store-address"
                                 label="Alamat Lengkap"
                                 value={data.store_address}
                                 errors={errors.store_address}
                                 onChange={(e) => setData("store_address", e.target.value)}
                                 rows={3}
                             />
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div data-tour="settings-store-city-phone" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input
                                     label="Kota/Kabupaten"
                                     value={data.store_city}
@@ -139,7 +139,7 @@ export default function Store({ settings }) {
                                     icon={<IconPhone size={16} />}
                                 />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div data-tour="settings-store-email-web" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input
                                     label="Email"
                                     type="email"
@@ -167,7 +167,7 @@ export default function Store({ settings }) {
                             <IconReceiptTax size={20} className="text-primary-500" />
                             Informasi Pajak & Legal
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div data-tour="settings-store-legal" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Input
                                 label="NPWP Toko"
                                 value={data.store_npwp}
@@ -184,7 +184,7 @@ export default function Store({ settings }) {
                                 placeholder="Nomor Induk Berusaha"
                             />
                         </div>
-                        <div className="mt-4">
+                        <div data-tour="settings-store-tax" className="mt-4">
                             <Input
                                 label="Tarif PPN Default (%)"
                                 type="number"
@@ -202,7 +202,7 @@ export default function Store({ settings }) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <div data-tour="settings-store-submit" className="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
                         <button
                             type="submit"
                             disabled={processing}

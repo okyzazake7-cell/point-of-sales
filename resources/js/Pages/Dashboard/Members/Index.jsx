@@ -75,7 +75,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                             Kelola pendaftaran, status, dan performa member tanpa memisahkan data dari customer inti.
                         </p>
                     </div>
-                    <Link
+                    <Link data-tour="members-add"
                         href={route("members.create")}
                         className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-500/30 transition hover:bg-primary-600"
                     >
@@ -84,7 +84,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                     </Link>
                 </div>
 
-                <div className="mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="members-summary" className="mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                     {summaryCards.map((card) => (
                         <div
                             key={card.label}
@@ -103,7 +103,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                     ))}
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="members-filters" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                     <div className="grid gap-3 md:grid-cols-4">
                         <div className="relative md:col-span-2">
                             <input
@@ -149,7 +149,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                     </div>
                 </div>
 
-                <Table.Card title="Daftar Member">
+                <Table.Card data-tour="members-list" title="Daftar Member">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -167,7 +167,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                         <Table.Tbody>
                             {members.data.length > 0 ? (
                                 members.data.map((member) => (
-                                    <tr key={member.id}>
+                                    <tr data-tour={member.id === members.data[0].id ? "members-row" : undefined} key={member.id}>
                                         <Table.Td>
                                             <Link
                                                 href={route("members.show", member.id)}
@@ -215,7 +215,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty
+                                <Table.Empty data-tour="members-empty"
                                     colSpan={7}
                                     message="Belum ada member yang sesuai dengan filter."
                                 >
@@ -229,7 +229,7 @@ export default function Index({ members, filters, tierOptions, summary }) {
                 </Table.Card>
 
                 {summary?.top_member ? (
-                    <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="members-top" className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-3">
                             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-100 text-primary-600 dark:bg-primary-950/40 dark:text-primary-300">
                                 <IconCrown size={20} />
@@ -246,9 +246,9 @@ export default function Index({ members, filters, tierOptions, summary }) {
                     </div>
                 ) : null}
 
-                {members.last_page > 1 ? <Pagination links={members.links} /> : null}
+                {members.last_page > 1 ? <Pagination data-tour="members-pagination" links={members.links} /> : null}
 
-                <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/60">
+                <div data-tour="members-help" className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/60">
                     <div className="flex items-start gap-3">
                         <div className="rounded-xl bg-white p-2 text-slate-500 dark:bg-slate-800 dark:text-slate-300">
                             <IconFileSearch size={18} />

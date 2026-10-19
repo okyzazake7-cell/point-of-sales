@@ -19,9 +19,9 @@ import {
 } from "@tabler/icons-react";
 
 // Role Card Component
-function RoleCard({ role, onEdit, onDelete, canUpdate, canDelete }) {
+function RoleCard({ role, onEdit, onDelete, canUpdate, canDelete, first }) {
     return (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg transition-all">
+        <div data-tour={first ? "roles-card" : undefined} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg transition-all">
             {/* Header */}
             <div className="p-5 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-3">
@@ -61,7 +61,7 @@ function RoleCard({ role, onEdit, onDelete, canUpdate, canDelete }) {
 
             {/* Actions */}
             {(canUpdate || canDelete) && (
-                <div className="flex border-t border-slate-100 dark:border-slate-800">
+                <div data-tour={first ? "roles-actions" : undefined} className="flex border-t border-slate-100 dark:border-slate-800">
                     {canUpdate && (
                         <button
                             onClick={onEdit}
@@ -180,7 +180,7 @@ export default function Index() {
                         </p>
                     </div>
                     {canCreateRoles && (
-                        <Button
+                        <Button data-tour="roles-add"
                             type={"button"}
                             icon={
                                 <IconCirclePlus
@@ -200,7 +200,7 @@ export default function Index() {
 
             {/* Search */}
             <div className="mb-4 w-full sm:w-80">
-                <Search
+                <Search data-tour="roles-search"
                     url={route("roles.index")}
                     placeholder="Cari akses group..."
                 />
@@ -256,10 +256,11 @@ export default function Index() {
 
             {/* Content */}
             {roles.data.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div data-tour="roles-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {roles.data.map((role) => (
                         <RoleCard
                             key={role.id}
+                            first={role.id === roles.data[0].id}
                             role={role}
                             onEdit={() => handleEdit(role)}
                             onDelete={() => handleDelete(role.id)}
@@ -269,7 +270,7 @@ export default function Index() {
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="roles-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -295,7 +296,7 @@ export default function Index() {
                 </div>
             )}
 
-            {roles.last_page !== 1 && <Pagination links={roles.links} />}
+            {roles.last_page !== 1 && <Pagination data-tour="roles-pagination" links={roles.links} />}
         </>
     );
 }

@@ -364,6 +364,107 @@ class PricingRuleTest extends TestCase
         $this->assertSame(23, $product->fresh()->stock);
     }
 
+    /**
+     * Isi formulir "Buat Promo Harga" PERSIS seperti yang dikirimnya: JSON,
+     * angka sebagai teks, dan baris contoh tersembunyi untuk ketiga jenis
+     * promo lain (satu baris grosir, dua baris paket, dua baris beli-gratis).
+     * Dulu baris tersembunyi itu ditolak validator — tanpa pesan yang
+     * terlihat — sehingga tidak ada promo yang bisa disimpan dari layar.
+     */
+    private function isianFormulirPromo(array $isian): array
+    {
+        return [
+            'name' => '',
+            'kind' => PricingRule::KIND_STANDARD_DISCOUNT,
+            'is_active' => true,
+            'priority' => '100',
+            'target_type' => 'all',
+            'product_id' => '',
+            'category_id' => '',
+            'customer_scope' => 'all',
+            'eligible_loyalty_tiers' => [],
+            'discount_type' => 'percentage',
+            'discount_value' => '',
+            'preview_quantity_multiplier' => '1',
+            'starts_at' => '',
+            'ends_at' => '',
+            'notes' => '',
+            'qty_breaks' => [
+                ['min_qty' => '3', 'discount_type' => 'fixed_price', 'discount_value' => '', 'sort_order' => '0'],
+            ],
+            'bundle_items' => [
+                ['product_id' => '', 'quantity' => '1', 'sort_order' => '0'],
+                ['product_id' => '', 'quantity' => '1', 'sort_order' => '1'],
+            ],
+            'buy_get_items' => [
+                ['product_id' => '', 'role' => 'buy', 'quantity' => '1', 'sort_order' => '0'],
+                ['product_id' => '', 'role' => 'get', 'quantity' => '1', 'sort_order' => '1'],
+            ],
+            ...$isian,
+        ];
+    }
+
+    private function kirimFormulirPromo(User $user, array $isian)
+    {
+        return $this->actingAs($user)->json('POST', route('pricing-rules.store'), $this->isianFormulirPromo($isian), [
+            'X-Inertia' => 'true',
+            'Accept' => 'text/html, application/xhtml+xml',
+        ]);
+    }
+
+    public function test_standard_discount_form_saves_despite_hidden_example_rows(): void
+    {
+        $user = $this->createUserWithPermissions(['pricing-rules-access', 'pricing-rules-create']);
+
+        $this->kirimFormulirPromo($user, ['name' => 'Diskon Pagi', 'discount_value' => '10'])
+            ->assertRedirect(route('pricing-rules.index'));
+
+        $rule = PricingRule::where('name', 'Diskon Pagi')->firstOrFail();
+        $this->assertSame(PricingRule::KIND_STANDARD_DISCOUNT, $rule->kind);
+        $this->assertSame(0, $rule->qtyBreaks()->count());
+        $this->assertSame(0, $rule->bundleItems()->count());
+        $this->assertSame(0, $rule->buyGetItems()->count());
+    }
+
+    public function test_buy_x_get_y_form_saves_without_the_hidden_discount_field(): void
+    {
+        $user = $this->createUserWithPermissions(['pricing-rules-access', 'pricing-rules-create']);
+        $beli = $this->createProduct('Produk Beli');
+        $gratis = $this->createProduct('Produk Gratis');
+
+        $this->kirimFormulirPromo($user, [
+            'name' => 'Beli 2 Gratis 1',
+            'kind' => PricingRule::KIND_BUY_X_GET_Y,
+            'buy_get_items' => [
+                ['product_id' => (string) $beli->id, 'role' => 'buy', 'quantity' => '2', 'sort_order' => '0'],
+                ['product_id' => (string) $gratis->id, 'role' => 'get', 'quantity' => '1', 'sort_order' => '1'],
+            ],
+        ])->assertRedirect(route('pricing-rules.index'));
+
+        $rule = PricingRule::where('name', 'Beli 2 Gratis 1')->firstOrFail();
+        $this->assertSame(2, $rule->buyGetItems()->count());
+        $this->assertSame(0, $rule->bundleItems()->count());
+        $this->assertSame(0, $rule->qtyBreaks()->count());
+    }
+
+    public function test_wholesale_form_saves_its_own_rows_and_ignores_the_others(): void
+    {
+        $user = $this->createUserWithPermissions(['pricing-rules-access', 'pricing-rules-create']);
+
+        $this->kirimFormulirPromo($user, [
+            'name' => 'Grosir Lusinan',
+            'kind' => PricingRule::KIND_QTY_BREAK,
+            'discount_value' => '1',
+            'qty_breaks' => [
+                ['min_qty' => '12', 'discount_type' => 'fixed_price', 'discount_value' => '9000', 'sort_order' => '0'],
+            ],
+        ])->assertRedirect(route('pricing-rules.index'));
+
+        $rule = PricingRule::where('name', 'Grosir Lusinan')->firstOrFail();
+        $this->assertSame(1, $rule->qtyBreaks()->count());
+        $this->assertSame(0, $rule->bundleItems()->count());
+    }
+
     private function createUserWithPermissions(array $permissions): User
     {
         $user = User::factory()->create();

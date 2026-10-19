@@ -52,7 +52,7 @@ export default function PriceLists({ priceLists }) {
                         </h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">Harga khusus per kelompok pelanggan</p>
                     </div>
-                    <button onClick={() => { resetForm(); setShowForm(true); }} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors">
+                    <button data-tour="settings-price-lists-new" onClick={() => { resetForm(); setShowForm(true); }} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors">
                         <IconPlus size={18} /> Baru
                     </button>
                 </div>
@@ -61,7 +61,7 @@ export default function PriceLists({ priceLists }) {
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                         <h3 className="font-semibold mb-4">{editing ? "Edit Price List" : "Price List Baru"}</h3>
                         <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div data-tour="settings-price-lists-form-name" className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Nama</label>
                                     <input value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm" required />
@@ -72,7 +72,7 @@ export default function PriceLists({ priceLists }) {
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
+                                <div data-tour="settings-price-lists-form-scope">
                                     <label className="block text-sm font-medium mb-1">Kelompok</label>
                                     <select value={form.customer_scope} onChange={e => setForm({...form, customer_scope: e.target.value})} className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm">
                                         <option value="all">Semua Pelanggan</option>
@@ -81,16 +81,16 @@ export default function PriceLists({ priceLists }) {
                                         <option value="member">Member</option>
                                     </select>
                                 </div>
-                                <div>
+                                <div data-tour="settings-price-lists-form-priority">
                                     <label className="block text-sm font-medium mb-1">Prioritas</label>
                                     <input type="number" value={form.priority} onChange={e => setForm({...form, priority: parseInt(e.target.value) || 0})} className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm" />
                                 </div>
                             </div>
-                            <div>
+                            <div data-tour="settings-price-lists-form-notes">
                                 <label className="block text-sm font-medium mb-1">Catatan</label>
                                 <textarea value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm" rows={2} />
                             </div>
-                            <div className="flex gap-3">
+                            <div data-tour="settings-price-lists-form-buttons" className="flex gap-3">
                                 <button type="submit" className="px-4 py-2 rounded-xl bg-primary-500 text-white text-sm font-medium">{editing ? "Update" : "Simpan"}</button>
                                 <button type="button" onClick={resetForm} className="px-4 py-2 rounded-xl border text-sm font-medium">Batal</button>
                             </div>
@@ -102,19 +102,19 @@ export default function PriceLists({ priceLists }) {
                     {priceLists.length > 0 ? (
                         <div className="divide-y">
                             {priceLists.map(pl => (
-                                <div key={pl.id} className="p-4 flex items-center gap-4">
+                                <div data-tour={pl.id === priceLists[0].id ? "settings-price-lists-row" : undefined} key={pl.id} className="p-4 flex items-center gap-4">
                                     <div className="flex-1">
                                         <p className="font-semibold">{pl.name} <span className="text-xs text-slate-400">({pl.slug})</span></p>
                                         <p className="text-sm text-slate-500">{scopeLabel[pl.customer_scope] || pl.customer_scope} • {pl.items_count} produk • Prioritas {pl.priority}</p>
                                     </div>
-                                    <Link href={route("price-lists.show", pl.id)} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconEye size={18} /></Link>
-                                    <button onClick={() => openEdit(pl)} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconPencil size={18} /></button>
-                                    <button onClick={() => handleDelete(pl)} className="p-2 rounded-lg text-danger-500 hover:bg-danger-50"><IconTrash size={18} /></button>
+                                    <Link data-tour={pl.id === priceLists[0].id ? "settings-price-lists-open" : undefined} href={route("price-lists.show", pl.id)} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconEye size={18} /></Link>
+                                    <button data-tour={pl.id === priceLists[0].id ? "settings-price-lists-edit" : undefined} onClick={() => openEdit(pl)} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconPencil size={18} /></button>
+                                    <button data-tour={pl.id === priceLists[0].id ? "settings-price-lists-delete" : undefined} onClick={() => handleDelete(pl)} className="p-2 rounded-lg text-danger-500 hover:bg-danger-50"><IconTrash size={18} /></button>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="p-8 text-center text-slate-400">Belum ada price list.</div>
+                        <div data-tour="settings-price-lists-empty" className="p-8 text-center text-slate-400">Belum ada price list.</div>
                     )}
                 </div>
             </div>

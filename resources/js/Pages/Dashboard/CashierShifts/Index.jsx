@@ -110,7 +110,6 @@ export default function Index({
 
             <div className="space-y-6">
                 <div
-                    data-tour="shifts-header"
                     className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
                 >
                     <div>
@@ -123,7 +122,7 @@ export default function Index({
                         </p>
                     </div>
                     {activeShift && (
-                        <Link
+                        <Link data-tour="cashier-shifts-view-active"
                             href={route("cashier-shifts.show", activeShift.id)}
                             className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-500/30 transition-colors hover:bg-primary-600"
                         >
@@ -135,7 +134,7 @@ export default function Index({
 
                 {!activeShift && canOpenShift && (
                     <div
-                        data-tour="shifts-open"
+                        data-tour="cashier-shifts-open"
                         className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                     >
                         <div className="mb-4">
@@ -148,7 +147,7 @@ export default function Index({
                         </div>
 
                         <form onSubmit={handleOpenShift} className="grid gap-4 md:grid-cols-4">
-                            <div>
+                            <div data-tour="cashier-shifts-cash">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Modal Awal
                                 </label>
@@ -164,7 +163,7 @@ export default function Index({
                                     <p className="mt-2 text-xs text-rose-500">{errors.opening_cash}</p>
                                 )}
                             </div>
-                            <div>
+                            <div data-tour="cashier-shifts-warehouse">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Gudang / Cabang
                                 </label>
@@ -180,7 +179,7 @@ export default function Index({
                                     ))}
                                 </select>
                             </div>
-                            <div className="md:col-span-2">
+                            <div data-tour="cashier-shifts-notes" className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Catatan
                                 </label>
@@ -193,7 +192,7 @@ export default function Index({
                                 />
                             </div>
                             <div className="md:col-span-4">
-                                <button
+                                <button data-tour="cashier-shifts-submit"
                                     type="submit"
                                     className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
                                 >
@@ -206,7 +205,7 @@ export default function Index({
                 )}
 
                 {activeShift && (
-                    <div data-tour="shifts-active" className="grid gap-4 md:grid-cols-4">
+                    <div data-tour="cashier-shifts-active" className="grid gap-4 md:grid-cols-4">
                         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900/50 dark:bg-emerald-950/30">
                             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
                                 Shift Aktif
@@ -231,7 +230,7 @@ export default function Index({
                                 {formatCurrency(activeShift.opening_cash)}
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="cashier-shifts-expected" className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                 Expected Cash
                             </p>
@@ -247,7 +246,7 @@ export default function Index({
                                 {activeShift.transactions_count}
                             </p>
                         </div>
-                        <div className="flex items-center justify-end gap-2 md:col-span-4">
+                        <div data-tour="cashier-shifts-buttons" className="flex flex-wrap items-center justify-end gap-2 md:col-span-4">
                             <button
                                 type="button"
                                 onClick={() =>
@@ -355,7 +354,7 @@ export default function Index({
                 )}
 
                 <div
-                    data-tour="shifts-filters"
+                    data-tour="cashier-shifts-filters"
                     className="grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-4"
                 >
                     {cashiers.length > 1 ? (
@@ -401,7 +400,7 @@ export default function Index({
                     />
                 </div>
 
-                <div data-tour="shifts-history">
+                <div data-tour="cashier-shifts-history">
                     <Table.Card title="Histori Shift Kasir">
                     <Table>
                         <Table.Thead>
@@ -418,7 +417,7 @@ export default function Index({
                         <Table.Tbody>
                             {shifts.data.length > 0 ? (
                                 shifts.data.map((shift) => (
-                                    <tr key={shift.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <tr data-tour={shift.id === shifts.data[0]?.id ? "cashier-shifts-row" : undefined} key={shift.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
                                         <Table.Td>
                                             <div>
                                                 <p className="font-semibold text-slate-800 dark:text-slate-200">
@@ -465,7 +464,7 @@ export default function Index({
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty
+                                <Table.Empty data-tour="cashier-shifts-empty"
                                     colSpan={7}
                                     message={
                                         <div className="text-slate-500 dark:text-slate-400">
@@ -483,7 +482,7 @@ export default function Index({
                 </Table.Card>
                 </div>
 
-                {shifts.last_page > 1 && <Pagination links={shifts.links} />}
+                {shifts.last_page > 1 && <Pagination data-tour="cashier-shifts-pagination" links={shifts.links} />}
             </div>
         </>
     );

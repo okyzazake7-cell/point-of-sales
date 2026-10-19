@@ -77,7 +77,7 @@ function AccessPage() {
                     </p>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div data-tour={visibleCards.length ? "access-cards" : undefined} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {visibleCards.length ? (
                         visibleCards.map((card) => (
                             <Link
@@ -99,7 +99,7 @@ function AccessPage() {
                             </Link>
                         ))
                     ) : (
-                        <div className="col-span-full text-slate-500 dark:text-slate-400">
+                        <div data-tour="access-empty" className="col-span-full text-slate-500 dark:text-slate-400">
                             Tidak ada akses tersedia. Hubungi admin.
                         </div>
                     )}

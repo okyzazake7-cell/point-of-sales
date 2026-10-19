@@ -4,6 +4,7 @@ namespace Tests\Feature\Purchasing;
 
 use App\Models\Category;
 use App\Models\GoodsReceiving;
+use App\Models\Payable;
 use App\Models\Product;
 use App\Models\ProductWarehouse;
 use App\Models\PurchaseOrder;
@@ -256,5 +257,35 @@ class GoodsReceivingTest extends TestCase
         $this->assertEquals(100, $product->fresh()->stock);
         $this->assertEquals(0, $order->items->first()->fresh()->qty_received);
         $this->assertEquals('ordered', $order->fresh()->status);
+    }
+
+    /**
+     * Satu PO, dua kali datang. Utang PO dulu ditimpa oleh penerimaan
+     * terakhir: totalnya tinggal barang kiriman kedua, dan pembayaran yang
+     * sudah dicatat terhapus ("Belum dibayar" lagi).
+     */
+    public function test_second_partial_receiving_adds_to_the_debt_and_keeps_payments(): void
+    {
+        $product = $this->createProduct(100);
+        $order = $this->createOrderedPo($product, 10, $this->warehouse->id);
+
+        $this->post(route('goods-receivings.store'), $this->receivingPayload($order, 4))->assertRedirect();
+        $payable = Payable::where('purchase_order_id', $order->id)->firstOrFail();
+        $this->assertEquals(20000, $payable->total);
+
+        $this->post(route('payables.pay', $payable), [
+            'amount' => 5000,
+            'paid_at' => now()->toDateString(),
+            'method' => 'cash',
+        ])->assertSessionHasNoErrors();
+
+        $this->post(route('goods-receivings.store'), $this->receivingPayload($order->fresh(), 6))->assertRedirect();
+
+        $payable->refresh();
+        $this->assertSame(1, Payable::where('purchase_order_id', $order->id)->count());
+        $this->assertEquals(50000, $payable->total);
+        $this->assertEquals(5000, $payable->paid);
+        $this->assertSame('partial', $payable->status);
+        $this->assertSame(1, $payable->payments()->count());
     }
 }

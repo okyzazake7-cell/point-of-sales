@@ -100,28 +100,46 @@ function ProductCard({ product, onAddToCart, isAdding }) {
 
             {/* Product Info */}
             <div className="flex-1 p-3 flex flex-col justify-between min-h-[80px]">
-                <h3 className="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2 leading-tight">
-                    {product.title}
-                </h3>
-                <div className="mt-2">
-                    {showPromo && !selectedUnit && (
-                        <p className="text-xs text-slate-400 line-through">
-                            {formatPrice(basePrice)}
-                        </p>
-                    )}
-                    <p className="text-base font-bold text-primary-600 dark:text-primary-400">
-                        {formatPrice(displayPrice)}
-                        {selectedUnit && (
-                            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                {" "}/{selectedUnit.code}
-                            </span>
+                {/*
+                    Nama dan harga ikut memasukkan barang ke keranjang. Dulu
+                    hanya gambarnya yang bisa diketuk: orang yang mengetuk
+                    nama barang (yang paling wajar dibaca) tidak mendapat apa
+                    pun (diuji di pos.aishiierp.com, 15 Okt). Pemilih satuan
+                    di bawahnya tetap tombolnya sendiri.
+                */}
+                <button
+                    type="button"
+                    onClick={() => hasStock && onAddToCart(product, selectedUnit)}
+                    disabled={!hasStock || isAdding}
+                    className={`flex flex-1 flex-col justify-between text-left ${
+                        hasStock ? "cursor-pointer" : "cursor-not-allowed"
+                    }`}
+                >
+                    <h3 className="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2 leading-tight">
+                        {product.title}
+                    </h3>
+                    <div className="mt-2">
+                        {showPromo && !selectedUnit && (
+                            <p className="text-xs text-slate-400 line-through">
+                                {formatPrice(basePrice)}
+                            </p>
                         )}
-                    </p>
-                    {showBadge && !showPromo && !selectedUnit && (
-                        <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
-                            Promo tersedia
+                        <p className="text-base font-bold text-primary-600 dark:text-primary-400">
+                            {formatPrice(displayPrice)}
+                            {selectedUnit && (
+                                <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                                    {" "}/{selectedUnit.code}
+                                </span>
+                            )}
                         </p>
-                    )}
+                        {showBadge && !showPromo && !selectedUnit && (
+                            <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                                Promo tersedia
+                            </p>
+                        )}
+                    </div>
+                </button>
+                <div>
                     {multiUnits.length > 0 && (
                         <div className="mt-1.5 flex flex-wrap gap-1">
                             <button
@@ -264,7 +282,7 @@ export default function ProductGrid({
             </div>
 
             {/* Category Tabs */}
-            <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
+            <div data-tour="pos-categories" className="px-4 py-3 border-b border-slate-200 dark:border-slate-800 overflow-x-auto scrollbar-hide">
                 <div className="flex gap-2">
                     <CategoryTab
                         category={{ id: null, name: "Semua" }}
@@ -286,7 +304,7 @@ export default function ProductGrid({
             </div>
 
             {/* Products Grid */}
-            <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
+            <div data-tour="pos-grid" className="flex-1 overflow-y-auto p-4 scrollbar-thin">
                 {filteredProducts.length > 0 ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {filteredProducts.map((product) => (

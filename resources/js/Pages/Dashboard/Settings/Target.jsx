@@ -51,7 +51,7 @@ export default function Target({ settings }) {
                                     className="text-primary-600 dark:text-primary-400"
                                 />
                             </div>
-                            <div className="flex-1">
+                            <div data-tour="settings-target-input" className="flex-1">
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                     Target Penjualan Bulanan
                                 </label>
@@ -103,7 +103,7 @@ export default function Target({ settings }) {
                 </div>
 
                 {/* Info */}
-                <div className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-900">
+                <div data-tour="settings-target-tip" className="bg-primary-50 dark:bg-primary-950/30 rounded-xl p-4 border border-primary-200 dark:border-primary-900">
                     <p className="text-sm text-primary-700 dark:text-primary-300">
                         <strong>Tip:</strong> Target penjualan akan ditampilkan
                         di Dashboard sebagai progress bar untuk memantau

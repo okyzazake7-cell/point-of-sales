@@ -110,13 +110,13 @@ export default function Warehouses({ warehouses = [] }) {
             </div>
 
             <div className="max-w-4xl space-y-6">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div data-tour="settings-warehouses-list" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                     <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                         <h3 className="font-semibold text-slate-800 dark:text-white">
                             Daftar Gudang ({warehouses.length})
                         </h3>
                         {canCreate && (
-                            <button
+                            <button data-tour="settings-warehouses-add"
                                 onClick={() => { resetForm(); setShowForm(true); }}
                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors"
                             >
@@ -129,7 +129,7 @@ export default function Warehouses({ warehouses = [] }) {
                     {warehouses.length > 0 ? (
                         <div className="divide-y divide-slate-200 dark:divide-slate-800">
                             {warehouses.map((w) => (
-                                <div key={w.id} className={`p-4 flex items-center gap-4 ${!w.is_active ? "opacity-50" : ""}`}>
+                                <div data-tour={w.id === warehouses[0].id ? "settings-warehouses-row" : undefined} key={w.id} className={`p-4 flex items-center gap-4 ${!w.is_active ? "opacity-50" : ""}`}>
                                     <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                                         <IconBuildingWarehouse size={22} className="text-slate-500" />
                                     </div>
@@ -148,7 +148,7 @@ export default function Warehouses({ warehouses = [] }) {
                                             {w.phone ? ` • ${w.phone}` : ""}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-2 shrink-0">
+                                    <div data-tour={w.id === warehouses[0].id ? "settings-warehouses-actions" : undefined} className="flex items-center gap-2 shrink-0">
                                         {w.type !== "main" && (
                                             <span className="text-xs text-slate-400 dark:text-slate-500">
                                                 Sort: {w.sort_order}
@@ -175,7 +175,7 @@ export default function Warehouses({ warehouses = [] }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="p-8 text-center">
+                        <div data-tour="settings-warehouses-empty" className="p-8 text-center">
                             <IconBuildingWarehouse size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-3" />
                             <p className="text-slate-500 dark:text-slate-400">Belum ada gudang</p>
                         </div>
@@ -188,7 +188,7 @@ export default function Warehouses({ warehouses = [] }) {
                             {editing ? "Edit Gudang" : "Tambah Gudang Baru"}
                         </h3>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div data-tour="settings-warehouses-form-main" className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <Input
                                     label="Kode"
                                     placeholder="WH-002"
@@ -219,7 +219,7 @@ export default function Warehouses({ warehouses = [] }) {
                                     )}
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div data-tour="settings-warehouses-form-extra" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                         Alamat
@@ -263,7 +263,7 @@ export default function Warehouses({ warehouses = [] }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div data-tour="settings-warehouses-form-buttons" className="flex items-center gap-3">
                                 <button
                                     type="submit"
                                     className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold transition-colors"

@@ -163,26 +163,58 @@ class GoodsReceivingService
         $order->update($updates);
     }
 
+    /**
+     * Satu utang per PO, sebesar SEMUA barang yang sudah diterima untuk PO
+     * itu. Kiriman sebagian berikutnya menambah utang yang sama — dulu ia
+     * menimpa totalnya dengan kiriman terakhir saja dan mengosongkan
+     * pembayaran yang sudah tercatat.
+     */
     private function createOrUpdatePayable(PurchaseOrder $order, GoodsReceiving $receiving, int $userId): void
     {
-        $total = $receiving->items()->sum(\DB::raw('qty_received * (SELECT unit_price FROM purchase_order_items WHERE id = goods_receiving_items.purchase_order_item_id)'));
+        $total = (int) $order->items()->sum(DB::raw('qty_received * unit_price'));
 
         if ($total <= 0) {
-            $total = $order->items()->sum(\DB::raw('qty_ordered * unit_price'));
+            $total = $order->items()->sum(DB::raw('qty_ordered * unit_price'));
         }
 
-        $payable = Payable::updateOrCreate(
-            ['purchase_order_id' => $order->id],
-            [
-                'supplier_id' => $order->supplier_id,
-                'document_number' => $receiving->document_number,
+        $payable = Payable::where('purchase_order_id', $order->id)->lockForUpdate()->first();
+
+        if ($payable) {
+            $before = ['total' => $payable->total, 'status' => $payable->status];
+            $paid = (float) $payable->paid;
+            $payable->update([
                 'total' => $total,
-                'paid' => 0,
-                'due_date' => now()->addDays(30),
-                'status' => 'unpaid',
-                'note' => 'Otomatis dari penerimaan PO '.$order->document_number,
-            ]
-        );
+                'status' => match (true) {
+                    $paid >= $total => 'paid',
+                    $payable->due_date && now()->gt($payable->due_date) => 'overdue',
+                    $paid > 0 => 'partial',
+                    default => 'unpaid',
+                },
+            ]);
+
+            $this->auditLogService->log(
+                event: 'payable.updated_from_receiving',
+                module: 'payable',
+                auditable: $payable,
+                description: 'Hutang PO '.$order->document_number.' bertambah dari penerimaan '.$receiving->document_number,
+                before: $before,
+                after: ['total' => $payable->total, 'status' => $payable->status],
+                meta: ['goods_receiving_id' => $receiving->id],
+            );
+
+            return;
+        }
+
+        $payable = Payable::create([
+            'purchase_order_id' => $order->id,
+            'supplier_id' => $order->supplier_id,
+            'document_number' => $receiving->document_number,
+            'total' => $total,
+            'paid' => 0,
+            'due_date' => now()->addDays(30),
+            'status' => 'unpaid',
+            'note' => 'Otomatis dari penerimaan PO '.$order->document_number,
+        ]);
 
         if ($payable->wasRecentlyCreated) {
             $this->auditLogService->log(

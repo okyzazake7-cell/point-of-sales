@@ -6,9 +6,9 @@ import React from 'react'
 // di grid satu kolom ponsel tabel lebarnya menyeret lajur grid sampai ±566px
 // (`min-width: auto`) sehingga seluruh halaman bisa digeser ke samping.
 // `min-w-0` mengembalikan guliran tabel ke pembungkus `overflow-x-auto`-nya.
-const Card = ({ icon, title, className, children }) => {
+const Card = ({ icon, title, className, children, "data-tour": tour }) => {
     return (
-        <div className="min-w-0">
+        <div className="min-w-0" data-tour={tour}>
             <div className={`p-4 rounded-t-lg border ${className ?? ''} bg-white dark:bg-gray-950 dark:border-gray-900 `}>
                 <div className='flex items-center gap-2 font-semibold text-sm text-gray-700 dark:text-gray-200'>
                     {title}
@@ -21,9 +21,9 @@ const Card = ({ icon, title, className, children }) => {
     )
 }
 
-const Table = ({ children }) => {
+const Table = ({ children, "data-tour": tour }) => {
     return (
-        <div className="w-full overflow-hidden overflow-x-auto border-collapse rounded-b-lg border border-t-0 dark:border-gray-900">
+        <div data-tour={tour} className="w-full overflow-hidden overflow-x-auto border-collapse rounded-b-lg border border-t-0 dark:border-gray-900">
             <table className="w-full text-sm">
                 {children}
             </table>
@@ -45,9 +45,10 @@ const Tbody = ({ className, children }) => {
     );
 };
 
-const Td = ({ className, children }) => {
+const Td = ({ className, children, "data-tour": tour }) => {
     return (
         <td
+            data-tour={tour}
             className={`${className} whitespace-nowrap p-4 align-middle text-gray-700 dark:text-gray-400`}
         >
             {children}
@@ -66,9 +67,9 @@ const Th = ({ className, children }) => {
     );
 };
 
-const Empty = ({ colSpan, message, children }) => {
+const Empty = ({ colSpan, message, children, "data-tour": tour }) => {
     return (
-        <tr>
+        <tr data-tour={tour}>
             <td colSpan={colSpan}>
                 <div className="flex items-center justify-center h-96">
                     <div className="text-center">

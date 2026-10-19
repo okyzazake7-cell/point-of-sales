@@ -178,7 +178,7 @@ export default function Form({ mode = "create", member = null }) {
                 </div>
 
                 <form onSubmit={submit} className="space-y-6">
-                    <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 dark:border-primary-900/40 dark:bg-primary-950/20">
+                    <div data-tour="members-form-info" className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 dark:border-primary-900/40 dark:bg-primary-950/20">
                         <div className="flex items-start gap-3">
                             <div className="mt-0.5 rounded-xl bg-white/80 p-2 text-primary-600 dark:bg-slate-900/70 dark:text-primary-300">
                                 <IconInfoCircle size={18} />
@@ -210,7 +210,7 @@ export default function Form({ mode = "create", member = null }) {
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <Input
+                            <Input data-tour="members-form-name"
                                 type="text"
                                 label="Nama Member"
                                 placeholder="Masukkan nama lengkap"
@@ -220,7 +220,7 @@ export default function Form({ mode = "create", member = null }) {
                                 }
                                 value={data.name}
                             />
-                            <Input
+                            <Input data-tour="members-form-phone"
                                 type="text"
                                 label="No. Handphone"
                                 placeholder="08xxxxxxxxxx"
@@ -233,7 +233,7 @@ export default function Form({ mode = "create", member = null }) {
                         </div>
 
                         <div className="mt-4 rounded-2xl border border-primary-100 bg-primary-50/70 p-4 dark:border-primary-900/40 dark:bg-primary-950/20">
-                            <div className="flex items-center justify-between gap-4">
+                            <div data-tour="members-form-status" className="flex items-center justify-between gap-4">
                                 <div>
                                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
                                         Status Member
@@ -258,7 +258,7 @@ export default function Form({ mode = "create", member = null }) {
                                 </label>
                             </div>
 
-                            <div className="mt-4">
+                            <div data-tour="members-form-tier" className="mt-4">
                                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Tier Member
                                 </label>
@@ -287,7 +287,7 @@ export default function Form({ mode = "create", member = null }) {
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="members-form-region" className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                             Wilayah & Alamat
                         </h2>
@@ -416,7 +416,7 @@ export default function Form({ mode = "create", member = null }) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-slate-100 pt-6 dark:border-slate-800">
+                    <div data-tour="members-form-submit" className="flex justify-end gap-3 border-t border-slate-100 pt-6 dark:border-slate-800">
                         <Link
                             href={route("members.index")}
                             className="rounded-xl border border-slate-200 px-5 py-2.5 font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800"

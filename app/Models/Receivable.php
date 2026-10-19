@@ -71,7 +71,9 @@ class Receivable extends Model
             return 'current';
         }
 
-        $daysOverdue = now()->diffInDays($this->due_date);
+        // Carbon 3: `now()->diffInDays($lalu)` NEGATIF — semua tagihan telat
+        // dulu jatuh di "0-30". Hari telat dihitung dari jatuh tempo ke kini.
+        $daysOverdue = (int) $this->due_date->diffInDays(now());
 
         return match (true) {
             $daysOverdue <= 30 => '0-30',

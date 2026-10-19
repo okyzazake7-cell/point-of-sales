@@ -103,7 +103,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                         </p>
                     </div>
                     {cashierShift.status !== "open" && (
-                        <button
+                        <button data-tour="cashier-shifts-show-report-z"
                             type="button"
                             onClick={() =>
                                 window.open(
@@ -120,7 +120,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                             <span>Cetak Laporan Z</span>
                         </button>
                     )}
-                    <span
+                    <span data-tour="cashier-shifts-show-status"
                         className={`inline-flex rounded-full px-3 py-1.5 text-sm font-semibold ${
                             cashierShift.status === "open"
                                 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400"
@@ -137,7 +137,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                     </span>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="cashier-shifts-show-metrics" className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                     <MetricCard title="Modal Awal" value={formatCurrency(cashierShift.opening_cash)} icon={IconWallet} />
                     <MetricCard title="Expected Cash" value={formatCurrency(cashierShift.expected_cash)} icon={IconCashBanknote} />
                     <MetricCard title="Penjualan Tunai" value={formatCurrency(cashierShift.cash_sales_total)} icon={IconReceipt} />
@@ -145,7 +145,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                 </div>
 
                 <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="cashier-shifts-show-summary" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                             Ringkasan Shift
                         </h2>
@@ -201,7 +201,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                     </div>
 
                     <div className="space-y-6">
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="cashier-shifts-show-closing" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                                 Cash Closing
                             </h2>
@@ -226,7 +226,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                         </div>
 
                         {canCloseShift && (
-                            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                            <div data-tour="cashier-shifts-show-close" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                                     Tutup Shift
                                 </h2>
@@ -234,7 +234,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                                     Input kas fisik akhir untuk finalisasi cash closing.
                                 </p>
                                 <form onSubmit={handleCloseShift} className="mt-4 space-y-4">
-                                    <div>
+                                    <div data-tour="cashier-shifts-show-actual">
                                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Kas Fisik Aktual</label>
                                         <input
                                             type="number"
@@ -247,7 +247,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                                             <p className="mt-2 text-xs text-rose-500">{errors.actual_cash}</p>
                                         )}
                                     </div>
-                                    <div>
+                                    <div data-tour="cashier-shifts-show-notes">
                                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Catatan Closing</label>
                                         <textarea
                                             rows={4}
@@ -268,7 +268,7 @@ export default function Show({ cashierShift, canForceClose = false }) {
                                             Selisih closing: {formatCurrency(difference)}
                                         </div>
                                     )}
-                                    <button
+                                    <button data-tour="cashier-shifts-show-finalize"
                                         type="submit"
                                         className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-600"
                                     >

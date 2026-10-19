@@ -327,6 +327,7 @@ export default function Dashboard({
                         </p>
                     </div>
                     <Link
+                        data-tour="dashboard-new-sale"
                         href={route("transactions.index")}
                         className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors shadow-lg shadow-primary-500/30"
                     >
@@ -374,7 +375,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Secondary Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div data-tour="dashboard-info" className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <InfoCard
                         title="Total Kategori"
                         value={totalCategories}

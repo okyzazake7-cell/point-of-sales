@@ -27,7 +27,7 @@ export default function Show({ receiving }) {
     return (
         <>
             <Head title={receiving.document_number} />
-            <div className="mb-6">
+            <div data-tour="goods-receivings-show-header" className="mb-6">
                 <Link
                     href={route("goods-receivings.index")}
                     className="mb-3 inline-flex items-center gap-2 text-sm text-slate-500 hover:text-primary-600"
@@ -55,7 +55,7 @@ export default function Show({ receiving }) {
             </div>
 
             <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="goods-receivings-show-items" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                     <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                         Item Diterima
                     </h2>
@@ -108,7 +108,7 @@ export default function Show({ receiving }) {
                             <p className="text-sm text-slate-600 dark:text-slate-400">{receiving.notes}</p>
                         </div>
                     )}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="goods-receivings-show-info" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-3 text-lg font-semibold text-slate-900 dark:text-white">Informasi</h2>
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">

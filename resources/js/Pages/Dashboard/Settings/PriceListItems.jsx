@@ -30,14 +30,14 @@ export default function PriceListItems({ priceList, products }) {
             <Head title={`Price List: ${priceList.name}`} />
             <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                    <Link href={route("price-lists.index")} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconArrowLeft size={20} /></Link>
+                    <Link data-tour="settings-price-list-items-back" href={route("price-lists.index")} className="p-2 rounded-lg text-slate-500 hover:bg-slate-100"><IconArrowLeft size={20} /></Link>
                     <div>
                         <h1 className="text-2xl font-bold">{priceList.name}</h1>
                         <p className="text-sm text-slate-500">{priceList.items.length} produk</p>
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                <div data-tour="settings-price-list-items-add" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                     <h3 className="font-semibold mb-3">Tambah Harga</h3>
                     <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Cari produk..." className="h-11 w-full rounded-xl border border-slate-200 px-4 text-sm mb-3" />
                     {search && filtered.filter(p => !existingProductIds.includes(p.id)).slice(0, 10).map(p => (
@@ -52,18 +52,18 @@ export default function PriceListItems({ priceList, products }) {
                     {priceList.items.length > 0 ? (
                         <div className="divide-y">
                             {priceList.items.map(item => (
-                                <div key={item.id} className="p-4 flex items-center gap-4">
+                                <div data-tour={item.id === priceList.items[0].id ? "settings-price-list-items-row" : undefined} key={item.id} className="p-4 flex items-center gap-4">
                                     <div className="flex-1">
                                         <p className="font-semibold">{item.product?.title || "-"}</p>
                                         <p className="text-sm text-slate-500">{item.product?.sku || "-"} • Harga normal: {formatPrice(item.product?.sell_price)}</p>
                                     </div>
                                     <span className="font-bold text-primary-600">{formatPrice(item.price)}</span>
-                                    <button onClick={() => removeItem(item)} className="p-2 rounded-lg text-danger-500 hover:bg-danger-50"><IconTrash size={18} /></button>
+                                    <button data-tour={item.id === priceList.items[0].id ? "settings-price-list-items-delete" : undefined} onClick={() => removeItem(item)} className="p-2 rounded-lg text-danger-500 hover:bg-danger-50"><IconTrash size={18} /></button>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="p-8 text-center text-slate-400">Belum ada item. Cari produk di atas untuk menambah.</div>
+                        <div data-tour="settings-price-list-items-empty" className="p-8 text-center text-slate-400">Belum ada item. Cari produk di atas untuk menambah.</div>
                     )}
                 </div>
             </div>

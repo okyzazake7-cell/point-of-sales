@@ -27,7 +27,7 @@ export default function SetupChecklist({ checklist = {} }) {
     const percent = Math.round((done / total) * 100);
 
     return (
-        <div className="rounded-2xl border border-primary-100 dark:border-primary-900/40 bg-primary-50/60 dark:bg-primary-950/20 p-5">
+        <div data-tour="dashboard-checklist" className="rounded-2xl border border-primary-100 dark:border-primary-900/40 bg-primary-50/60 dark:bg-primary-950/20 p-5">
             <div className="flex items-center justify-between gap-4 mb-3">
                 <div>
                     <h2 className="text-base font-semibold text-primary-900 dark:text-primary-200">

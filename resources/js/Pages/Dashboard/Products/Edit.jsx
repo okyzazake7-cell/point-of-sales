@@ -200,7 +200,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Left - Image */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                        <div data-tour="products-form-image" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                             <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
                                 <IconPhoto size={18} />
                                 Gambar Produk
@@ -243,7 +243,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
-                                    <InputSelect
+                                    <InputSelect data-tour="products-form-category"
                                         label="Kategori"
                                         data={categories}
                                         selected={selectedCategory}
@@ -254,7 +254,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                         displayKey="name"
                                     />
                                 </div>
-                                <Input
+                                <Input data-tour="products-form-barcode"
                                     type="text"
                                     label="Barcode"
                                     value={data.barcode}
@@ -264,7 +264,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                     errors={errors.barcode}
                                     placeholder="Kode produk"
                                 />
-                                <Input
+                                <Input data-tour="products-form-sku"
                                     type="text"
                                     label="SKU"
                                     value={data.sku}
@@ -272,7 +272,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                     errors={errors.sku}
                                     placeholder="SKU unik"
                                 />
-                                <Input
+                                <Input data-tour="products-form-name"
                                     type="text"
                                     label="Nama Produk"
                                     value={data.title}
@@ -283,7 +283,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                     placeholder="Nama produk"
                                 />
                                 <div className="md:col-span-2">
-                                    <Textarea
+                                    <Textarea data-tour="products-form-description"
                                         label="Deskripsi"
                                         placeholder="Deskripsi produk (opsional)"
                                         errors={errors.description}
@@ -302,7 +302,7 @@ export default function Edit({ categories, product, products = [], units = [] })
 
                         {/* Units */}
                         {!data.is_composite && (
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+                            <div data-tour="products-form-units" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                                         <IconRulerMeasure size={18} />
@@ -462,7 +462,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                 <IconCurrencyDollar size={18} />
                                 Harga Produk
                             </h3>
-                            <label className="flex items-center gap-2 mb-4 cursor-pointer">
+                            <label data-tour="products-form-composite" className="flex items-center gap-2 mb-4 cursor-pointer">
                                 <input
                                     type="checkbox"
                                     checked={data.is_composite}
@@ -477,7 +477,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                     paket)
                                 </span>
                             </label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div data-tour="products-form-prices" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input
                                     type="number"
                                     label="Harga Beli"
@@ -507,7 +507,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                 />
                             </div>
 
-                            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+                            <div data-tour="products-form-stock-now" className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
                                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                     {data.is_composite
                                         ? "Stok Komposit"
@@ -524,7 +524,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                            <div data-tour="products-form-minmax" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                                 <Input
                                     type="number"
                                     label="Stok Minimum"
@@ -553,7 +553,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                            <div data-tour="products-form-tax" className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                         Tipe Pajak
@@ -618,7 +618,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                             {!data.is_composite &&
                                 data.buy_price > 0 &&
                                 data.sell_price > 0 && (
-                                <div className="mt-4 p-4 rounded-xl bg-success-50 dark:bg-success-950/30 border border-success-200 dark:border-success-900">
+                                <div data-tour="products-form-profit" className="mt-4 p-4 rounded-xl bg-success-50 dark:bg-success-950/30 border border-success-200 dark:border-success-900">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <p className="text-sm text-success-700 dark:text-success-400 font-medium">
@@ -652,7 +652,7 @@ export default function Edit({ categories, product, products = [], units = [] })
 
                             {/* Composite Components */}
                             {data.is_composite && (
-                                <div className="mt-4">
+                                <div data-tour="products-form-components" className="mt-4">
                                     <div className="flex items-center justify-between mb-4">
                                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                                             <IconPackages size={18} />
@@ -770,7 +770,7 @@ export default function Edit({ categories, product, products = [], units = [] })
                             )}
                         </div>
 
-                        <div className="flex justify-end gap-3">
+                        <div data-tour="products-form-submit" className="flex justify-end gap-3">
                             <Link
                                 href={route("products.index")}
                                 className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors"

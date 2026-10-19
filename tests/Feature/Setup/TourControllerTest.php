@@ -58,13 +58,13 @@ class TourControllerTest extends TestCase
 
     public function test_all_registered_tours_can_be_completed(): void
     {
-        foreach (TourController::TOURS as $tour) {
+        foreach (TourController::tours() as $tour) {
             $this->actingAs($this->user)
                 ->postJson("/dashboard/tours/{$tour}/complete")
                 ->assertOk();
         }
 
-        $this->assertSame(TourController::TOURS, $this->user->fresh()->completed_tours);
+        $this->assertSame(TourController::tours(), $this->user->fresh()->completed_tours);
     }
 
     public function test_guest_cannot_complete_a_tour(): void

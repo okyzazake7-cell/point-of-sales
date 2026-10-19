@@ -28,6 +28,7 @@ function UserCard({
     onDelete,
     canUpdate,
     canDelete,
+    first,
 }) {
     const avatarUrl = user.avatar;
     const initial =
@@ -97,7 +98,7 @@ function UserCard({
 
             {/* Actions */}
             {(canUpdate || canDelete) && (
-                <div className="flex border-t border-slate-100 dark:border-slate-800">
+                <div data-tour={first ? "users-row" : undefined} className="flex border-t border-slate-100 dark:border-slate-800">
                     {canUpdate && (
                         <Link
                             href={route("users.edit", user.id)}
@@ -193,7 +194,7 @@ export default function Index() {
                     </div>
                     <div className="flex gap-2">
                         {canDeleteUsers && data.selectedUser.length > 0 && (
-                            <Button
+                            <Button data-tour="users-bulk"
                                 type={"bulk"}
                                 icon={<IconTrash size={18} />}
                                 className={
@@ -204,7 +205,7 @@ export default function Index() {
                             />
                         )}
                         {canCreateUsers && (
-                            <Button
+                            <Button data-tour="users-add"
                                 type={"link"}
                                 href={route("users.create")}
                                 icon={
@@ -226,12 +227,12 @@ export default function Index() {
             {/* Toolbar */}
             <div className="mb-4 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                 <div className="w-full sm:w-80">
-                    <Search
+                    <Search data-tour="users-search"
                         url={route("users.index")}
                         placeholder="Cari pengguna..."
                     />
                 </div>
-                <div className="flex items-center gap-2">
+                <div data-tour="users-view" className="flex items-center gap-2">
                     <button
                         onClick={() => setViewMode("grid")}
                         className={`p-2.5 rounded-lg transition-colors ${
@@ -258,10 +259,11 @@ export default function Index() {
             {/* Content */}
             {users.data.length > 0 ? (
                 viewMode === "grid" ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div data-tour="users-list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {users.data.map((user) => (
                             <UserCard
                                 key={user.id}
+                                first={user.id === users.data[0].id}
                                 user={user}
                                 isSelected={data.selectedUser.includes(
                                     user.id.toString()
@@ -274,7 +276,7 @@ export default function Index() {
                         ))}
                     </div>
                 ) : (
-                    <Table.Card title={"Data Pengguna"}>
+                    <Table.Card data-tour="users-list" title={"Data Pengguna"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
@@ -367,7 +369,7 @@ export default function Index() {
                                                 )}
                                             </div>
                                         </Table.Td>
-                                        <Table.Td>
+                                        <Table.Td data-tour={user.id === users.data[0].id ? "users-row" : undefined}>
                                             <div className="flex gap-2">
                                                 {canUpdateUsers && (
                                                     <Button
@@ -418,7 +420,7 @@ export default function Index() {
                     </Table.Card>
                 )
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="users-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -446,7 +448,7 @@ export default function Index() {
                 </div>
             )}
 
-            {users.last_page !== 1 && <Pagination links={users.links} />}
+            {users.last_page !== 1 && <Pagination data-tour="users-pagination" links={users.links} />}
         </>
     );
 }

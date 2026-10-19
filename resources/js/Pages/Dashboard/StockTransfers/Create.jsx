@@ -69,7 +69,7 @@ export default function Create({ warehouses, products }) {
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Informasi Transfer</h2>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                            <div>
+                            <div data-tour="stock-transfers-create-source">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Gudang Asal</label>
                                 <select
                                     value={data.source_warehouse_id}
@@ -81,7 +81,7 @@ export default function Create({ warehouses, products }) {
                                 </select>
                                 {errors.source_warehouse_id && <p className="mt-1 text-xs text-danger-500">{errors.source_warehouse_id}</p>}
                             </div>
-                            <div>
+                            <div data-tour="stock-transfers-create-destination">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Gudang Tujuan</label>
                                 <select
                                     value={data.destination_warehouse_id}
@@ -93,11 +93,11 @@ export default function Create({ warehouses, products }) {
                                 </select>
                                 {errors.destination_warehouse_id && <p className="mt-1 text-xs text-danger-500">{errors.destination_warehouse_id}</p>}
                             </div>
-                            <div>
+                            <div data-tour="stock-transfers-create-number">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Nomor Dokumen</label>
                                 <input type="text" value={data.document_number} onChange={(e) => setData("document_number", e.target.value)} placeholder="Kosongkan auto-generate" className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" />
                             </div>
-                            <div>
+                            <div data-tour="stock-transfers-create-notes">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Catatan</label>
                                 <input type="text" value={data.notes} onChange={(e) => setData("notes", e.target.value)} placeholder="Opsional" className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" />
                             </div>
@@ -106,7 +106,7 @@ export default function Create({ warehouses, products }) {
 
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Item Transfer</h2>
-                        <div className="mb-4">
+                        <div data-tour="stock-transfers-create-search" className="mb-4">
                             <input type="text" value={searchProduct} onChange={(e) => setSearchProduct(e.target.value)} placeholder="Cari produk untuk ditambahkan..." className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200" />
                         </div>
                         {searchProduct && filteredProducts.length > 0 && (
@@ -122,7 +122,7 @@ export default function Create({ warehouses, products }) {
                             </div>
                         )}
                         {data.items.length > 0 ? (
-                            <div className="overflow-x-auto">
+                            <div data-tour="stock-transfers-create-items" className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
                                         <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -150,14 +150,14 @@ export default function Create({ warehouses, products }) {
                                 </table>
                             </div>
                         ) : (
-                            <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
+                            <div data-tour="stock-transfers-create-empty" className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
                                 <IconPackage size={40} className="mx-auto text-slate-300 dark:text-slate-600" />
                                 <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Cari produk di atas untuk ditambahkan ke transfer.</p>
                             </div>
                         )}
                     </div>
 
-                    <div className="flex justify-end gap-3">
+                    <div data-tour="stock-transfers-create-actions" className="flex justify-end gap-3">
                         <Link href={route("stock-transfers.index")} className="flex h-11 items-center rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Batal</Link>
                         <Button type="submit" icon={<IconPlus size={18} />} className="bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/30" label={processing ? "Menyimpan..." : "Simpan Draft"} disabled={processing} />
                     </div>

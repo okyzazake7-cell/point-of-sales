@@ -20,6 +20,19 @@ original copyright in `LICENSE`, and send generic fixes upstream.
 - Mobile-friendliness is MEASURED: `node scripts/audit-ponsel.mjs` (server on
   :8000 with `php artisan seed:demo --force`) must report
   `0 halaman×lebar meluber` at 390 and 320 px before every PR touching UI.
+- EVERY page has a guide for non-tech-savvy users (owner's request, 15 Oct):
+  `resources/js/Panduan/daftar.json` maps an Inertia component to its steps
+  (each step points at a `data-tour="…"` anchor), texts live in
+  `Panduan/teks/{id,en}.json` (loaded only when a guide opens), the engine is
+  `Utils/tours.js` + `Hooks/useTour.js`. The "?" button opens the CURRENT
+  page's guide; each guide starts by itself once per user (guests: per
+  browser). A new page without a guide, a step without both texts, or an
+  anchor missing from the JSX fails `tests/Feature/PanduanTest.php`;
+  `node scripts/audit-panduan.mjs` (same server as `audit-ponsel`) must
+  report `0 halaman×lebar gagal`. Create/Edit pages sharing a form share one
+  guide (map Edit to Create with a string). Anchors go on real boxes — never
+  a Fragment or `display: contents`. `TourController` reads its keys from the
+  same JSON, so never list keys twice.
 - Interface language defaults to Indonesian; `SetLocale` must not read
   `Accept-Language`. English stays available as an explicit choice.
 - `Permissions-Policy` keeps `camera=(self)` and `usb=(self)`: the camera barcode

@@ -117,7 +117,7 @@ function TagihanTerbuka({ tagihan, qris, whatsapp, bolehMengatur }) {
     );
 
     return (
-        <section data-tagihan-terbuka className={kartu}>
+        <section data-tour="langganan-tagihan" data-tagihan-terbuka className={kartu}>
             <h2 className="text-base font-semibold text-slate-900 dark:text-white">Tagihan menunggu pembayaran</h2>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
                 {tagihan.jenis === "perpanjang"
@@ -126,7 +126,7 @@ function TagihanTerbuka({ tagihan, qris, whatsapp, bolehMengatur }) {
                 · berlaku sampai {tanggalJam(tagihan.berlaku_sampai)}
             </p>
 
-            <div className="mt-4 rounded-2xl bg-slate-50 p-4 text-center dark:bg-slate-800/60">
+            <div data-tour="langganan-nominal" className="mt-4 rounded-2xl bg-slate-50 p-4 text-center dark:bg-slate-800/60">
                 <p className="text-sm text-slate-600 dark:text-slate-400">Transfer TEPAT sebesar</p>
                 <p data-nominal-bayar className="mt-1 break-words text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
                     {rupiah(tagihan.total_bayar)}
@@ -152,7 +152,7 @@ function TagihanTerbuka({ tagihan, qris, whatsapp, bolehMengatur }) {
                 )}
             </div>
 
-            <div className="mt-4 flex flex-col items-center">
+            <div data-tour="langganan-qris" className="mt-4 flex flex-col items-center">
                 <img
                     src={qris.gambar}
                     alt={`QRIS ${qris.nama}`}
@@ -164,7 +164,7 @@ function TagihanTerbuka({ tagihan, qris, whatsapp, bolehMengatur }) {
                 </p>
             </div>
 
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <div data-tour="langganan-periksa" className="mt-4 grid gap-2 sm:grid-cols-2">
                 <button
                     type="button"
                     onClick={periksa}
@@ -185,7 +185,7 @@ function TagihanTerbuka({ tagihan, qris, whatsapp, bolehMengatur }) {
                 </a>
             </div>
             {bolehMengatur && (
-                <button
+                <button data-tour="langganan-batal"
                     type="button"
                     onClick={batalkan}
                     className="mt-3 w-full text-center text-sm font-medium text-slate-500 underline-offset-2 hover:underline dark:text-slate-400"
@@ -226,13 +226,13 @@ function BuatTagihan({ ringkasan, pilihanBulan, hargaPerOutlet, hariProrata }) {
     };
 
     return (
-        <section data-buat-tagihan className={kartu}>
+        <section data-tour="langganan-buat-tagihan" data-buat-tagihan className={kartu}>
             <h2 className="text-base font-semibold text-slate-900 dark:text-white">
                 {ringkasan.pernah_aktif ? "Perpanjang atau tambah outlet" : "Tagihan pertama"}
             </h2>
 
             {bisaTambah && (
-                <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
+                <div data-tour="langganan-jenis" className="mt-3 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
                     {[
                         ["perpanjang", "Perpanjang"],
                         ["tambah_outlet", "Tambah outlet"],
@@ -255,7 +255,7 @@ function BuatTagihan({ ringkasan, pilihanBulan, hargaPerOutlet, hariProrata }) {
 
             <form onSubmit={kirim} className="mt-4 space-y-5">
                 {jenis === "perpanjang" && (
-                    <div>
+                    <div data-tour="langganan-bulan">
                         <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Lama berlangganan</p>
                         <div className="grid grid-cols-4 gap-2">
                             {pilihanBulan.map((b) => (
@@ -277,7 +277,7 @@ function BuatTagihan({ ringkasan, pilihanBulan, hargaPerOutlet, hariProrata }) {
                     </div>
                 )}
 
-                <div>
+                <div data-tour="langganan-jumlah">
                     <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
                         {jenis === "perpanjang" ? "Outlet yang berjualan" : "Outlet tambahan"}
                     </p>
@@ -296,7 +296,7 @@ function BuatTagihan({ ringkasan, pilihanBulan, hargaPerOutlet, hariProrata }) {
                     {errors.tagihan && <p className="mt-1 text-sm text-danger-500">{errors.tagihan}</p>}
                 </div>
 
-                <button
+                <button data-tour="langganan-buat"
                     type="submit"
                     disabled={processing}
                     className="flex h-12 w-full items-center justify-center rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-60"
@@ -352,7 +352,7 @@ export default function Index({
                     </p>
                 </div>
 
-                <section className={kartu}>
+                <section data-tour="langganan-status" className={kartu}>
                     <StatusLangganan ringkasan={ringkasan} />
                     {/* `kursi_dibayar` bernilai 1 sejak toko lahir, jadi toko yang belum
                         pernah membayar dulu berkata "1 dari 1 yang dibayar" (AV8). */}
@@ -384,13 +384,13 @@ export default function Index({
                         hariProrata={hariProrata}
                     />
                 ) : (
-                    <p className={`${kartu} text-sm text-slate-600 dark:text-slate-400`}>
+                    <p data-tour="langganan-pemilik" className={`${kartu} text-sm text-slate-600 dark:text-slate-400`}>
                         Langganan diatur pemilik toko.
                     </p>
                 )}
                 {errors?.tagihan && !bolehMengatur && <p className="text-sm text-danger-500">{errors.tagihan}</p>}
 
-                <section className={kartu}>
+                <section data-tour="langganan-outlet" className={kartu}>
                     <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
                         <IconBuildingStore size={18} />
                         Outlet yang ditagih
@@ -420,7 +420,7 @@ export default function Index({
                 </section>
 
                 {riwayat.length > 0 && (
-                    <section className={kartu}>
+                    <section data-tour="langganan-riwayat" className={kartu}>
                         <h2 className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
                             <IconHistory size={18} />
                             Riwayat tagihan

@@ -566,14 +566,23 @@ class SalesReturnController extends Controller
                     ]);
                 }
 
+                // `price` detail penjualan adalah TOTAL baris (CheckoutService),
+                // bukan harga satuan: dulu retur 2 dari 3 barang membayar dua
+                // kali total barisnya. Bagian yang diretur dihitung dari total
+                // itu, sehingga retur bertahap berjumlah persis harga barisnya.
+                $qtySold = max(1, (int) $detail->qty);
+                $lineTotal = (int) $detail->price;
+                $subtotal = intdiv($lineTotal * ($qtyReturnedBefore + $qtyReturn), $qtySold)
+                    - intdiv($lineTotal * $qtyReturnedBefore, $qtySold);
+
                 return [
                     'transaction_detail_id' => $detail->id,
                     'product_id' => $detail->product_id,
                     'qty_sold' => (int) $detail->qty,
                     'qty_returned_before' => $qtyReturnedBefore,
                     'qty_return' => $qtyReturn,
-                    'unit_price' => (int) $detail->price,
-                    'subtotal' => $qtyReturn * (int) $detail->price,
+                    'unit_price' => (int) round($lineTotal / $qtySold),
+                    'subtotal' => $subtotal,
                     'return_reason' => trim($item['return_reason']),
                     'restock_to_inventory' => (bool) ($item['restock_to_inventory'] ?? true),
                 ];

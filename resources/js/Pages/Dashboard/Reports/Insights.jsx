@@ -352,7 +352,6 @@ export default function Insights({
 
             <div className="space-y-6">
                 <div
-                    data-tour="reports-header"
                     className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                     <div>
@@ -368,7 +367,7 @@ export default function Insights({
                             performa kasir dalam satu dashboard.
                         </p>
                     </div>
-                    <button
+                    <button data-tour="reports-insights-filter"
                         onClick={() => setShowFilters((value) => !value)}
                         className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
                             showFilters || hasActiveFilters
@@ -381,7 +380,7 @@ export default function Insights({
                     </button>
                 </div>
 
-                <div data-tour="reports-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="reports-insights-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <SummaryCard
                         title="Pendapatan"
                         value={formatCurrency(summary?.revenue_total ?? 0)}
@@ -414,7 +413,6 @@ export default function Insights({
 
                 {showFilters && (
                     <div
-                        data-tour="reports-filters"
                         className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                     >
                         <form onSubmit={applyFilters}>
@@ -501,7 +499,7 @@ export default function Insights({
                     </div>
                 )}
 
-                <div data-tour="reports-table" className="grid gap-6 xl:grid-cols-2">
+                <div data-tour="reports-insights-charts" className="grid gap-6 xl:grid-cols-2">
                     <ChartCard
                         title="Sales by Hour"
                         subtitle="Pola omzet per jam dari transaksi yang lolos filter."
@@ -516,7 +514,7 @@ export default function Insights({
                     />
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="reports-insights-customers" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <SummaryCard
                         title="Customer Aktif"
                         value={(repeatSummary.active_customers ?? 0).toLocaleString("id-ID")}
@@ -552,7 +550,7 @@ export default function Insights({
                     />
                 </div>
 
-                <Table.Card title="Top Selling Products">
+                <Table.Card data-tour="reports-insights-top" title="Top Selling Products">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -590,7 +588,7 @@ export default function Insights({
                     </Table>
                 </Table.Card>
 
-                <Table.Card title="Low Performing Products">
+                <Table.Card data-tour="reports-insights-low" title="Low Performing Products">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -628,7 +626,7 @@ export default function Insights({
                     </Table>
                 </Table.Card>
 
-                <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="reports-insights-margin" className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
                     <div className="flex flex-col gap-3 border-b border-slate-100 p-5 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -687,7 +685,7 @@ export default function Insights({
                     </Table>
                 </div>
 
-                <Table.Card title="Cashier Performance">
+                <Table.Card data-tour="reports-insights-cashiers" title="Cashier Performance">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -718,7 +716,7 @@ export default function Insights({
                     </Table>
                 </Table.Card>
 
-                <Table.Card title="Repeat Customer Metrics">
+                <Table.Card data-tour="reports-insights-repeat" title="Repeat Customer Metrics">
                     <div className="mb-4 grid gap-3 md:grid-cols-3">
                         <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                             <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -817,7 +815,7 @@ export default function Insights({
                     </Table>
                 </Table.Card>
 
-                <Table.Card title="Stock Coverage Analysis">
+                <Table.Card data-tour="reports-insights-coverage" title="Stock Coverage Analysis">
                     <div className="mb-4 grid gap-3 md:grid-cols-4">
                         <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                             <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -929,7 +927,7 @@ export default function Insights({
                 </Table.Card>
 
                 <div className="grid gap-6 xl:grid-cols-2">
-                    <Table.Card title="Promo Active Monitor">
+                    <Table.Card data-tour="reports-insights-promo" title="Promo Active Monitor">
                         <div className="mb-4 grid gap-3 md:grid-cols-2">
                             <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -1061,7 +1059,7 @@ export default function Insights({
                         </div>
                     </Table.Card>
 
-                    <Table.Card title="Loyalty Performance Summary">
+                    <Table.Card data-tour="reports-insights-loyalty" title="Loyalty Performance Summary">
                         <div className="mb-4 grid gap-3 md:grid-cols-2">
                             <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -1186,7 +1184,7 @@ export default function Insights({
                     </Table.Card>
                 </div>
 
-                <Table.Card title="CRM Operational Snapshot">
+                <Table.Card data-tour="reports-insights-crm" title="CRM Operational Snapshot">
                     <div className="mb-4 grid gap-3 md:grid-cols-4">
                         <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                             <p className="text-sm text-slate-500 dark:text-slate-400">

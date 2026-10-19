@@ -41,7 +41,7 @@ export default function Create({ warehouses = [] }) {
 
             <form onSubmit={submit} className="max-w-3xl">
                 <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-                    <div className="mb-4">
+                    <div data-tour="stock-opnames-create-warehouse" className="mb-4">
                         <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Gudang / Cabang
                         </label>
@@ -58,7 +58,7 @@ export default function Create({ warehouses = [] }) {
                         </select>
                     </div>
 
-                    <Textarea
+                    <Textarea data-tour="stock-opnames-create-notes"
                         label="Catatan Sesi"
                         placeholder="Contoh: opname bulanan gudang depan"
                         value={data.notes}
@@ -68,7 +68,7 @@ export default function Create({ warehouses = [] }) {
                     />
 
                     <div className="mt-5 flex justify-end">
-                        <Button
+                        <Button data-tour="stock-opnames-create-submit"
                             type="submit"
                             icon={<IconClipboardCheck size={18} />}
                             className="bg-primary-500 hover:bg-primary-600 text-white shadow-lg shadow-primary-500/30"

@@ -99,7 +99,7 @@ export default function Printer({ settings }) {
                 </div>
 
                 <form onSubmit={submit} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-6 max-w-lg">
-                    <div>
+                    <div data-tour="settings-printer-paper">
                         <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Ukuran Kertas</label>
                         <select value={data.printer_paper_size} onChange={(e) => setData("printer_paper_size", e.target.value)}
                             className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm">
@@ -108,7 +108,7 @@ export default function Printer({ settings }) {
                         </select>
                     </div>
 
-                    <label className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
+                    <label data-tour="settings-printer-auto" className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
                         <input type="checkbox" checked={data.printer_auto_print} onChange={(e) => setData("printer_auto_print", e.target.checked)}
                             className="rounded border-slate-300 text-primary-600 focus:ring-primary-500" />
                         Cetak otomatis setelah transaksi
@@ -116,7 +116,7 @@ export default function Printer({ settings }) {
 
                     <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
                         <p className="text-sm text-slate-500">Printer thermal terhubung via WebUSB (Chrome/Edge)</p>
-                        <div className="flex flex-wrap gap-2">
+                        <div data-tour="settings-printer-device" className="flex flex-wrap gap-2">
                             {!printerConnected ? (
                                 <button type="button" onClick={handleConnect} disabled={printerBusy}
                                     className="px-4 py-2 rounded-xl border border-primary-500 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/30 text-sm font-medium disabled:opacity-50">
@@ -139,7 +139,7 @@ export default function Printer({ settings }) {
                                 </>
                             )}
                         </div>
-                        <button type="submit" disabled={processing}
+                        <button data-tour="settings-printer-submit" type="submit" disabled={processing}
                             className="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-medium transition-colors disabled:opacity-50">
                             {processing ? "Menyimpan..." : "Simpan Pengaturan"}
                         </button>

@@ -42,6 +42,7 @@ function ProductCard({
     onToggle,
     canUpdate,
     canDelete,
+    tour,
 }) {
     const rowNumber = index + 1 + (currentPage - 1) * perPage;
     const lowStock = product.stock > 0 && product.stock <= 5;
@@ -50,6 +51,7 @@ function ProductCard({
 
     return (
         <div
+            data-tour={tour}
             className={`group bg-white dark:bg-slate-900 rounded-2xl border overflow-hidden hover:shadow-lg transition-all duration-200 ${
                 isSelected
                     ? "border-primary-500 ring-2 ring-primary-500/20"
@@ -374,11 +376,10 @@ export default function Index({ products }) {
             </div>
 
             {/* Content */}
-            <div data-tour="products-list" className="contents">
             {products.data.length > 0 ? (
                 viewMode === "grid" ? (
                     /* Grid View */
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <div data-tour="products-list" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {products.data.map((product, i) => (
                             <ProductCard
                                 key={product.id}
@@ -390,12 +391,13 @@ export default function Index({ products }) {
                                 onToggle={toggleProductSelection}
                                 canUpdate={canEditProducts}
                                 canDelete={canDeleteProducts}
+                                tour={i === 0 ? "products-row" : undefined}
                             />
                         ))}
                     </div>
                 ) : (
                     /* List View */
-                    <Table.Card title={"Data Produk"}>
+                    <Table.Card data-tour="products-list" title={"Data Produk"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
@@ -476,7 +478,7 @@ export default function Index({ products }) {
                                                 {product.stock}
                                             </span>
                                         </Table.Td>
-                                        <Table.Td>
+                                        <Table.Td data-tour={product.id === products.data[0].id ? "products-row" : undefined}>
                                             <div className="flex gap-2">
                                                 {canEditProducts && (
                                                     <Button
@@ -528,7 +530,7 @@ export default function Index({ products }) {
                 )
             ) : (
                 /* Empty State */
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="products-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -555,9 +557,8 @@ export default function Index({ products }) {
                     )}
                 </div>
             )}
-            </div>
 
-            {products.last_page !== 1 && <Pagination links={products.links} />}
+            {products.last_page !== 1 && <Pagination data-tour="products-pagination" links={products.links} />}
 
             {/* Barcode Print Modal */}
             <BarcodePrintModal

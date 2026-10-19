@@ -30,7 +30,7 @@ export default function Index() {
 
             {/* Search */}
             <div className="mb-4 w-full sm:w-80">
-                <Search
+                <Search data-tour="permissions-search"
                     url={route("permissions.index")}
                     placeholder="Cari hak akses..."
                 />
@@ -38,9 +38,9 @@ export default function Index() {
 
             {/* Permissions Grid */}
             {permissions.data.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                <div data-tour="permissions-list" className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                     {permissions.data.map((permission, i) => (
-                        <div
+                        <div data-tour={i === 0 ? "permissions-item" : undefined}
                             key={permission.id || i}
                             className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-700 transition-all"
                         >
@@ -59,7 +59,7 @@ export default function Index() {
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="permissions-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -77,7 +77,7 @@ export default function Index() {
             )}
 
             {permissions.last_page !== 1 && (
-                <Pagination links={permissions.links} />
+                <Pagination data-tour="permissions-pagination" links={permissions.links} />
             )}
         </>
     );
