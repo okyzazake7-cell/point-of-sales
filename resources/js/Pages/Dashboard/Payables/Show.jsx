@@ -97,7 +97,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
         <>
             <Head title={`Hutang ${payable.document_number}`} />
             <div className="space-y-6">
-                <div className="flex items-start justify-between gap-3 flex-wrap">
+                <div data-tour="payables-show-header" className="flex items-start justify-between gap-3 flex-wrap">
                     <div className="flex items-center gap-3">
                         <Link
                             href={route("payables.index")}
@@ -123,7 +123,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                         ref={printRef}
                         className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4 print:border-0 print:shadow-none"
                     >
-                        <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div data-tour="payables-show-supplier" className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                                 <p className="text-slate-500">Supplier</p>
                                 <p className="font-semibold text-slate-800 dark:text-white">
@@ -145,7 +145,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                         {/* Di ponsel ketiga angka BERTUMPUK, label di kiri dan nominal di
                             kanan: tiga kotak sejajar di 390px menyisakan ±74px untuk
                             "Rp 754.000" dan angkanya menembus kotaknya. */}
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+                        <div data-tour="payables-show-summary" className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
                             <div className="flex items-baseline justify-between gap-2 sm:block p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                                 <p className="text-xs text-slate-500">Total</p>
                                 <p className="text-lg font-bold text-slate-900 dark:text-white">
@@ -170,7 +170,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                 Riwayat Pembayaran
                             </p>
                             {payable.status !== "paid" && canPayPayable && (
-                                <button
+                                <button data-tour="payables-show-add"
                                     onClick={() => setShowForm(!showForm)}
                                     className="px-3 py-2 rounded-xl text-sm font-semibold bg-primary-500 hover:bg-primary-600 text-white transition-colors"
                                 >
@@ -179,7 +179,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                             )}
                         </div>
 
-                        <div className="space-y-2">
+                        <div data-tour="payables-show-history" className="space-y-2">
                                         {payable.payments?.length ? (
                                             payable.payments.map((pay) => (
                                                 <div
@@ -236,7 +236,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
 
                         {showForm && canPayPayable && (
                             <form onSubmit={submitPayment} className="mt-4 space-y-3">
-                                <div>
+                                <div data-tour="payables-show-amount">
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         Nominal
                                     </label>
@@ -254,7 +254,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         </p>
                                     )}
                                 </div>
-                                <div>
+                                <div data-tour="payables-show-date">
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         Tanggal Bayar
                                     </label>
@@ -266,7 +266,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         required
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div data-tour="payables-show-method" className="grid grid-cols-2 gap-2">
                                     <button
                                         type="button"
                                         onClick={() => setData("method", "cash")}
@@ -293,7 +293,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                     </button>
                                 </div>
                                 {data.method === "bank_transfer" && (
-                                    <div>
+                                    <div data-tour="payables-show-bank">
                                         <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                             Rekening
                                         </label>
@@ -313,7 +313,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         </select>
                                     </div>
                                 )}
-                                <div>
+                                <div data-tour="payables-show-note">
                                     <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                                         Catatan (opsional)
                                     </label>
@@ -325,7 +325,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                                         placeholder="Catatan pembayaran"
                                     />
                                 </div>
-                                <button
+                                <button data-tour="payables-show-save"
                                     type="submit"
                                     disabled={processing}
                                     className="w-full h-11 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
@@ -336,7 +336,7 @@ export default function PayableShow({ payable, bankAccounts = [] }) {
                         )}
 
                         <div className="mt-4">
-                            <button
+                            <button data-tour="payables-show-preview"
                                 onClick={() => setShowPreview(true)}
                                 className="w-full h-11 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold flex items-center justify-center gap-2"
                             >

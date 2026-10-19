@@ -8,7 +8,7 @@ import i18n from "@/i18n";
  * memanggil `useTour` sendiri — jangan pasang tombol ini di halamannya,
  * nanti panduannya muncul dua kali.
  */
-export default function TombolPanduan({ className = "" }) {
+export default function TombolPanduan({ className = "", ringkas = false }) {
     const { start, isActive, available } = useTour();
 
     if (!available) return null;
@@ -20,10 +20,14 @@ export default function TombolPanduan({ className = "" }) {
             onClick={start}
             disabled={isActive}
             title={i18n.t("tour.button")}
-            className={`inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 ${className}`}
+            aria-label={i18n.t("tour.button")}
+            className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 ${className}`}
         >
             <IconQuestionMark size={18} />
-            <span>{i18n.t("tour.button")}</span>
+            {/* Di 320px label ringkasnya pun mendesak nama merek: tinggal ikon. */}
+            <span className={ringkas ? "max-[359px]:sr-only" : ""}>
+                {i18n.t(ringkas ? "tour.short" : "tour.button")}
+            </span>
         </button>
     );
 }

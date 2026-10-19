@@ -14,8 +14,9 @@
  *     `TourController` membaca berkas yang SAMA untuk daftar kunci yang
  *     boleh ditandai selesai, jadi kunci tidak bisa menyimpang.
  *   - `Panduan/teks/{id,en}.json` — judul dan isi tiap langkah per kunci.
- *     Dimuat saat panduan dibuka (bundel terpisah): ±100 KB teks per
- *     bahasa tidak ikut membebani setiap pemuatan halaman di ponsel.
+ *     Dimuat saat panduan dibuka (bundel terpisah): ±235 KB teks per
+ *     bahasa (±70 KB terkompresi) tidak ikut membebani setiap pemuatan
+ *     halaman di ponsel.
  *   - atribut `data-tour="…"` di elemen yang ditunjuk.
  *
  * `el` yang tidak terlihat (tersembunyi di lebar ini, daftar kosong, tab

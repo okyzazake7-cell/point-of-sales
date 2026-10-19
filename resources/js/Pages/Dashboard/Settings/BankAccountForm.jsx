@@ -73,7 +73,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                     className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-4"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
+                        <Input data-tour="settings-bank-account-form-bank"
                             label="Nama Bank"
                             placeholder="BCA, Mandiri, BNI..."
                             value={data.bank_name}
@@ -81,7 +81,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                             errors={errors.bank_name}
                             disabled={!canUpdatePaymentSettings}
                         />
-                        <Input
+                        <Input data-tour="settings-bank-account-form-number"
                             label="Nomor Rekening"
                             placeholder="1234567890"
                             value={data.account_number}
@@ -90,7 +90,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                             disabled={!canUpdatePaymentSettings}
                         />
                     </div>
-                    <Input
+                    <Input data-tour="settings-bank-account-form-name"
                         label="Atas Nama"
                         placeholder="Nama pemilik rekening"
                         value={data.account_name}
@@ -100,7 +100,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
+                        <div data-tour="settings-bank-account-form-logo">
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                 Logo Bank (opsional)
                             </label>
@@ -120,7 +120,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                             )}
                         </div>
                         <div className="flex items-end">
-                            <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                            <label data-tour="settings-bank-account-form-active" className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                                 <input
                                     type="checkbox"
                                     checked={data.is_active}
@@ -133,7 +133,7 @@ export default function BankAccountForm({ bankAccount = null }) {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div data-tour="settings-bank-account-form-submit" className="flex items-center gap-3">
                         <button
                             type="submit"
                             disabled={processing || !canUpdatePaymentSettings}

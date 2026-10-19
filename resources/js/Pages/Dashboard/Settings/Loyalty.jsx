@@ -61,7 +61,7 @@ export default function Loyalty({ settings }) {
                             </div>
 
                             <div className="space-y-4">
-                                <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
+                                <label data-tour="settings-loyalty-earn" className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
                                     <span className="font-medium text-slate-700 dark:text-slate-200">
                                         Aktifkan earn points
                                     </span>
@@ -74,7 +74,7 @@ export default function Loyalty({ settings }) {
                                         className="h-4 w-4 rounded border-slate-300 text-primary-500"
                                     />
                                 </label>
-                                <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
+                                <label data-tour="settings-loyalty-redeem" className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800">
                                     <span className="font-medium text-slate-700 dark:text-slate-200">
                                         Aktifkan redeem points
                                     </span>
@@ -91,7 +91,7 @@ export default function Loyalty({ settings }) {
                                     />
                                 </label>
 
-                                <div>
+                                <div data-tour="settings-loyalty-rate">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Nominal belanja untuk 1 poin
                                     </label>
@@ -114,7 +114,7 @@ export default function Loyalty({ settings }) {
                                     )}
                                 </div>
 
-                                <div>
+                                <div data-tour="settings-loyalty-value">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Nilai rupiah per 1 poin redeem
                                     </label>
@@ -139,7 +139,7 @@ export default function Loyalty({ settings }) {
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 p-5 dark:border-slate-800">
+                        <section data-tour="settings-loyalty-tiers" className="rounded-2xl border border-slate-200 p-5 dark:border-slate-800">
                             <div className="mb-4 flex items-center gap-3">
                                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300">
                                     <IconMedal size={22} />
@@ -181,7 +181,7 @@ export default function Loyalty({ settings }) {
                         </section>
                     </div>
 
-                    <div className="flex justify-end border-t border-slate-100 pt-4 dark:border-slate-800">
+                    <div data-tour="settings-loyalty-submit" className="flex justify-end border-t border-slate-100 pt-4 dark:border-slate-800">
                         <button
                             type="submit"
                             disabled={processing}

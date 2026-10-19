@@ -208,7 +208,6 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
             <div className="space-y-6">
                 {/* Header */}
                 <div
-                    data-tour="reports-header"
                     className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
                 >
                     <div>
@@ -223,7 +222,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                             Analisis dan ringkasan penjualan
                         </p>
                     </div>
-                    <button
+                    <button data-tour="reports-sales-filter"
                         onClick={() => setShowFilters(!showFilters)}
                         className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
                             showFilters || hasActiveFilters
@@ -240,7 +239,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                 </div>
 
                 {/* Summary Cards */}
-                <div data-tour="reports-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="reports-sales-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {summaryCards.map((card) => (
                         <SummaryCard key={card.title} {...card} />
                     ))}
@@ -249,7 +248,6 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                 {/* Filters Panel */}
                 {showFilters && (
                     <div
-                        data-tour="reports-filters"
                         className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 animate-slide-up"
                     >
                         <form onSubmit={applyFilters}>
@@ -345,7 +343,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                 {/* Table */}
                 {rows.length > 0 ? (
                     <div
-                        data-tour="reports-table"
+                        data-tour="reports-sales-table"
                         className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
                     >
                         <div className="overflow-x-auto">
@@ -423,7 +421,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div data-tour="reports-sales-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                             <IconDatabaseOff
                                 size={32}
@@ -440,7 +438,7 @@ const Sales = ({ transactions, summary, filters, cashiers, customers, warehouses
                 )}
 
                 {paginationLinks.length > 3 && (
-                    <Pagination links={paginationLinks} />
+                    <Pagination data-tour="reports-sales-pagination" links={paginationLinks} />
                 )}
             </div>
         </>

@@ -5,6 +5,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import AuthBotGuardFields from "@/Components/AuthBotGuardFields";
 import { BRAND } from "@/Utils/brand";
 import { rupiah } from "@/Utils/rupiah";
+import TombolPanduan from "@/Components/Panduan/TombolPanduan";
 
 /**
  * /daftar — toko baru Aishii POS (AS7, dokumen 24 §4). Satu layar, satu
@@ -20,9 +21,9 @@ import { rupiah } from "@/Utils/rupiah";
  * menekan "Masuk" membuat pendaftarannya menumpang permintaan masuk yang
  * kedaluwarsa selama surelnya dikonfirmasi.
  */
-function Kolom({ label, galat, petunjuk, children }) {
+function Kolom({ label, galat, petunjuk, children, tour }) {
     return (
-        <div>
+        <div data-tour={tour}>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">{label}</label>
             {children}
             {petunjuk && !galat && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{petunjuk}</p>}
@@ -64,10 +65,13 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
             <Head title="Daftarkan toko" />
             <div className="min-h-screen bg-slate-50 px-4 py-8 dark:bg-slate-950 sm:py-12">
                 <div className="mx-auto w-full max-w-lg">
-                    <Link href="/" className="mb-6 inline-flex items-center gap-3">
-                        <ApplicationLogo className="h-11 w-11" />
-                        <span className="text-xl font-bold text-slate-900 dark:text-white">{BRAND.name}</span>
-                    </Link>
+                    <div className="mb-6 flex items-center justify-between gap-3">
+                        <Link href="/" className="inline-flex min-w-0 items-center gap-3">
+                            <ApplicationLogo className="h-11 w-11 shrink-0" />
+                            <span className="text-xl font-bold text-slate-900 dark:text-white">{BRAND.name}</span>
+                        </Link>
+                        <TombolPanduan ringkas />
+                    </div>
 
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">Daftarkan toko</h1>
                     <p className="mt-2 text-slate-600 dark:text-slate-400">
@@ -76,6 +80,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
 
                     <div
                         data-harga-daftar
+                        data-tour="daftar-harga"
                         className="mt-6 rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm text-primary-900 dark:border-primary-900 dark:bg-primary-950/40 dark:text-primary-100"
                     >
                         <p className="text-base font-semibold">
@@ -100,6 +105,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                     {lewatAishii && !akunAishii.email ? (
                         <div
                             data-daftar-masuk-aishii
+                            data-tour="daftar-pintu"
                             className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                         >
                             <p className="text-sm text-slate-700 dark:text-slate-300">
@@ -118,6 +124,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                             <a
                                 href={akunAishii.daftar}
                                 data-daftar-buat-akun
+                                data-tour="daftar-buat-akun"
                                 className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-600 font-semibold text-white shadow-lg shadow-primary-600/25 transition-colors hover:bg-primary-700"
                             >
                                 Buat akun Aishii — gratis
@@ -125,6 +132,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                             <a
                                 href={akunAishii.masuk}
                                 data-daftar-sudah-punya
+                                data-tour="daftar-sudah-punya"
                                 className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 font-semibold text-slate-700 transition-colors hover:border-primary-500 hover:text-primary-700 dark:border-slate-700 dark:text-slate-200"
                             >
                                 Sudah punya akun Aishii? Masuk
@@ -148,6 +156,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         {lewatAishii && (
                             <div
                                 data-daftar-akun-aishii
+                                data-tour="daftar-akun"
                                 className="rounded-xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900"
                             >
                                 <p className="text-xs text-slate-500 dark:text-slate-400">Akun Aishii pemilik toko</p>
@@ -177,7 +186,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                             </div>
                         )}
 
-                        <Kolom label="Nama toko" galat={errors.nama_toko}>
+                        <Kolom label="Nama toko" galat={errors.nama_toko} tour="daftar-nama-toko">
                             <input
                                 name="nama_toko"
                                 value={data.nama_toko}
@@ -191,6 +200,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         <Kolom
                             label="Jenis usaha"
                             galat={errors.jenis_usaha}
+                            tour="daftar-jenis-usaha"
                             petunjuk="Kategori barang awalnya disiapkan sesuai pilihan ini — bisa diubah kapan saja."
                         >
                             <select
@@ -207,7 +217,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                             </select>
                         </Kolom>
 
-                        <Kolom label="Nama Anda" galat={errors.nama}>
+                        <Kolom label="Nama Anda" galat={errors.nama} tour="daftar-nama">
                             <input
                                 name="nama"
                                 value={data.nama}
@@ -218,7 +228,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         </Kolom>
 
                         {!lewatAishii && (
-                        <Kolom label="Surel" galat={errors.email} petunjuk="Dipakai untuk masuk. Satu surel untuk satu toko.">
+                        <Kolom label="Surel" galat={errors.email} petunjuk="Dipakai untuk masuk. Satu surel untuk satu toko." tour="daftar-email">
                             <input
                                 type="email"
                                 name="email"
@@ -231,7 +241,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         </Kolom>
                         )}
 
-                        <Kolom label="Nomor WhatsApp (boleh dikosongkan)" galat={errors.telepon}>
+                        <Kolom label="Nomor WhatsApp (boleh dikosongkan)" galat={errors.telepon} tour="daftar-telepon">
                             <input
                                 type="tel"
                                 name="telepon"
@@ -245,7 +255,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
 
                         {!lewatAishii && (
                         <>
-                        <Kolom label="Kata sandi" galat={errors.password} petunjuk="Minimal 8 huruf.">
+                        <Kolom label="Kata sandi" galat={errors.password} petunjuk="Minimal 8 huruf." tour="daftar-sandi">
                             <input
                                 type="password"
                                 name="password"
@@ -270,6 +280,7 @@ export default function Daftar({ jenisUsaha = [], hargaPerOutlet, botGuard, akun
                         )}
 
                         <button
+                            data-tour="daftar-kirim"
                             type="submit"
                             disabled={processing}
                             className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary-600 font-semibold text-white shadow-lg shadow-primary-600/25 transition-colors hover:bg-primary-700 disabled:opacity-60"

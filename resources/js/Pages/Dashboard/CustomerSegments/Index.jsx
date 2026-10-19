@@ -26,7 +26,7 @@ export default function Index({ segments, filters }) {
                         </p>
                     </div>
                     {can("customer-segments-create") && (
-                        <Button
+                        <Button data-tour="customer-segments-add"
                             type="link"
                             href={route("customer-segments.create")}
                             icon={<IconCirclePlus size={18} />}
@@ -36,7 +36,7 @@ export default function Index({ segments, filters }) {
                     )}
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="customer-segments-filters" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                     <div className="grid gap-3 md:grid-cols-3">
                         <div className="relative md:col-span-2">
                             <input
@@ -62,7 +62,7 @@ export default function Index({ segments, filters }) {
                     </div>
                 </div>
 
-                <Table.Card title="Daftar Segment">
+                <Table.Card data-tour="customer-segments-list" title="Daftar Segment">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -76,7 +76,7 @@ export default function Index({ segments, filters }) {
                         <Table.Tbody>
                             {segments.data.length > 0 ? (
                                 segments.data.map((segment) => (
-                                    <tr key={segment.id}>
+                                    <tr data-tour={segment.id === segments.data[0].id ? "customer-segments-row" : undefined} key={segment.id}>
                                         <Table.Td>
                                             <Link
                                                 href={route("customer-segments.show", segment.id)}
@@ -122,7 +122,7 @@ export default function Index({ segments, filters }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={5} message="Belum ada segment customer.">
+                                <Table.Empty data-tour="customer-segments-empty" colSpan={5} message="Belum ada segment customer.">
                                     <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                                         <IconUsersGroup size={28} className="text-slate-400" />
                                     </div>
@@ -132,7 +132,7 @@ export default function Index({ segments, filters }) {
                     </Table>
                 </Table.Card>
 
-                {segments.last_page > 1 && <Pagination links={segments.links} />}
+                {segments.last_page > 1 && <Pagination data-tour="customer-segments-pagination" links={segments.links} />}
             </div>
         </>
     );

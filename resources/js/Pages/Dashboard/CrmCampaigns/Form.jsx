@@ -66,7 +66,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                             </div>
                         </div>
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="crm-campaigns-form-name">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Nama Campaign</label>
                                 <input
                                     type="text"
@@ -75,7 +75,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                     className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
                             </div>
-                            <div>
+                            <div data-tour="crm-campaigns-form-type">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Tipe Campaign</label>
                                 <select
                                     value={data.type}
@@ -87,7 +87,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                     <option value="repeat_order_reminder">Repeat Order Reminder</option>
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="crm-campaigns-form-channel">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Channel</label>
                                 <select
                                     value={data.channel}
@@ -98,7 +98,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                     <option value="whatsapp_link">WhatsApp Link</option>
                                 </select>
                             </div>
-                            <label className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+                            <label data-tour="crm-campaigns-form-draft" className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
                                 <input
                                     type="checkbox"
                                     checked={data.save_as_draft}
@@ -112,7 +112,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Audience Builder</h2>
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div className="md:col-span-2">
+                            <div data-tour="crm-campaigns-form-segments" className="md:col-span-2">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Segment Customer</label>
                                 <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                                     {audienceOptions.segment_options.map((segment) => {
@@ -136,7 +136,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                 </div>
                             </div>
 
-                            <div>
+                            <div data-tour="crm-campaigns-form-customer-type">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Customer Type</label>
                                 <select
                                     value={data.audience_filters.customer_type}
@@ -148,7 +148,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="crm-campaigns-form-receivable">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Status Piutang</label>
                                 <select
                                     value={data.audience_filters.receivable_status}
@@ -160,7 +160,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="crm-campaigns-form-voucher">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">Voucher Filter</label>
                                 <select
                                     value={data.audience_filters.voucher_filter}
@@ -175,7 +175,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="crm-campaigns-form-message" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Template Pesan</h2>
                         <textarea
                             rows="5"
@@ -185,7 +185,7 @@ export default function Form({ mode = "create", campaign = null, audienceOptions
                         />
                     </div>
 
-                    <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+                    <div data-tour="crm-campaigns-form-submit" className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
                         <Button
                             type="link"
                             href={route("crm-campaigns.index")}

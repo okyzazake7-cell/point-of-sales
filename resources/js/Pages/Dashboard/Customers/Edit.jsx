@@ -152,7 +152,7 @@ export default function Edit({ customer }) {
                 <div className="max-w-3xl">
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input
+                            <Input data-tour="customers-form-name"
                                 type="text"
                                 label="Nama Pelanggan"
                                 placeholder="Nama lengkap"
@@ -160,7 +160,7 @@ export default function Edit({ customer }) {
                                 onChange={(e) => setData("name", e.target.value)}
                                 value={data.name}
                             />
-                            <Input
+                            <Input data-tour="customers-form-phone"
                                 type="text"
                                 label="No. Handphone"
                                 placeholder="08xxxxxxxxxx"
@@ -170,7 +170,7 @@ export default function Edit({ customer }) {
                             />
                         </div>
 
-                        <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 dark:border-primary-900/40 dark:bg-primary-950/20">
+                        <div data-tour="customers-form-loyalty" className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 dark:border-primary-900/40 dark:bg-primary-950/20">
                             <div className="flex items-center justify-between gap-4">
                                 <div>
                                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -224,7 +224,7 @@ export default function Edit({ customer }) {
                             )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div data-tour="customers-form-region" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Provinsi
@@ -276,7 +276,7 @@ export default function Edit({ customer }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div data-tour="customers-form-area" className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Kecamatan
@@ -329,7 +329,7 @@ export default function Edit({ customer }) {
                                 )}
                             </div>
                         </div>
-                        <Textarea
+                        <Textarea data-tour="customers-form-address"
                             label="Alamat Detail"
                             placeholder="Alamat lengkap"
                             errors={errors.address}
@@ -339,7 +339,7 @@ export default function Edit({ customer }) {
                         />
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <div data-tour="customers-form-submit" className="flex justify-end gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
                         <Link
                             href={route("customers.index")}
                             className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors"

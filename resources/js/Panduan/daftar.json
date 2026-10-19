@@ -1,4 +1,1052 @@
 {
+    "Auth/Login": [
+        {
+            "key": "login_aishii",
+            "if": "login-aishii",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "aishii",
+                    "el": "login-aishii"
+                },
+                {
+                    "id": "email",
+                    "el": "login-email"
+                },
+                {
+                    "id": "password",
+                    "el": "login-password"
+                },
+                {
+                    "id": "remember",
+                    "el": "login-remember"
+                },
+                {
+                    "id": "submit",
+                    "el": "login-submit"
+                },
+                {
+                    "id": "daftar",
+                    "el": "login-daftar"
+                }
+            ]
+        },
+        {
+            "key": "login",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "email",
+                    "el": "login-email"
+                },
+                {
+                    "id": "password",
+                    "el": "login-password"
+                },
+                {
+                    "id": "remember",
+                    "el": "login-remember"
+                },
+                {
+                    "id": "submit",
+                    "el": "login-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Access": [
+        {
+            "key": "access",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "cards",
+                    "el": "access-cards"
+                },
+                {
+                    "id": "empty",
+                    "el": "access-empty"
+                },
+                {
+                    "id": "menu",
+                    "el": "nav-sidebar"
+                },
+                {
+                    "id": "toggle",
+                    "el": "nav-menu"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Aging/Index": [
+        {
+            "key": "aging",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "cards",
+                    "el": "aging-cards"
+                },
+                {
+                    "id": "payables",
+                    "el": "aging-payables"
+                },
+                {
+                    "id": "receivables",
+                    "el": "aging-receivables"
+                }
+            ]
+        }
+    ],
+    "Dashboard/AuditLogs/Index": [
+        {
+            "key": "audit_logs",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filters",
+                    "el": "audit-logs-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "audit-logs-list"
+                },
+                {
+                    "id": "event",
+                    "el": "audit-logs-event"
+                },
+                {
+                    "id": "row",
+                    "el": "audit-logs-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "audit-logs-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "audit-logs-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/AuditLogs/Show": [
+        {
+            "key": "audit_logs_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "summary",
+                    "el": "audit-logs-show-summary"
+                },
+                {
+                    "id": "desc",
+                    "el": "audit-logs-show-desc"
+                },
+                {
+                    "id": "changes",
+                    "el": "audit-logs-show-changes"
+                },
+                {
+                    "id": "meta",
+                    "el": "audit-logs-show-meta"
+                },
+                {
+                    "id": "back",
+                    "el": "audit-logs-show-back"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CashierShifts/Index": [
+        {
+            "key": "cashier_shifts",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "view_active",
+                    "el": "cashier-shifts-view-active"
+                },
+                {
+                    "id": "open",
+                    "el": "cashier-shifts-open"
+                },
+                {
+                    "id": "cash",
+                    "el": "cashier-shifts-cash"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "cashier-shifts-warehouse"
+                },
+                {
+                    "id": "notes",
+                    "el": "cashier-shifts-notes"
+                },
+                {
+                    "id": "submit",
+                    "el": "cashier-shifts-submit"
+                },
+                {
+                    "id": "active",
+                    "el": "cashier-shifts-active"
+                },
+                {
+                    "id": "expected",
+                    "el": "cashier-shifts-expected"
+                },
+                {
+                    "id": "buttons",
+                    "el": "cashier-shifts-buttons"
+                },
+                {
+                    "id": "filters",
+                    "el": "cashier-shifts-filters"
+                },
+                {
+                    "id": "history",
+                    "el": "cashier-shifts-history"
+                },
+                {
+                    "id": "row",
+                    "el": "cashier-shifts-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "cashier-shifts-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "cashier-shifts-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CashierShifts/Show": [
+        {
+            "key": "cashier_shifts_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "status",
+                    "el": "cashier-shifts-show-status"
+                },
+                {
+                    "id": "report_z",
+                    "el": "cashier-shifts-show-report-z"
+                },
+                {
+                    "id": "metrics",
+                    "el": "cashier-shifts-show-metrics"
+                },
+                {
+                    "id": "summary",
+                    "el": "cashier-shifts-show-summary"
+                },
+                {
+                    "id": "closing",
+                    "el": "cashier-shifts-show-closing"
+                },
+                {
+                    "id": "close",
+                    "el": "cashier-shifts-show-close"
+                },
+                {
+                    "id": "actual",
+                    "el": "cashier-shifts-show-actual"
+                },
+                {
+                    "id": "notes",
+                    "el": "cashier-shifts-show-notes"
+                },
+                {
+                    "id": "finalize",
+                    "el": "cashier-shifts-show-finalize"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Categories/Create": [
+        {
+            "key": "categories_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "image",
+                    "el": "categories-form-image"
+                },
+                {
+                    "id": "name",
+                    "el": "categories-form-name"
+                },
+                {
+                    "id": "description",
+                    "el": "categories-form-description"
+                },
+                {
+                    "id": "submit",
+                    "el": "categories-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Categories/Edit": "Dashboard/Categories/Create",
+    "Dashboard/Categories/Index": [
+        {
+            "key": "categories",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "categories-add"
+                },
+                {
+                    "id": "search",
+                    "el": "categories-search"
+                },
+                {
+                    "id": "view",
+                    "el": "categories-view"
+                },
+                {
+                    "id": "list",
+                    "el": "categories-list"
+                },
+                {
+                    "id": "row",
+                    "el": "categories-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "categories-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "categories-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CrmCampaigns/Create": [
+        {
+            "key": "crm_campaigns_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "name",
+                    "el": "crm-campaigns-form-name"
+                },
+                {
+                    "id": "type",
+                    "el": "crm-campaigns-form-type"
+                },
+                {
+                    "id": "channel",
+                    "el": "crm-campaigns-form-channel"
+                },
+                {
+                    "id": "draft",
+                    "el": "crm-campaigns-form-draft"
+                },
+                {
+                    "id": "segments",
+                    "el": "crm-campaigns-form-segments"
+                },
+                {
+                    "id": "customer_type",
+                    "el": "crm-campaigns-form-customer-type"
+                },
+                {
+                    "id": "receivable",
+                    "el": "crm-campaigns-form-receivable"
+                },
+                {
+                    "id": "voucher",
+                    "el": "crm-campaigns-form-voucher"
+                },
+                {
+                    "id": "message",
+                    "el": "crm-campaigns-form-message"
+                },
+                {
+                    "id": "submit",
+                    "el": "crm-campaigns-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CrmCampaigns/Edit": "Dashboard/CrmCampaigns/Create",
+    "Dashboard/CrmCampaigns/Index": [
+        {
+            "key": "crm_campaigns",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "crm-campaigns-add"
+                },
+                {
+                    "id": "filters",
+                    "el": "crm-campaigns-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "crm-campaigns-list"
+                },
+                {
+                    "id": "row",
+                    "el": "crm-campaigns-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "crm-campaigns-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "crm-campaigns-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CrmCampaigns/Show": [
+        {
+            "key": "crm_campaigns_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "crm-campaigns-show-header"
+                },
+                {
+                    "id": "process",
+                    "el": "crm-campaigns-show-process"
+                },
+                {
+                    "id": "cancel",
+                    "el": "crm-campaigns-show-cancel"
+                },
+                {
+                    "id": "logs",
+                    "el": "crm-campaigns-show-logs"
+                },
+                {
+                    "id": "row",
+                    "el": "crm-campaigns-show-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "crm-campaigns-show-empty"
+                },
+                {
+                    "id": "snapshot",
+                    "el": "crm-campaigns-show-snapshot"
+                },
+                {
+                    "id": "template",
+                    "el": "crm-campaigns-show-template"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CrmReminders/Index": [
+        {
+            "key": "crm_reminders",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filters",
+                    "el": "crm-reminders-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "crm-reminders-list"
+                },
+                {
+                    "id": "row",
+                    "el": "crm-reminders-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "crm-reminders-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "crm-reminders-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CustomerSegments/Create": [
+        {
+            "key": "customer_segments_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "name",
+                    "el": "customer-segments-form-name"
+                },
+                {
+                    "id": "type",
+                    "el": "customer-segments-form-type"
+                },
+                {
+                    "id": "description",
+                    "el": "customer-segments-form-description"
+                },
+                {
+                    "id": "active",
+                    "el": "customer-segments-form-active"
+                },
+                {
+                    "id": "auto",
+                    "el": "customer-segments-form-auto"
+                },
+                {
+                    "id": "submit",
+                    "el": "customer-segments-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CustomerSegments/Edit": "Dashboard/CustomerSegments/Create",
+    "Dashboard/CustomerSegments/Index": [
+        {
+            "key": "customer_segments",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "customer-segments-add"
+                },
+                {
+                    "id": "filters",
+                    "el": "customer-segments-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "customer-segments-list"
+                },
+                {
+                    "id": "row",
+                    "el": "customer-segments-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "customer-segments-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "customer-segments-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CustomerSegments/Show": [
+        {
+            "key": "customer_segments_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "customer-segments-show-header"
+                },
+                {
+                    "id": "stats",
+                    "el": "customer-segments-show-stats"
+                },
+                {
+                    "id": "members",
+                    "el": "customer-segments-show-members"
+                },
+                {
+                    "id": "row",
+                    "el": "customer-segments-show-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "customer-segments-show-empty"
+                },
+                {
+                    "id": "add",
+                    "el": "customer-segments-show-add"
+                },
+                {
+                    "id": "rule",
+                    "el": "customer-segments-show-rule"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CustomerVouchers/Create": [
+        {
+            "key": "customer_vouchers_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "customer",
+                    "el": "customer-vouchers-form-customer"
+                },
+                {
+                    "id": "code",
+                    "el": "customer-vouchers-form-code"
+                },
+                {
+                    "id": "name",
+                    "el": "customer-vouchers-form-name"
+                },
+                {
+                    "id": "type",
+                    "el": "customer-vouchers-form-type"
+                },
+                {
+                    "id": "value",
+                    "el": "customer-vouchers-form-value"
+                },
+                {
+                    "id": "minimum",
+                    "el": "customer-vouchers-form-minimum"
+                },
+                {
+                    "id": "active",
+                    "el": "customer-vouchers-form-active"
+                },
+                {
+                    "id": "start",
+                    "el": "customer-vouchers-form-start"
+                },
+                {
+                    "id": "end",
+                    "el": "customer-vouchers-form-end"
+                },
+                {
+                    "id": "notes",
+                    "el": "customer-vouchers-form-notes"
+                },
+                {
+                    "id": "submit",
+                    "el": "customer-vouchers-form-submit"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/CustomerVouchers/Edit": "Dashboard/CustomerVouchers/Create",
+    "Dashboard/CustomerVouchers/Index": [
+        {
+            "key": "customer_vouchers",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "customer-vouchers-add"
+                },
+                {
+                    "id": "filters",
+                    "el": "customer-vouchers-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "customer-vouchers-list"
+                },
+                {
+                    "id": "row",
+                    "el": "customer-vouchers-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "customer-vouchers-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "customer-vouchers-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Customers/Create": [
+        {
+            "key": "customers_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "name",
+                    "el": "customers-form-name"
+                },
+                {
+                    "id": "phone",
+                    "el": "customers-form-phone"
+                },
+                {
+                    "id": "loyalty",
+                    "el": "customers-form-loyalty"
+                },
+                {
+                    "id": "region",
+                    "el": "customers-form-region"
+                },
+                {
+                    "id": "area",
+                    "el": "customers-form-area"
+                },
+                {
+                    "id": "address",
+                    "el": "customers-form-address"
+                },
+                {
+                    "id": "submit",
+                    "el": "customers-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Customers/Edit": "Dashboard/Customers/Create",
+    "Dashboard/Customers/Index": [
+        {
+            "key": "customers",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "actions",
+                    "el": "customers-actions"
+                },
+                {
+                    "id": "search",
+                    "el": "customers-search"
+                },
+                {
+                    "id": "view",
+                    "el": "customers-view"
+                },
+                {
+                    "id": "list",
+                    "el": "customers-list"
+                },
+                {
+                    "id": "row",
+                    "el": "customers-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "customers-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "customers-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Customers/Show": [
+        {
+            "key": "customers_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "customers-show-header"
+                },
+                {
+                    "id": "points",
+                    "el": "customers-show-points"
+                },
+                {
+                    "id": "summary",
+                    "el": "customers-show-summary"
+                },
+                {
+                    "id": "segments",
+                    "el": "customers-show-segments"
+                },
+                {
+                    "id": "transactions",
+                    "el": "customers-show-transactions"
+                },
+                {
+                    "id": "rewards",
+                    "el": "customers-show-rewards"
+                },
+                {
+                    "id": "info",
+                    "el": "customers-show-info"
+                },
+                {
+                    "id": "tags",
+                    "el": "customers-show-tags"
+                },
+                {
+                    "id": "favorites",
+                    "el": "customers-show-favorites"
+                },
+                {
+                    "id": "vouchers",
+                    "el": "customers-show-vouchers"
+                }
+            ]
+        }
+    ],
+    "Dashboard/DineIn/Areas/Index": [
+        {
+            "key": "dine_areas",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "dine-areas-add"
+                },
+                {
+                    "id": "list",
+                    "el": "dine-areas-list"
+                },
+                {
+                    "id": "row",
+                    "el": "dine-areas-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "dine-areas-empty"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/DineIn/Orders/Index": [
+        {
+            "key": "dine_orders",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "card",
+                    "el": "dine-orders-card"
+                },
+                {
+                    "id": "status",
+                    "el": "dine-orders-head"
+                },
+                {
+                    "id": "actions",
+                    "el": "dine-orders-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "dine-orders-empty"
+                }
+            ]
+        }
+    ],
+    "Dashboard/DineIn/Tables/Index": [
+        {
+            "key": "dine_tables",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "dine-tables-add"
+                },
+                {
+                    "id": "areas",
+                    "el": "dine-tables-areas"
+                },
+                {
+                    "id": "map",
+                    "el": "dine-tables-map"
+                },
+                {
+                    "id": "to_list",
+                    "el": "dine-tables-to-list",
+                    "klik": true
+                },
+                {
+                    "id": "list",
+                    "el": "dine-tables-list"
+                },
+                {
+                    "id": "row",
+                    "el": "dine-tables-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "dine-tables-empty"
+                },
+                {
+                    "id": "to_map",
+                    "el": "dine-tables-to-map"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/DiscountApprovals": [
+        {
+            "key": "discount_approvals",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "card",
+                    "el": "discount-approvals-card"
+                },
+                {
+                    "id": "actions",
+                    "el": "discount-approvals-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "discount-approvals-empty"
+                }
+            ]
+        }
+    ],
+    "Dashboard/GoodsReceivings/Create": [
+        {
+            "key": "goods_receivings_create",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "po",
+                    "el": "goods-receivings-create-po"
+                },
+                {
+                    "id": "items",
+                    "el": "goods-receivings-create-items"
+                },
+                {
+                    "id": "notes",
+                    "el": "goods-receivings-create-notes"
+                },
+                {
+                    "id": "submit",
+                    "el": "goods-receivings-create-submit"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/GoodsReceivings/Index": [
+        {
+            "key": "goods_receivings",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "goods-receivings-add"
+                },
+                {
+                    "id": "search",
+                    "el": "goods-receivings-search"
+                },
+                {
+                    "id": "list",
+                    "el": "goods-receivings-list"
+                },
+                {
+                    "id": "row",
+                    "el": "goods-receivings-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "goods-receivings-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "goods-receivings-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/GoodsReceivings/Show": [
+        {
+            "key": "goods_receivings_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "goods-receivings-show-header"
+                },
+                {
+                    "id": "items",
+                    "el": "goods-receivings-show-items"
+                },
+                {
+                    "id": "info",
+                    "el": "goods-receivings-show-info"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
     "Dashboard/Index": [
         {
             "key": "dashboard",
@@ -64,6 +1112,472 @@
                 },
                 {
                     "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Langganan/Index": [
+        {
+            "key": "langganan",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "status",
+                    "el": "langganan-status"
+                },
+                {
+                    "id": "buat_tagihan",
+                    "el": "langganan-buat-tagihan"
+                },
+                {
+                    "id": "jenis",
+                    "el": "langganan-jenis"
+                },
+                {
+                    "id": "bulan",
+                    "el": "langganan-bulan"
+                },
+                {
+                    "id": "jumlah",
+                    "el": "langganan-jumlah"
+                },
+                {
+                    "id": "buat",
+                    "el": "langganan-buat"
+                },
+                {
+                    "id": "tagihan",
+                    "el": "langganan-tagihan"
+                },
+                {
+                    "id": "nominal",
+                    "el": "langganan-nominal"
+                },
+                {
+                    "id": "qris",
+                    "el": "langganan-qris"
+                },
+                {
+                    "id": "periksa",
+                    "el": "langganan-periksa"
+                },
+                {
+                    "id": "batal",
+                    "el": "langganan-batal"
+                },
+                {
+                    "id": "pemilik",
+                    "el": "langganan-pemilik"
+                },
+                {
+                    "id": "outlet",
+                    "el": "langganan-outlet"
+                },
+                {
+                    "id": "riwayat",
+                    "el": "langganan-riwayat"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Members/Create": [
+        {
+            "key": "members_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "info",
+                    "el": "members-form-info"
+                },
+                {
+                    "id": "name",
+                    "el": "members-form-name"
+                },
+                {
+                    "id": "phone",
+                    "el": "members-form-phone"
+                },
+                {
+                    "id": "status",
+                    "el": "members-form-status"
+                },
+                {
+                    "id": "tier",
+                    "el": "members-form-tier"
+                },
+                {
+                    "id": "region",
+                    "el": "members-form-region"
+                },
+                {
+                    "id": "submit",
+                    "el": "members-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Members/Edit": "Dashboard/Members/Create",
+    "Dashboard/Members/Index": [
+        {
+            "key": "members",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "members-add"
+                },
+                {
+                    "id": "summary",
+                    "el": "members-summary"
+                },
+                {
+                    "id": "filters",
+                    "el": "members-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "members-list"
+                },
+                {
+                    "id": "row",
+                    "el": "members-row"
+                },
+                {
+                    "id": "top",
+                    "el": "members-top"
+                },
+                {
+                    "id": "pagination",
+                    "el": "members-pagination"
+                },
+                {
+                    "id": "empty",
+                    "el": "members-empty"
+                },
+                {
+                    "id": "help",
+                    "el": "members-help"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Members/Show": [
+        {
+            "key": "members_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "members-show-header"
+                },
+                {
+                    "id": "actions",
+                    "el": "members-show-actions"
+                },
+                {
+                    "id": "summary",
+                    "el": "members-show-summary"
+                },
+                {
+                    "id": "transactions",
+                    "el": "members-show-transactions"
+                },
+                {
+                    "id": "rewards",
+                    "el": "members-show-rewards"
+                },
+                {
+                    "id": "info",
+                    "el": "members-show-info"
+                },
+                {
+                    "id": "segments",
+                    "el": "members-show-segments"
+                },
+                {
+                    "id": "favorites",
+                    "el": "members-show-favorites"
+                },
+                {
+                    "id": "vouchers",
+                    "el": "members-show-vouchers"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Payables/Index": [
+        {
+            "key": "payables",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "form",
+                    "el": "payables-form"
+                },
+                {
+                    "id": "supplier",
+                    "el": "payables-form-supplier"
+                },
+                {
+                    "id": "number",
+                    "el": "payables-form-number"
+                },
+                {
+                    "id": "total",
+                    "el": "payables-form-total"
+                },
+                {
+                    "id": "due",
+                    "el": "payables-form-due"
+                },
+                {
+                    "id": "note",
+                    "el": "payables-form-note"
+                },
+                {
+                    "id": "save",
+                    "el": "payables-form-save"
+                },
+                {
+                    "id": "filters",
+                    "el": "payables-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "payables-list"
+                },
+                {
+                    "id": "row",
+                    "el": "payables-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "payables-empty"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Payables/Show": [
+        {
+            "key": "payables_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "payables-show-header"
+                },
+                {
+                    "id": "supplier",
+                    "el": "payables-show-supplier"
+                },
+                {
+                    "id": "summary",
+                    "el": "payables-show-summary"
+                },
+                {
+                    "id": "add",
+                    "el": "payables-show-add"
+                },
+                {
+                    "id": "history",
+                    "el": "payables-show-history"
+                },
+                {
+                    "id": "amount",
+                    "el": "payables-show-amount"
+                },
+                {
+                    "id": "date",
+                    "el": "payables-show-date"
+                },
+                {
+                    "id": "method",
+                    "el": "payables-show-method"
+                },
+                {
+                    "id": "bank",
+                    "el": "payables-show-bank"
+                },
+                {
+                    "id": "note",
+                    "el": "payables-show-note"
+                },
+                {
+                    "id": "save",
+                    "el": "payables-show-save"
+                },
+                {
+                    "id": "preview",
+                    "el": "payables-show-preview"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Permissions/Index": [
+        {
+            "key": "permissions",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "search",
+                    "el": "permissions-search"
+                },
+                {
+                    "id": "list",
+                    "el": "permissions-list"
+                },
+                {
+                    "id": "item",
+                    "el": "permissions-item"
+                },
+                {
+                    "id": "empty",
+                    "el": "permissions-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "permissions-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/PricingRules/Create": [
+        {
+            "key": "pricing_rules_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "name",
+                    "el": "pricing-rules-form-name"
+                },
+                {
+                    "id": "kind",
+                    "el": "pricing-rules-form-kind"
+                },
+                {
+                    "id": "priority",
+                    "el": "pricing-rules-form-priority"
+                },
+                {
+                    "id": "preview_qty",
+                    "el": "pricing-rules-form-preview-qty"
+                },
+                {
+                    "id": "target",
+                    "el": "pricing-rules-form-target"
+                },
+                {
+                    "id": "scope",
+                    "el": "pricing-rules-form-scope"
+                },
+                {
+                    "id": "product",
+                    "el": "pricing-rules-form-product"
+                },
+                {
+                    "id": "category",
+                    "el": "pricing-rules-form-category"
+                },
+                {
+                    "id": "tiers",
+                    "el": "pricing-rules-form-tiers"
+                },
+                {
+                    "id": "discount",
+                    "el": "pricing-rules-form-discount"
+                },
+                {
+                    "id": "qty_breaks",
+                    "el": "pricing-rules-form-qty-breaks"
+                },
+                {
+                    "id": "bundle",
+                    "el": "pricing-rules-form-bundle"
+                },
+                {
+                    "id": "buy_get",
+                    "el": "pricing-rules-form-buy-get"
+                },
+                {
+                    "id": "schedule",
+                    "el": "pricing-rules-form-schedule"
+                },
+                {
+                    "id": "active",
+                    "el": "pricing-rules-form-active"
+                },
+                {
+                    "id": "preview",
+                    "el": "pricing-rules-form-preview"
+                },
+                {
+                    "id": "submit",
+                    "el": "pricing-rules-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/PricingRules/Edit": "Dashboard/PricingRules/Create",
+    "Dashboard/PricingRules/Index": [
+        {
+            "key": "pricing_rules",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "pricing-rules-add"
+                },
+                {
+                    "id": "summary",
+                    "el": "pricing-rules-summary"
+                },
+                {
+                    "id": "filters",
+                    "el": "pricing-rules-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "pricing-rules-list"
+                },
+                {
+                    "id": "row",
+                    "el": "pricing-rules-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "pricing-rules-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "pricing-rules-pagination"
+                },
+                {
+                    "id": "activity",
+                    "el": "pricing-rules-activity"
                 }
             ]
         }
@@ -177,6 +1691,1531 @@
             ]
         }
     ],
+    "Dashboard/PurchaseOrders/Create": [
+        {
+            "key": "purchase_orders_create",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "supplier",
+                    "el": "purchase-orders-create-supplier"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "purchase-orders-create-warehouse"
+                },
+                {
+                    "id": "number",
+                    "el": "purchase-orders-create-number"
+                },
+                {
+                    "id": "notes",
+                    "el": "purchase-orders-create-notes"
+                },
+                {
+                    "id": "search",
+                    "el": "purchase-orders-create-search"
+                },
+                {
+                    "id": "items",
+                    "el": "purchase-orders-create-items"
+                },
+                {
+                    "id": "empty",
+                    "el": "purchase-orders-create-empty"
+                },
+                {
+                    "id": "submit",
+                    "el": "purchase-orders-create-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/PurchaseOrders/Index": [
+        {
+            "key": "purchase_orders",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "purchase-orders-add"
+                },
+                {
+                    "id": "filters",
+                    "el": "purchase-orders-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "purchase-orders-list"
+                },
+                {
+                    "id": "row",
+                    "el": "purchase-orders-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "purchase-orders-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "purchase-orders-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/PurchaseOrders/Show": [
+        {
+            "key": "purchase_orders_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "purchase-orders-show-header"
+                },
+                {
+                    "id": "place",
+                    "el": "purchase-orders-show-place"
+                },
+                {
+                    "id": "cancel",
+                    "el": "purchase-orders-show-cancel"
+                },
+                {
+                    "id": "receive",
+                    "el": "purchase-orders-show-receive"
+                },
+                {
+                    "id": "items",
+                    "el": "purchase-orders-show-items"
+                },
+                {
+                    "id": "receivings",
+                    "el": "purchase-orders-show-receivings"
+                },
+                {
+                    "id": "payable",
+                    "el": "purchase-orders-show-payable"
+                },
+                {
+                    "id": "flow",
+                    "el": "purchase-orders-show-flow"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Receivables/Index": [
+        {
+            "key": "receivables",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "tabs",
+                    "el": "receivables-tabs"
+                },
+                {
+                    "id": "create",
+                    "el": "receivables-create"
+                },
+                {
+                    "id": "filters",
+                    "el": "receivables-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "receivables-list"
+                },
+                {
+                    "id": "row",
+                    "el": "receivables-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "receivables-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "receivables-pagination"
+                },
+                {
+                    "id": "aging_cards",
+                    "el": "receivables-aging-cards"
+                },
+                {
+                    "id": "aging_buckets",
+                    "el": "receivables-aging-buckets"
+                },
+                {
+                    "id": "aging_top",
+                    "el": "receivables-aging-top"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Receivables/Show": [
+        {
+            "key": "receivables_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "actions",
+                    "el": "receivables-show-actions"
+                },
+                {
+                    "id": "customer",
+                    "el": "receivables-show-customer"
+                },
+                {
+                    "id": "amounts",
+                    "el": "receivables-show-amounts"
+                },
+                {
+                    "id": "add",
+                    "el": "receivables-show-add"
+                },
+                {
+                    "id": "history",
+                    "el": "receivables-show-history"
+                },
+                {
+                    "id": "detail",
+                    "el": "receivables-show-detail"
+                },
+                {
+                    "id": "notes",
+                    "el": "receivables-show-notes"
+                },
+                {
+                    "id": "payform",
+                    "el": "receivables-show-payform"
+                },
+                {
+                    "id": "print",
+                    "el": "receivables-show-print"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Reports/Insights": [
+        {
+            "key": "reports_insights",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filter",
+                    "el": "reports-insights-filter"
+                },
+                {
+                    "id": "summary",
+                    "el": "reports-insights-summary"
+                },
+                {
+                    "id": "charts",
+                    "el": "reports-insights-charts"
+                },
+                {
+                    "id": "customers",
+                    "el": "reports-insights-customers"
+                },
+                {
+                    "id": "top",
+                    "el": "reports-insights-top"
+                },
+                {
+                    "id": "low",
+                    "el": "reports-insights-low"
+                },
+                {
+                    "id": "margin",
+                    "el": "reports-insights-margin"
+                },
+                {
+                    "id": "cashiers",
+                    "el": "reports-insights-cashiers"
+                },
+                {
+                    "id": "repeat",
+                    "el": "reports-insights-repeat"
+                },
+                {
+                    "id": "coverage",
+                    "el": "reports-insights-coverage"
+                },
+                {
+                    "id": "promo",
+                    "el": "reports-insights-promo"
+                },
+                {
+                    "id": "loyalty",
+                    "el": "reports-insights-loyalty"
+                },
+                {
+                    "id": "crm",
+                    "el": "reports-insights-crm"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Reports/Profit": [
+        {
+            "key": "reports_profit",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filter",
+                    "el": "reports-profit-filter"
+                },
+                {
+                    "id": "summary",
+                    "el": "reports-profit-summary"
+                },
+                {
+                    "id": "table",
+                    "el": "reports-profit-table"
+                },
+                {
+                    "id": "empty",
+                    "el": "reports-profit-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "reports-profit-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Reports/Sales": [
+        {
+            "key": "reports",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filter",
+                    "el": "reports-sales-filter"
+                },
+                {
+                    "id": "summary",
+                    "el": "reports-sales-summary"
+                },
+                {
+                    "id": "table",
+                    "el": "reports-sales-table"
+                },
+                {
+                    "id": "empty",
+                    "el": "reports-sales-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "reports-sales-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Roles/Index": [
+        {
+            "key": "roles",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "roles-add"
+                },
+                {
+                    "id": "search",
+                    "el": "roles-search"
+                },
+                {
+                    "id": "card",
+                    "el": "roles-card"
+                },
+                {
+                    "id": "actions",
+                    "el": "roles-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "roles-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "roles-pagination"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SalesReturns/Create": [
+        {
+            "key": "sales_returns_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "summary",
+                    "el": "sales-returns-form-summary"
+                },
+                {
+                    "id": "items",
+                    "el": "sales-returns-form-items"
+                },
+                {
+                    "id": "row",
+                    "el": "sales-returns-form-row"
+                },
+                {
+                    "id": "method",
+                    "el": "sales-returns-form-method"
+                },
+                {
+                    "id": "notes",
+                    "el": "sales-returns-form-notes"
+                },
+                {
+                    "id": "preview",
+                    "el": "sales-returns-form-preview"
+                },
+                {
+                    "id": "save",
+                    "el": "sales-returns-form-save"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SalesReturns/Index": [
+        {
+            "key": "sales_returns",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filters",
+                    "el": "sales-returns-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "sales-returns-list"
+                },
+                {
+                    "id": "row",
+                    "el": "sales-returns-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "sales-returns-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "sales-returns-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SalesReturns/Show": [
+        {
+            "key": "sales_returns_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "status",
+                    "el": "sales-returns-form-status"
+                },
+                {
+                    "id": "summary",
+                    "el": "sales-returns-form-summary"
+                },
+                {
+                    "id": "items",
+                    "el": "sales-returns-form-items"
+                },
+                {
+                    "id": "row",
+                    "el": "sales-returns-form-row"
+                },
+                {
+                    "id": "method",
+                    "el": "sales-returns-form-method"
+                },
+                {
+                    "id": "notes",
+                    "el": "sales-returns-form-notes"
+                },
+                {
+                    "id": "preview",
+                    "el": "sales-returns-form-preview"
+                },
+                {
+                    "id": "save",
+                    "el": "sales-returns-form-save"
+                },
+                {
+                    "id": "complete",
+                    "el": "sales-returns-form-complete"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/BankAccountForm": [
+        {
+            "key": "settings_bank_account_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "bank",
+                    "el": "settings-bank-account-form-bank"
+                },
+                {
+                    "id": "number",
+                    "el": "settings-bank-account-form-number"
+                },
+                {
+                    "id": "name",
+                    "el": "settings-bank-account-form-name"
+                },
+                {
+                    "id": "logo",
+                    "el": "settings-bank-account-form-logo"
+                },
+                {
+                    "id": "active",
+                    "el": "settings-bank-account-form-active"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-bank-account-form-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/BankAccounts": [
+        {
+            "key": "settings_bank_accounts",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "add",
+                    "el": "settings-bank-accounts-add"
+                },
+                {
+                    "id": "list",
+                    "el": "settings-bank-accounts-list"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-bank-accounts-row"
+                },
+                {
+                    "id": "actions",
+                    "el": "settings-bank-accounts-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-bank-accounts-empty"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Loyalty": [
+        {
+            "key": "settings_loyalty",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "earn",
+                    "el": "settings-loyalty-earn"
+                },
+                {
+                    "id": "redeem",
+                    "el": "settings-loyalty-redeem"
+                },
+                {
+                    "id": "rate",
+                    "el": "settings-loyalty-rate"
+                },
+                {
+                    "id": "value",
+                    "el": "settings-loyalty-value"
+                },
+                {
+                    "id": "tiers",
+                    "el": "settings-loyalty-tiers"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-loyalty-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Outlets/Index": [
+        {
+            "key": "settings_outlets",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "settings-outlets-add"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-outlets-row"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "settings-outlets-warehouse"
+                },
+                {
+                    "id": "actions",
+                    "el": "settings-outlets-actions"
+                },
+                {
+                    "id": "sales",
+                    "el": "settings-outlets-sales"
+                },
+                {
+                    "id": "pusat",
+                    "el": "settings-outlets-pusat"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-outlets-empty"
+                },
+                {
+                    "id": "form_identity",
+                    "el": "settings-outlets-form-identity"
+                },
+                {
+                    "id": "form_address",
+                    "el": "settings-outlets-form-address"
+                },
+                {
+                    "id": "form_active",
+                    "el": "settings-outlets-form-active"
+                },
+                {
+                    "id": "form_sales",
+                    "el": "settings-outlets-form-sales"
+                },
+                {
+                    "id": "form_warehouse",
+                    "el": "settings-outlets-form-warehouse"
+                },
+                {
+                    "id": "form_buttons",
+                    "el": "settings-outlets-form-buttons"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Payment": [
+        {
+            "key": "settings_payment",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "readonly",
+                    "el": "settings-payment-readonly"
+                },
+                {
+                    "id": "default",
+                    "el": "settings-payment-default"
+                },
+                {
+                    "id": "bank",
+                    "el": "settings-payment-bank"
+                },
+                {
+                    "id": "midtrans",
+                    "el": "settings-payment-midtrans"
+                },
+                {
+                    "id": "mode",
+                    "el": "settings-payment-mode"
+                },
+                {
+                    "id": "xendit",
+                    "el": "settings-payment-xendit"
+                },
+                {
+                    "id": "webhook",
+                    "el": "settings-payment-webhook"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-payment-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/PriceListItems": [
+        {
+            "key": "settings_price_list_items",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "back",
+                    "el": "settings-price-list-items-back"
+                },
+                {
+                    "id": "add",
+                    "el": "settings-price-list-items-add"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-price-list-items-row"
+                },
+                {
+                    "id": "delete",
+                    "el": "settings-price-list-items-delete"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-price-list-items-empty"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/PriceLists": [
+        {
+            "key": "settings_price_lists",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "new",
+                    "el": "settings-price-lists-new"
+                },
+                {
+                    "id": "form_name",
+                    "el": "settings-price-lists-form-name"
+                },
+                {
+                    "id": "form_scope",
+                    "el": "settings-price-lists-form-scope"
+                },
+                {
+                    "id": "form_priority",
+                    "el": "settings-price-lists-form-priority"
+                },
+                {
+                    "id": "form_notes",
+                    "el": "settings-price-lists-form-notes"
+                },
+                {
+                    "id": "form_buttons",
+                    "el": "settings-price-lists-form-buttons"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-price-lists-row"
+                },
+                {
+                    "id": "open",
+                    "el": "settings-price-lists-open"
+                },
+                {
+                    "id": "edit",
+                    "el": "settings-price-lists-edit"
+                },
+                {
+                    "id": "delete",
+                    "el": "settings-price-lists-delete"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-price-lists-empty"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Printer": [
+        {
+            "key": "settings_printer",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "paper",
+                    "el": "settings-printer-paper"
+                },
+                {
+                    "id": "auto",
+                    "el": "settings-printer-auto"
+                },
+                {
+                    "id": "device",
+                    "el": "settings-printer-device"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-printer-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Store": [
+        {
+            "key": "settings_store",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "logo",
+                    "el": "settings-store-logo"
+                },
+                {
+                    "id": "name",
+                    "el": "settings-store-name"
+                },
+                {
+                    "id": "address",
+                    "el": "settings-store-address"
+                },
+                {
+                    "id": "city_phone",
+                    "el": "settings-store-city-phone"
+                },
+                {
+                    "id": "email_web",
+                    "el": "settings-store-email-web"
+                },
+                {
+                    "id": "legal",
+                    "el": "settings-store-legal"
+                },
+                {
+                    "id": "tax",
+                    "el": "settings-store-tax"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-store-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Target": [
+        {
+            "key": "settings_target",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "input",
+                    "el": "settings-target-input"
+                },
+                {
+                    "id": "tip",
+                    "el": "settings-target-tip"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Units": [
+        {
+            "key": "settings_units",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "settings-units-add"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-units-row"
+                },
+                {
+                    "id": "actions",
+                    "el": "settings-units-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-units-empty"
+                },
+                {
+                    "id": "form_code",
+                    "el": "settings-units-form-code"
+                },
+                {
+                    "id": "form_name",
+                    "el": "settings-units-form-name"
+                },
+                {
+                    "id": "form_symbol",
+                    "el": "settings-units-form-symbol"
+                },
+                {
+                    "id": "form_buttons",
+                    "el": "settings-units-form-buttons"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Warehouses": [
+        {
+            "key": "settings_warehouses",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "settings-warehouses-add"
+                },
+                {
+                    "id": "list",
+                    "el": "settings-warehouses-list"
+                },
+                {
+                    "id": "row",
+                    "el": "settings-warehouses-row"
+                },
+                {
+                    "id": "actions",
+                    "el": "settings-warehouses-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "settings-warehouses-empty"
+                },
+                {
+                    "id": "form_main",
+                    "el": "settings-warehouses-form-main"
+                },
+                {
+                    "id": "form_extra",
+                    "el": "settings-warehouses-form-extra"
+                },
+                {
+                    "id": "form_buttons",
+                    "el": "settings-warehouses-form-buttons"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Settings/Whatsapp": [
+        {
+            "key": "settings_whatsapp",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "outlet",
+                    "el": "nav-outlet"
+                },
+                {
+                    "id": "status",
+                    "el": "settings-whatsapp-status"
+                },
+                {
+                    "id": "connect",
+                    "el": "settings-whatsapp-connect"
+                },
+                {
+                    "id": "qr",
+                    "el": "settings-whatsapp-qr"
+                },
+                {
+                    "id": "disconnect",
+                    "el": "settings-whatsapp-disconnect"
+                },
+                {
+                    "id": "url",
+                    "el": "settings-whatsapp-url"
+                },
+                {
+                    "id": "enable",
+                    "el": "settings-whatsapp-enable"
+                },
+                {
+                    "id": "auto",
+                    "el": "settings-whatsapp-auto"
+                },
+                {
+                    "id": "submit",
+                    "el": "settings-whatsapp-submit"
+                },
+                {
+                    "id": "test",
+                    "el": "settings-whatsapp-test"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockMutations/Index": [
+        {
+            "key": "stock_mutations",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filters",
+                    "el": "stock-mutations-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "stock-mutations-list"
+                },
+                {
+                    "id": "type",
+                    "el": "stock-mutations-type"
+                },
+                {
+                    "id": "before_after",
+                    "el": "stock-mutations-before-after"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "stock-mutations-warehouse"
+                },
+                {
+                    "id": "ref",
+                    "el": "stock-mutations-ref"
+                },
+                {
+                    "id": "empty",
+                    "el": "stock-mutations-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "stock-mutations-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockOpnames/Create": [
+        {
+            "key": "stock_opnames_create",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "warehouse",
+                    "el": "stock-opnames-create-warehouse"
+                },
+                {
+                    "id": "notes",
+                    "el": "stock-opnames-create-notes"
+                },
+                {
+                    "id": "submit",
+                    "el": "stock-opnames-create-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockOpnames/Index": [
+        {
+            "key": "stock_opnames",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "new",
+                    "el": "stock-opnames-new"
+                },
+                {
+                    "id": "filters",
+                    "el": "stock-opnames-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "stock-opnames-list"
+                },
+                {
+                    "id": "row",
+                    "el": "stock-opnames-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "stock-opnames-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "stock-opnames-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockOpnames/Show": [
+        {
+            "key": "stock_opnames_show_final",
+            "if": "stock-opnames-show-finalized",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "stock-opnames-show-header"
+                },
+                {
+                    "id": "summary",
+                    "el": "stock-opnames-show-summary"
+                },
+                {
+                    "id": "items",
+                    "el": "stock-opnames-show-items"
+                },
+                {
+                    "id": "notes",
+                    "el": "stock-opnames-show-notes"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        },
+        {
+            "key": "stock_opnames_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "stock-opnames-show-header"
+                },
+                {
+                    "id": "summary",
+                    "el": "stock-opnames-show-summary"
+                },
+                {
+                    "id": "add",
+                    "el": "stock-opnames-show-add"
+                },
+                {
+                    "id": "items",
+                    "el": "stock-opnames-show-items"
+                },
+                {
+                    "id": "physical",
+                    "el": "stock-opnames-show-physical"
+                },
+                {
+                    "id": "difference",
+                    "el": "stock-opnames-show-difference"
+                },
+                {
+                    "id": "reason",
+                    "el": "stock-opnames-show-items"
+                },
+                {
+                    "id": "save",
+                    "el": "stock-opnames-show-items"
+                },
+                {
+                    "id": "empty",
+                    "el": "stock-opnames-show-empty"
+                },
+                {
+                    "id": "notes",
+                    "el": "stock-opnames-show-notes"
+                },
+                {
+                    "id": "finalize",
+                    "el": "stock-opnames-show-finalize"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockTransfers/Create": [
+        {
+            "key": "stock_transfers_create",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "source",
+                    "el": "stock-transfers-create-source"
+                },
+                {
+                    "id": "destination",
+                    "el": "stock-transfers-create-destination"
+                },
+                {
+                    "id": "number",
+                    "el": "stock-transfers-create-number"
+                },
+                {
+                    "id": "notes",
+                    "el": "stock-transfers-create-notes"
+                },
+                {
+                    "id": "search",
+                    "el": "stock-transfers-create-search"
+                },
+                {
+                    "id": "empty",
+                    "el": "stock-transfers-create-empty"
+                },
+                {
+                    "id": "items",
+                    "el": "stock-transfers-create-items"
+                },
+                {
+                    "id": "actions",
+                    "el": "stock-transfers-create-actions"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockTransfers/Index": [
+        {
+            "key": "stock_transfers",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "new",
+                    "el": "stock-transfers-new"
+                },
+                {
+                    "id": "list",
+                    "el": "stock-transfers-list"
+                },
+                {
+                    "id": "row",
+                    "el": "stock-transfers-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "stock-transfers-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "stock-transfers-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/StockTransfers/Show": [
+        {
+            "key": "stock_transfers_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "status",
+                    "el": "stock-transfers-show-status"
+                },
+                {
+                    "id": "info",
+                    "el": "stock-transfers-show-info"
+                },
+                {
+                    "id": "items",
+                    "el": "stock-transfers-show-items"
+                },
+                {
+                    "id": "send",
+                    "el": "stock-transfers-show-send"
+                },
+                {
+                    "id": "cancel",
+                    "el": "stock-transfers-show-cancel"
+                },
+                {
+                    "id": "receive",
+                    "el": "stock-transfers-show-receive"
+                },
+                {
+                    "id": "return",
+                    "el": "stock-transfers-show-return"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SupplierReturns/Create": [
+        {
+            "key": "supplier_returns_create",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "supplier",
+                    "el": "supplier-returns-create-supplier"
+                },
+                {
+                    "id": "gr",
+                    "el": "supplier-returns-create-gr"
+                },
+                {
+                    "id": "notes",
+                    "el": "supplier-returns-create-notes"
+                },
+                {
+                    "id": "gr_items",
+                    "el": "supplier-returns-create-gr-items"
+                },
+                {
+                    "id": "search",
+                    "el": "supplier-returns-create-search"
+                },
+                {
+                    "id": "items",
+                    "el": "supplier-returns-create-items"
+                },
+                {
+                    "id": "empty",
+                    "el": "supplier-returns-create-empty"
+                },
+                {
+                    "id": "submit",
+                    "el": "supplier-returns-create-submit"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SupplierReturns/Index": [
+        {
+            "key": "supplier_returns",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "supplier-returns-add"
+                },
+                {
+                    "id": "filters",
+                    "el": "supplier-returns-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "supplier-returns-list"
+                },
+                {
+                    "id": "row",
+                    "el": "supplier-returns-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "supplier-returns-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "supplier-returns-pagination"
+                }
+            ]
+        }
+    ],
+    "Dashboard/SupplierReturns/Show": [
+        {
+            "key": "supplier_returns_show",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "supplier-returns-show-header"
+                },
+                {
+                    "id": "complete",
+                    "el": "supplier-returns-show-complete"
+                },
+                {
+                    "id": "cancel",
+                    "el": "supplier-returns-show-cancel"
+                },
+                {
+                    "id": "items",
+                    "el": "supplier-returns-show-items"
+                },
+                {
+                    "id": "info",
+                    "el": "supplier-returns-show-info"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Suppliers/Index": [
+        {
+            "key": "suppliers",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "suppliers-add"
+                },
+                {
+                    "id": "name",
+                    "el": "suppliers-form-name"
+                },
+                {
+                    "id": "phone",
+                    "el": "suppliers-form-phone"
+                },
+                {
+                    "id": "email",
+                    "el": "suppliers-form-email"
+                },
+                {
+                    "id": "address",
+                    "el": "suppliers-form-address"
+                },
+                {
+                    "id": "submit",
+                    "el": "suppliers-form-submit"
+                },
+                {
+                    "id": "list",
+                    "el": "suppliers-list"
+                },
+                {
+                    "id": "row",
+                    "el": "suppliers-row"
+                },
+                {
+                    "id": "empty",
+                    "el": "suppliers-empty"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Transactions/History": [
+        {
+            "key": "transactions_history",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "filter",
+                    "el": "transactions-history-filter"
+                },
+                {
+                    "id": "new",
+                    "el": "transactions-history-new"
+                },
+                {
+                    "id": "filters",
+                    "el": "transactions-history-filters"
+                },
+                {
+                    "id": "list",
+                    "el": "transactions-history-list"
+                },
+                {
+                    "id": "status",
+                    "el": "transactions-history-status"
+                },
+                {
+                    "id": "actions",
+                    "el": "transactions-history-actions"
+                },
+                {
+                    "id": "empty",
+                    "el": "transactions-history-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "transactions-history-pagination"
+                }
+            ]
+        }
+    ],
     "Dashboard/Transactions/Index": [
         {
             "key": "pos_buka_shift",
@@ -285,6 +3324,291 @@
                 {
                     "id": "help",
                     "el": "pos-help"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Transactions/Print": [
+        {
+            "key": "transactions_print",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "nav",
+                    "el": "transactions-print-nav"
+                },
+                {
+                    "id": "modes",
+                    "el": "transactions-print-modes"
+                },
+                {
+                    "id": "thermal",
+                    "el": "transactions-print-thermal"
+                },
+                {
+                    "id": "pay_link",
+                    "el": "transactions-print-pay-link"
+                },
+                {
+                    "id": "qris",
+                    "el": "transactions-print-qris"
+                },
+                {
+                    "id": "share",
+                    "el": "transactions-print-share"
+                },
+                {
+                    "id": "confirm",
+                    "el": "transactions-print-confirm"
+                },
+                {
+                    "id": "pdf",
+                    "el": "transactions-print-pdf"
+                },
+                {
+                    "id": "head",
+                    "el": "transactions-print-head"
+                },
+                {
+                    "id": "info",
+                    "el": "transactions-print-info"
+                },
+                {
+                    "id": "bank",
+                    "el": "transactions-print-bank"
+                },
+                {
+                    "id": "items",
+                    "el": "transactions-print-items"
+                },
+                {
+                    "id": "summary",
+                    "el": "transactions-print-summary"
+                },
+                {
+                    "id": "receipt",
+                    "el": "transactions-print-receipt"
+                },
+                {
+                    "id": "label",
+                    "el": "transactions-print-label"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Users/Create": [
+        {
+            "key": "users_form",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "avatar",
+                    "el": "users-form-avatar"
+                },
+                {
+                    "id": "name",
+                    "el": "users-form-name"
+                },
+                {
+                    "id": "email",
+                    "el": "users-form-email"
+                },
+                {
+                    "id": "password",
+                    "el": "users-form-password"
+                },
+                {
+                    "id": "outlets",
+                    "el": "users-form-outlets"
+                },
+                {
+                    "id": "default",
+                    "el": "users-form-default"
+                },
+                {
+                    "id": "roles",
+                    "el": "users-form-roles"
+                },
+                {
+                    "id": "submit",
+                    "el": "users-form-submit"
+                },
+                {
+                    "id": "next"
+                }
+            ]
+        }
+    ],
+    "Dashboard/Users/Edit": "Dashboard/Users/Create",
+    "Dashboard/Users/Index": [
+        {
+            "key": "users",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "add",
+                    "el": "users-add"
+                },
+                {
+                    "id": "search",
+                    "el": "users-search"
+                },
+                {
+                    "id": "view",
+                    "el": "users-view"
+                },
+                {
+                    "id": "list",
+                    "el": "users-list"
+                },
+                {
+                    "id": "row",
+                    "el": "users-row"
+                },
+                {
+                    "id": "bulk",
+                    "el": "users-bulk"
+                },
+                {
+                    "id": "empty",
+                    "el": "users-empty"
+                },
+                {
+                    "id": "pagination",
+                    "el": "users-pagination"
+                }
+            ]
+        }
+    ],
+    "Penyewaan/Daftar": [
+        {
+            "key": "daftar_pintu",
+            "if": "daftar-pintu",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "harga",
+                    "el": "daftar-harga"
+                },
+                {
+                    "id": "buat_akun",
+                    "el": "daftar-buat-akun"
+                },
+                {
+                    "id": "sudah_punya",
+                    "el": "daftar-sudah-punya"
+                }
+            ]
+        },
+        {
+            "key": "daftar",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "harga",
+                    "el": "daftar-harga"
+                },
+                {
+                    "id": "akun",
+                    "el": "daftar-akun"
+                },
+                {
+                    "id": "nama_toko",
+                    "el": "daftar-nama-toko"
+                },
+                {
+                    "id": "jenis_usaha",
+                    "el": "daftar-jenis-usaha"
+                },
+                {
+                    "id": "nama",
+                    "el": "daftar-nama"
+                },
+                {
+                    "id": "email",
+                    "el": "daftar-email"
+                },
+                {
+                    "id": "telepon",
+                    "el": "daftar-telepon"
+                },
+                {
+                    "id": "sandi",
+                    "el": "daftar-sandi"
+                },
+                {
+                    "id": "kirim",
+                    "el": "daftar-kirim"
+                }
+            ]
+        }
+    ],
+    "Profile/Edit": [
+        {
+            "key": "profile",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "name",
+                    "el": "profile-name"
+                },
+                {
+                    "id": "email",
+                    "el": "profile-email"
+                },
+                {
+                    "id": "photo",
+                    "el": "profile-photo"
+                },
+                {
+                    "id": "save",
+                    "el": "profile-save"
+                },
+                {
+                    "id": "password",
+                    "el": "profile-password"
+                },
+                {
+                    "id": "delete",
+                    "el": "profile-delete"
+                }
+            ]
+        }
+    ],
+    "Public/DineMenu": [
+        {
+            "key": "dine_menu",
+            "steps": [
+                {
+                    "id": "intro"
+                },
+                {
+                    "id": "header",
+                    "el": "dine-menu-header"
+                },
+                {
+                    "id": "categories",
+                    "el": "dine-menu-categories"
+                },
+                {
+                    "id": "list",
+                    "el": "dine-menu-list"
+                },
+                {
+                    "id": "cart",
+                    "el": "dine-menu-cart"
                 }
             ]
         }

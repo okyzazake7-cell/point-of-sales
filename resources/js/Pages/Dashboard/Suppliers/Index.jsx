@@ -70,7 +70,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                         </p>
                     </div>
                     {canManageSuppliers && (
-                        <button
+                        <button data-tour="suppliers-add"
                             onClick={cancel}
                             className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-500 text-white text-sm font-semibold"
                         >
@@ -85,7 +85,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                         onSubmit={submit}
                         className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 grid grid-cols-1 md:grid-cols-4 gap-3"
                     >
-                    <div className="md:col-span-1">
+                    <div data-tour="suppliers-form-name" className="md:col-span-1">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Nama
                         </label>
@@ -96,7 +96,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                             required
                         />
                     </div>
-                    <div>
+                    <div data-tour="suppliers-form-phone">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Telepon
                         </label>
@@ -106,7 +106,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                             onChange={(e) => setData("phone", e.target.value)}
                         />
                     </div>
-                    <div>
+                    <div data-tour="suppliers-form-email">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Email
                         </label>
@@ -117,7 +117,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                             type="email"
                         />
                     </div>
-                    <div className="md:col-span-1">
+                    <div data-tour="suppliers-form-address" className="md:col-span-1">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                             Alamat
                         </label>
@@ -128,7 +128,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                             onChange={(e) => setData("address", e.target.value)}
                         />
                     </div>
-                    <div className="md:col-span-4 flex gap-2">
+                    <div data-tour="suppliers-form-submit" className="md:col-span-4 flex gap-2">
                         <button
                             type="submit"
                             disabled={processing}
@@ -149,7 +149,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                     </form>
                 )}
 
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl divide-y divide-slate-100 dark:divide-slate-800">
+                <div data-tour="suppliers-list" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl divide-y divide-slate-100 dark:divide-slate-800">
                     {suppliers.length ? (
                         suppliers.map((sup) => (
                             <div
@@ -169,7 +169,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div data-tour={sup.id === suppliers[0].id ? "suppliers-row" : undefined} className="flex items-center gap-2">
                                     {canManageSuppliers && (
                                         <>
                                             <button
@@ -190,7 +190,7 @@ export default function SuppliersIndex({ suppliers = [] }) {
                             </div>
                         ))
                     ) : (
-                        <div className="p-6 text-center text-slate-500">
+                        <div data-tour="suppliers-empty" className="p-6 text-center text-slate-500">
                             Belum ada supplier.
                         </div>
                     )}

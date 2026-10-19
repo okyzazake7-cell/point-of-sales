@@ -126,7 +126,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <button
+                        <button data-tour="transactions-history-filter"
                             onClick={() => setShowFilters(!showFilters)}
                             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
                                 showFilters || hasActiveFilters
@@ -140,7 +140,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                 <span className="w-2 h-2 rounded-full bg-primary-500"></span>
                             )}
                         </button>
-                        <Link
+                        <Link data-tour="transactions-history-new"
                             href={route("transactions.index")}
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors shadow-lg shadow-primary-500/30"
                         >
@@ -152,7 +152,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
 
                 {/* Filters Panel */}
                 {showFilters && (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 animate-slide-up">
+                    <div data-tour="transactions-history-filters" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 animate-slide-up">
                         <form onSubmit={applyFilters}>
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 <div>
@@ -248,7 +248,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                         {/* Desktop Table */}
                         <div className="overflow-x-auto hidden sm:block">
                             <table className="w-full">
-                                <thead>
+                                <thead data-tour="transactions-history-list">
                                     <tr className="border-b border-slate-100 dark:border-slate-800">
                                         <th className="px-4 py-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                             No
@@ -319,7 +319,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                     transaction.grand_total ?? 0
                                                 )}
                                             </td>
-                                            <td className="px-4 py-4 text-center">
+                                            <td data-tour={index === 0 ? "transactions-history-status" : undefined} className="px-4 py-4 text-center">
                                                 {transaction.payment_method ===
                                                     "pay_later" &&
                                                 transaction.payment_status !==
@@ -354,7 +354,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                                     </span>
                                                 )}
                                             </td>
-                                            <td className="px-4 py-4">
+                                            <td data-tour={index === 0 ? "transactions-history-actions" : undefined} className="px-4 py-4">
                                                 <div className="flex items-center justify-center gap-2">
                                                     {canCreateSalesReturn ? (
                                                         transaction.can_create_sales_return ? (
@@ -445,7 +445,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                             </p>
                                         </div>
                                         <div className="text-right space-y-2">
-                                            <div className="flex flex-wrap gap-2 justify-end">
+                                            <div data-tour={index === 0 ? "transactions-history-status" : undefined} className="flex flex-wrap gap-2 justify-end">
                                                 {transaction.payment_method ===
                                                     "pay_later" &&
                                                 transaction.payment_status !==
@@ -488,7 +488,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-2 text-sm text-slate-600 dark:text-slate-300">
+                                    <div data-tour={index === 0 ? "transactions-history-list" : undefined} className="grid grid-cols-2 gap-2 text-sm text-slate-600 dark:text-slate-300">
                                         <div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
                                                 Kasir
@@ -526,7 +526,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div data-tour={index === 0 ? "transactions-history-actions" : undefined} className="grid grid-cols-2 gap-2">
                                         {canCreateSalesReturn ? (
                                             transaction.can_create_sales_return ? (
                                             <Link
@@ -596,7 +596,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                     </div>
                 ) : (
                     /* Empty State */
-                    <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div data-tour="transactions-history-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                             <IconDatabaseOff
                                 size={32}
@@ -615,7 +615,7 @@ const History = ({ transactions, filters, warehouses = [] }) => {
                     </div>
                 )}
 
-                {links.length > 3 && <Pagination links={links} />}
+                {links.length > 3 && <Pagination data-tour="transactions-history-pagination" links={links} />}
             </div>
 
             {/* Confirmation Modal */}

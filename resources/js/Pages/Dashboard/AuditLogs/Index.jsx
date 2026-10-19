@@ -53,7 +53,7 @@ export default function Index({
                 </p>
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-3">
+            <div data-tour="audit-logs-filters" className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-3">
                 <select
                     value={currentFilters.user_id}
                     onChange={(event) =>
@@ -146,7 +146,7 @@ export default function Index({
                 />
             </div>
 
-            <Table.Card title="Histori Audit">
+            <Table.Card data-tour="audit-logs-list" title="Histori Audit">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -178,14 +178,14 @@ export default function Index({
                                         </div>
                                     </Table.Td>
                                     <Table.Td>{log.module}</Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={log.id === auditLogs.data[0].id ? "audit-logs-event" : undefined}>
                                         <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                                             {log.event}
                                         </span>
                                     </Table.Td>
                                     <Table.Td>{log.target_label || "-"}</Table.Td>
                                     <Table.Td>{log.description}</Table.Td>
-                                    <Table.Td className="text-center">
+                                    <Table.Td data-tour={log.id === auditLogs.data[0].id ? "audit-logs-row" : undefined} className="text-center">
                                         <Link
                                             href={route("audit-logs.show", log.id)}
                                             className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
@@ -197,7 +197,7 @@ export default function Index({
                                 </tr>
                             ))
                         ) : (
-                            <Table.Empty
+                            <Table.Empty data-tour="audit-logs-empty"
                                 colSpan={7}
                                 message="Belum ada data audit log."
                             />
@@ -206,7 +206,7 @@ export default function Index({
                 </Table>
             </Table.Card>
 
-            {auditLogs.last_page > 1 && <Pagination links={auditLogs.links} />}
+            {auditLogs.last_page > 1 && <Pagination data-tour="audit-logs-pagination" links={auditLogs.links} />}
         </>
     );
 }

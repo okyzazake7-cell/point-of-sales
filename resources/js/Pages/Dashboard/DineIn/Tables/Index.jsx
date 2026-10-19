@@ -215,7 +215,7 @@ export default function Index({ tables, areas, filters }) {
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Button
+                        <Button data-tour={activeView === "grid" ? "dine-tables-to-list" : "dine-tables-to-map"}
                             type={"button"}
                             label={activeView === "grid" ? "Daftar" : "Peta"}
                             onClick={() => setActiveView(activeView === "grid" ? "list" : "grid")}
@@ -224,7 +224,7 @@ export default function Index({ tables, areas, filters }) {
                             }
                         />
                         {canCreate && (
-                            <Button
+                            <Button data-tour="dine-tables-add"
                                 type={"link"}
                                 icon={<IconCirclePlus size={18} strokeWidth={1.5} />}
                                 className={
@@ -239,7 +239,7 @@ export default function Index({ tables, areas, filters }) {
             </div>
 
             {canAccess && (
-                <div className="mb-4 flex gap-2 flex-wrap">
+                <div data-tour="dine-tables-areas" className="mb-4 flex gap-2 flex-wrap">
                     <button
                         onClick={() => handleFilterArea("")}
                         className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
@@ -267,7 +267,7 @@ export default function Index({ tables, areas, filters }) {
             )}
 
             {activeView === "grid" ? (
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 overflow-x-auto">
+                <div data-tour="dine-tables-map" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 overflow-x-auto">
                     <svg
                         ref={svgRef}
                         viewBox={`0 0 ${gridWidth * GRID_SIZE} ${gridHeight * GRID_SIZE}`}
@@ -303,7 +303,7 @@ export default function Index({ tables, areas, filters }) {
                     </svg>
                 </div>
             ) : tables.length > 0 ? (
-                <Table.Card title={"Daftar Meja"}>
+                <Table.Card data-tour="dine-tables-list" title={"Daftar Meja"}>
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -349,7 +349,7 @@ export default function Index({ tables, areas, filters }) {
                                             {table.is_active ? "Aktif" : "Nonaktif"}
                                         </span>
                                     </Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={table.id === tables[0].id ? "dine-tables-row" : undefined}>
                                         <div className="flex gap-2 justify-end">
                                             {canAccess && (
                                                 <Button
@@ -389,7 +389,7 @@ export default function Index({ tables, areas, filters }) {
                     </Table>
                 </Table.Card>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="dine-tables-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff size={32} className="text-slate-400" strokeWidth={1.5} />
                     </div>

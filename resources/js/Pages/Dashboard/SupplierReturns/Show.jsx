@@ -76,7 +76,7 @@ export default function Show({ return: ret }) {
                     Kembali ke daftar retur
                 </Link>
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
+                    <div data-tour="supplier-returns-show-header">
                         <div className="mb-2 flex items-center gap-2">
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{ret.document_number}</h1>
                             {statusBadge(ret.status)}
@@ -95,14 +95,14 @@ export default function Show({ return: ret }) {
                     <div className="flex gap-2">
                         {ret.status === "draft" && canEdit && (
                             <>
-                                <Button
+                                <Button data-tour="supplier-returns-show-complete"
                                     type="button"
                                     icon={<IconCheck size={18} />}
                                     className="bg-success-500 hover:bg-success-600 text-white"
                                     label="Selesaikan Retur"
                                     onClick={completeReturn}
                                 />
-                                <Button
+                                <Button data-tour="supplier-returns-show-cancel"
                                     type="button"
                                     icon={<IconCircleX size={18} />}
                                     className="bg-rose-500 hover:bg-rose-600 text-white"
@@ -117,7 +117,7 @@ export default function Show({ return: ret }) {
 
             <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="supplier-returns-show-items" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Item Retur</h2>
                         <Table>
                             <Table.Thead>
@@ -177,7 +177,7 @@ export default function Show({ return: ret }) {
                         </div>
                     )}
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="supplier-returns-show-info" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-3 text-lg font-semibold text-slate-900 dark:text-white">Informasi</h2>
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">

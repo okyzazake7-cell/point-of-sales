@@ -132,7 +132,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Informasi Retur</h2>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <div>
+                            <div data-tour="supplier-returns-create-supplier">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Supplier</label>
                                 <select
                                     value={data.supplier_id}
@@ -148,7 +148,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="supplier-returns-create-gr">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">
                                     Penerimaan Barang (Opsional)
                                 </label>
@@ -169,7 +169,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="supplier-returns-create-notes">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Catatan</label>
                                 <input
                                     type="text"
@@ -186,7 +186,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Item Retur</h2>
 
                         {selectedGr && (
-                            <div className="mb-4">
+                            <div data-tour="supplier-returns-create-gr-items" className="mb-4">
                                 <p className="mb-2 text-sm font-medium text-slate-600 dark:text-slate-400">
                                     Item dari GR {selectedGr.document_number}
                                 </p>
@@ -216,7 +216,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                             </div>
                         )}
 
-                        <div className="mb-4 flex gap-3">
+                        <div data-tour="supplier-returns-create-search" className="mb-4 flex gap-3">
                             <input
                                 type="text"
                                 value={searchProduct}
@@ -245,7 +245,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                         )}
 
                         {data.items.length > 0 ? (
-                            <div className="overflow-x-auto">
+                            <div data-tour="supplier-returns-create-items" className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
                                         <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -317,7 +317,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                                 </table>
                             </div>
                         ) : (
-                            <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
+                            <div data-tour="supplier-returns-create-empty" className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
                                 <p className="text-sm text-slate-500 dark:text-slate-400">
                                     Pilih supplier, lalu tambahkan item dari GR atau cari produk di atas.
                                 </p>
@@ -325,7 +325,7 @@ export default function Create({ suppliers, goodsReceivings, products }) {
                         )}
                     </div>
 
-                    <div className="flex justify-end gap-3">
+                    <div data-tour="supplier-returns-create-submit" className="flex justify-end gap-3">
                         <Link
                             href={route("supplier-returns.index")}
                             className="flex h-11 items-center rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"

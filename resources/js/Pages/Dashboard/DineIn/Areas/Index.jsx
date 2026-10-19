@@ -83,7 +83,7 @@ export default function Index({ areas }) {
                         </p>
                     </div>
                     {canCreate && (
-                        <Button
+                        <Button data-tour="dine-areas-add"
                             type={"link"}
                             icon={<IconCirclePlus size={18} strokeWidth={1.5} />}
                             className={
@@ -97,7 +97,7 @@ export default function Index({ areas }) {
             </div>
 
             {areas.length > 0 ? (
-                <Table.Card title={"Data Area"}>
+                <Table.Card data-tour="dine-areas-list" title={"Data Area"}>
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -136,7 +136,7 @@ export default function Index({ areas }) {
                                             {area.is_active ? "Aktif" : "Nonaktif"}
                                         </span>
                                     </Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={area.id === areas[0].id ? "dine-areas-row" : undefined}>
                                         <div className="flex gap-2 justify-end">
                                             {canUpdate && (
                                                 <Button
@@ -166,7 +166,7 @@ export default function Index({ areas }) {
                     </Table>
                 </Table.Card>
             ) : (
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="dine-areas-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff size={32} className="text-slate-400" strokeWidth={1.5} />
                     </div>

@@ -162,7 +162,6 @@ const ProfitReport = ({
             <div className="space-y-6">
                 {/* Header */}
                 <div
-                    data-tour="reports-header"
                     className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
                 >
                     <div>
@@ -174,7 +173,7 @@ const ProfitReport = ({
                             Analisis profit dan margin
                         </p>
                     </div>
-                    <button
+                    <button data-tour="reports-profit-filter"
                         onClick={() => setShowFilters(!showFilters)}
                         className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
                             showFilters || hasActiveFilters
@@ -191,7 +190,7 @@ const ProfitReport = ({
                 </div>
 
                 {/* Summary Cards */}
-                <div data-tour="reports-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="reports-profit-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     {summaryCards.map((card) => (
                         <SummaryCard key={card.title} {...card} />
                     ))}
@@ -200,7 +199,6 @@ const ProfitReport = ({
                 {/* Filters */}
                 {showFilters && (
                     <div
-                        data-tour="reports-filters"
                         className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 animate-slide-up"
                     >
                         <form onSubmit={applyFilters}>
@@ -308,7 +306,7 @@ const ProfitReport = ({
                 {/* Table & Mobile Cards */}
                 {rows.length > 0 ? (
                     <div
-                        data-tour="reports-table"
+                        data-tour="reports-profit-table"
                         className="bg-transparent border-0 shadow-none rounded-2xl sm:bg-white sm:dark:bg-slate-900 sm:border sm:border-slate-200 sm:dark:border-slate-800 sm:overflow-hidden"
                     >
                         <div className="overflow-x-auto hidden sm:block">
@@ -440,7 +438,7 @@ const ProfitReport = ({
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div data-tour="reports-profit-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                             <IconDatabaseOff
                                 size={32}
@@ -456,7 +454,7 @@ const ProfitReport = ({
                     </div>
                 )}
 
-                {links.length > 3 && <Pagination links={links} />}
+                {links.length > 3 && <Pagination data-tour="reports-profit-pagination" links={links} />}
             </div>
         </>
     );

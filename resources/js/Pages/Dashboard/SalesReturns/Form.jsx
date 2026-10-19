@@ -214,7 +214,7 @@ export default function SalesReturnForm({
                     </div>
 
                     {salesReturn && (
-                        <div className="flex items-center gap-2">
+                        <div data-tour="sales-returns-form-status" className="flex items-center gap-2">
                             <span
                                 className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                                     salesReturn.status === "completed"
@@ -235,7 +235,7 @@ export default function SalesReturnForm({
                     )}
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div data-tour="sales-returns-form-summary" className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                     <InfoCard
                         label="Pelanggan"
                         value={transaction.customer?.name || "Umum"}
@@ -260,13 +260,13 @@ export default function SalesReturnForm({
                     onSubmit={submit}
                     className="grid gap-6 xl:grid-cols-[1.7fr_1fr]"
                 >
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="sales-returns-form-items" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="mb-4 flex items-center justify-between">
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                                 Item Retur
                             </h2>
                             {canEdit && (
-                                <Button
+                                <Button data-tour="sales-returns-form-save"
                                     type="submit"
                                     icon={<IconDeviceFloppy size={18} />}
                                     className="bg-primary-500 text-white hover:bg-primary-600"
@@ -291,7 +291,7 @@ export default function SalesReturnForm({
                             </Table.Thead>
                             <Table.Tbody>
                                 {itemStates.map((item) => (
-                                    <tr key={item.id}>
+                                    <tr data-tour={item.id === itemStates[0]?.id ? "sales-returns-form-row" : undefined} key={item.id}>
                                         <Table.Td>
                                             <div>
                                                 <p className="font-medium text-slate-800 dark:text-slate-100">
@@ -379,7 +379,7 @@ export default function SalesReturnForm({
                             </h2>
 
                             <div className="space-y-4">
-                                <div>
+                                <div data-tour="sales-returns-form-method">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Metode Penyelesaian
                                     </label>
@@ -417,7 +417,7 @@ export default function SalesReturnForm({
                                     )}
                                 </div>
 
-                                <div>
+                                <div data-tour="sales-returns-form-notes">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Catatan
                                     </label>
@@ -438,7 +438,7 @@ export default function SalesReturnForm({
                             </div>
                         </div>
 
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="sales-returns-form-preview" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
                                 Preview Dampak
                             </h2>
@@ -491,7 +491,7 @@ export default function SalesReturnForm({
 
                             {canComplete && (
                                 <div className="mt-5">
-                                    <Button
+                                    <Button data-tour="sales-returns-form-complete"
                                         type="button"
                                         icon={<IconCheck size={18} />}
                                         className="w-full bg-success-500 text-white hover:bg-success-600 disabled:opacity-50"

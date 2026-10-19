@@ -44,7 +44,7 @@ export default function Index({ receivings, filters }) {
                     </p>
                 </div>
                 {can("goods-receivings-create") && (
-                    <Button
+                    <Button data-tour="goods-receivings-add"
                         type="link"
                         href={route("goods-receivings.create")}
                         icon={<IconCirclePlus size={18} />}
@@ -54,7 +54,7 @@ export default function Index({ receivings, filters }) {
                 )}
             </div>
 
-            <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+            <div data-tour="goods-receivings-search" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                 <div className="relative">
                     <input
                         type="text"
@@ -69,7 +69,7 @@ export default function Index({ receivings, filters }) {
                 </div>
             </div>
 
-            <Table.Card title="Daftar Penerimaan Barang">
+            <Table.Card data-tour="goods-receivings-list" title="Daftar Penerimaan Barang">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -85,7 +85,7 @@ export default function Index({ receivings, filters }) {
                         {receivings.data.length > 0 ? (
                             receivings.data.map((gr) => (
                                 <tr key={gr.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <Table.Td>
+                                    <Table.Td data-tour={gr.id === receivings.data[0].id ? "goods-receivings-row" : undefined}>
                                         <p className="font-semibold text-slate-800 dark:text-slate-200">
                                             {gr.document_number}
                                         </p>
@@ -112,7 +112,7 @@ export default function Index({ receivings, filters }) {
                                 </tr>
                             ))
                         ) : (
-                            <Table.Empty colSpan={6} message={
+                            <Table.Empty data-tour="goods-receivings-empty" colSpan={6} message={
                                 <div className="text-slate-500 dark:text-slate-400">
                                     Belum ada penerimaan barang.
                                 </div>
@@ -126,7 +126,7 @@ export default function Index({ receivings, filters }) {
                 </Table>
             </Table.Card>
 
-            {receivings.last_page > 1 && <Pagination links={receivings.links} />}
+            {receivings.last_page > 1 && <Pagination data-tour="goods-receivings-pagination" links={receivings.links} />}
         </>
     );
 }

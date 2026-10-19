@@ -27,7 +27,7 @@
  * lokasi bawaan Playwright di kontainer pengembangan.
  */
 import puppeteer from 'puppeteer'
-import { existsSync, mkdirSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 
 const BASE = process.env.BASE ?? 'http://127.0.0.1:8000'
 const LEBAR = (process.env.LEBAR ?? '390,320').split(',').map(Number)
@@ -36,6 +36,14 @@ const HANYA = (process.env.HANYA ?? '').split(',').map(s => s.trim()).filter(Boo
 const CHROMIUM = process.env.CHROMIUM
     ?? ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome', '/opt/pw-browsers/chromium/chrome-linux/chrome']
         .find(p => existsSync(p))
+
+/*
+ * Panduan halaman muncul sendiri pada kunjungan pertama SETIAP halaman dan
+ * menutupi layar — yang diukur di sini tata letaknya, jadi semua panduan
+ * ditandai selesai: di akun (server) dan di peramban (halaman tamu).
+ */
+const KUNCI_PANDUAN = Object.values(JSON.parse(readFileSync(new URL('../resources/js/Panduan/daftar.json', import.meta.url), 'utf8')))
+    .flatMap((entri) => (Array.isArray(entri) ? entri.map((v) => v.key) : []))
 
 const PUBLIK = ['/', '/login', '/forgot-password', '/fitur', '/dokumentasi', '/roadmap', '/kontribusi']
 
@@ -215,10 +223,8 @@ async function masuk(page, surel) {
     ])
     if (/\/(login|masuk)$/.test(new URL(page.url()).pathname)) throw new Error(`gagal masuk sebagai ${surel}`)
     if (pengelola) return
-    // Tur pengenalan menutupi layar pada kunjungan pertama tiap halaman, dan
-    // yang diukur di sini tata letaknya — jadi turnya ditandai selesai.
-    await page.evaluate(() => Promise.all(['dashboard', 'pos', 'products', 'cashier_shifts', 'reports']
-        .map(t => window.axios.post(`/dashboard/tours/${t}/complete`).catch(() => {}))))
+    await page.evaluate((kunci) => Promise.all(kunci
+        .map(t => window.axios.post(`/dashboard/tours/${t}/complete`).catch(() => {}))), KUNCI_PANDUAN)
 }
 
 let jumlahLuber = 0
@@ -261,6 +267,9 @@ async function audit(daftar, surel, { rincian = false } = {}) {
         // Bahasa ponsel yang paling lazim di Indonesia: Inggris. Yang diuji
         // justru apakah aplikasinya tetap berbahasa Indonesia.
         await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en;q=0.9' })
+        await page.evaluateOnNewDocument((kunci) => {
+            try { localStorage.setItem('pos-panduan-selesai', JSON.stringify(kunci)) } catch { /* diblokir */ }
+        }, KUNCI_PANDUAN)
         if (surel) await masuk(page, surel)
         const semua = rincian ? [...daftar, ...await cariRincian(page)] : daftar
         for (const jalan of semua) {

@@ -37,7 +37,7 @@ export default function Show({ campaign }) {
                     Kembali ke CRM campaigns
                 </Link>
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
+                    <div data-tour="crm-campaigns-show-header">
                         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{campaign.name}</h1>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                             {campaign.type} • status {campaign.status} • diproses {formatDateTime(campaign.processed_at)}
@@ -45,7 +45,7 @@ export default function Show({ campaign }) {
                     </div>
                     <div className="flex gap-2">
                         {campaign.status === "draft" && (
-                            <button
+                            <button data-tour="crm-campaigns-show-process"
                                 type="button"
                                 onClick={processCampaign}
                                 className="inline-flex items-center gap-2 rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-600"
@@ -55,7 +55,7 @@ export default function Show({ campaign }) {
                             </button>
                         )}
                         {campaign.status !== "cancelled" && campaign.status !== "processed" && (
-                            <button
+                            <button data-tour="crm-campaigns-show-cancel"
                                 type="button"
                                 onClick={cancelCampaign}
                                 className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-rose-600"
@@ -70,7 +70,7 @@ export default function Show({ campaign }) {
 
             <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="crm-campaigns-show-logs" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Delivery Logs</h2>
                         <Table>
                             <Table.Thead>
@@ -84,7 +84,7 @@ export default function Show({ campaign }) {
                             <Table.Tbody>
                                 {campaign.logs.length > 0 ? (
                                     campaign.logs.map((log) => (
-                                        <tr key={log.id}>
+                                        <tr data-tour={log.id === campaign.logs[0].id ? "crm-campaigns-show-row" : undefined} key={log.id}>
                                             <Table.Td>
                                                 <Link href={log.customer ? route("customers.show", log.customer.id) : "#"} className="font-semibold text-slate-800 hover:text-primary-600 dark:text-slate-100">
                                                     {log.customer?.name || "Tanpa customer"}
@@ -121,7 +121,7 @@ export default function Show({ campaign }) {
                                         </tr>
                                     ))
                                 ) : (
-                                    <Table.Empty colSpan={4} message="Belum ada delivery log untuk campaign ini." />
+                                    <Table.Empty data-tour="crm-campaigns-show-empty" colSpan={4} message="Belum ada delivery log untuk campaign ini." />
                                 )}
                             </Table.Tbody>
                         </Table>
@@ -129,7 +129,7 @@ export default function Show({ campaign }) {
                 </div>
 
                 <div className="space-y-6">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="crm-campaigns-show-snapshot" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Audience Snapshot</h2>
                         <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60">
                             <pre className="overflow-x-auto whitespace-pre-wrap text-xs text-slate-600 dark:text-slate-300">
@@ -138,7 +138,7 @@ export default function Show({ campaign }) {
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="crm-campaigns-show-template" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Template Pesan</h2>
                         <p className="whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
                             {campaign.message_template || "-"}

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import TombolPanduan from "@/Components/Panduan/TombolPanduan";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { useTranslation } from "react-i18next";
 import AuthBotGuardFields from "@/Components/AuthBotGuardFields";
@@ -48,15 +49,19 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                     <div className="w-full max-w-md">
                         {/* Logo */}
                         <div className="mb-8">
-                            <Link
-                                href="/"
-                                className="inline-flex items-center gap-3 mb-6"
-                            >
-                                <ApplicationLogo className="w-12 h-12" />
-                                <span className="text-2xl font-bold text-slate-900 dark:text-white">
-                                    {t("auth.login.appName")}
-                                </span>
-                            </Link>
+                            <div className="mb-6 flex items-center justify-between gap-3">
+                                <Link
+                                    href="/"
+                                    className="inline-flex min-w-0 items-center gap-3"
+                                >
+                                    <ApplicationLogo className="w-12 h-12 shrink-0" />
+                                    <span className="text-2xl font-bold text-slate-900 dark:text-white">
+                                        {t("auth.login.appName")}
+                                    </span>
+                                </Link>
+                                {/* Pemilik atau kasir? Panduannya menjawab sebelum orang menebak. */}
+                                <TombolPanduan ringkas />
+                            </div>
                             <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                                 {t("auth.login.subtitle")}
                             </h1>
@@ -77,7 +82,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                             tujuannya server akun Aishii, bukan halaman aplikasi ini.
                             Kasir tetap bersandi (keputusan D1b). */}
                         {masukAishii && (
-                            <div className="mb-6 space-y-3" data-masuk-aishii>
+                            <div className="mb-6 space-y-3" data-masuk-aishii data-tour="login-aishii">
                                 <a
                                     href={masukAishii}
                                     className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border-2 border-primary-500 bg-white px-4 font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus:ring-4 focus:ring-primary-500/20 dark:bg-slate-900 dark:text-primary-300 dark:hover:bg-slate-800"
@@ -117,7 +122,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                                 </div>
                             )}
                             {/* Email */}
-                            <div>
+                            <div data-tour="login-email">
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                     {t("auth.login.email")}
                                 </label>
@@ -148,7 +153,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                             </div>
 
                             {/* Password */}
-                            <div>
+                            <div data-tour="login-password">
                                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                                     {t("auth.login.password")}
                                 </label>
@@ -194,7 +199,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                             </div>
 
                             {/* Remember & Forgot */}
-                            <div className="flex items-center justify-between">
+                            <div data-tour="login-remember" className="flex items-center justify-between">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -224,6 +229,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
 
                             {/* Submit */}
                             <button
+                                data-tour="login-submit"
                                 type="submit"
                                 disabled={processing}
                                 className="w-full h-12 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold hover:from-primary-600 hover:to-primary-700 focus:ring-4 focus:ring-primary-500/30 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
@@ -242,7 +248,7 @@ export default function Login({ status, canResetPassword, canRegister, botGuard,
                             </button>
 
                             {banyakToko && (
-                                <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+                                <p data-tour="login-daftar" className="text-center text-sm text-slate-600 dark:text-slate-400">
                                     Belum punya toko di Aishii POS?{" "}
                                     <Link
                                         href="/daftar"

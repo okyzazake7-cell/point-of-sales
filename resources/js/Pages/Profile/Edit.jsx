@@ -31,11 +31,11 @@ export default function Edit() {
                     <UpdateProfileInformationForm className="max-w-xl" />
                 </div>
 
-                <div className={kartu}>
+                <div data-tour="profile-password" className={kartu}>
                     <UpdatePasswordForm className="max-w-xl" />
                 </div>
 
-                <div className={kartu}>
+                <div data-tour="profile-delete" className={kartu}>
                     <DeleteUserForm className="max-w-xl" />
                 </div>
             </div>

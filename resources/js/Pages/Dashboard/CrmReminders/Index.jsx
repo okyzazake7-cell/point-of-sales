@@ -21,7 +21,7 @@ export default function Index({ campaigns, filters }) {
                     </p>
                 </div>
 
-                <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="crm-reminders-filters" className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                     <div className="grid gap-3 md:grid-cols-2">
                         <select
                             value={filters.type || ""}
@@ -48,7 +48,7 @@ export default function Index({ campaigns, filters }) {
                     </div>
                 </div>
 
-                <Table.Card title="Reminder & Campaign Queue">
+                <Table.Card data-tour="crm-reminders-list" title="Reminder & Campaign Queue">
                     <Table>
                         <Table.Thead>
                             <tr>
@@ -61,7 +61,7 @@ export default function Index({ campaigns, filters }) {
                         <Table.Tbody>
                             {campaigns.data.length > 0 ? (
                                 campaigns.data.map((campaign) => (
-                                    <tr key={campaign.id}>
+                                    <tr data-tour={campaign.id === campaigns.data[0].id ? "crm-reminders-row" : undefined} key={campaign.id}>
                                         <Table.Td>
                                             <Link href={route("crm-campaigns.show", campaign.id)} className="font-semibold text-slate-800 hover:text-primary-600 dark:text-slate-100">
                                                 {campaign.name}
@@ -91,7 +91,7 @@ export default function Index({ campaigns, filters }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={4} message="Belum ada reminder atau campaign queue.">
+                                <Table.Empty data-tour="crm-reminders-empty" colSpan={4} message="Belum ada reminder atau campaign queue.">
                                     <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                                         <IconBellRinging size={28} className="text-slate-400" />
                                     </div>
@@ -101,7 +101,7 @@ export default function Index({ campaigns, filters }) {
                     </Table>
                 </Table.Card>
 
-                {campaigns.last_page > 1 && <Pagination links={campaigns.links} />}
+                {campaigns.last_page > 1 && <Pagination data-tour="crm-reminders-pagination" links={campaigns.links} />}
             </div>
         </>
     );

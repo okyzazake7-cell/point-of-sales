@@ -18,9 +18,9 @@ import Pagination from "@/Components/Dashboard/Pagination";
 import { useAuthorization } from "@/Utils/authorization";
 
 // Category Card for Grid View
-function CategoryCard({ category, canUpdate, canDelete }) {
+function CategoryCard({ category, canUpdate, canDelete, tour }) {
     return (
-        <div className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
+        <div data-tour={tour} className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200">
             {/* Category Image */}
             <div className="relative aspect-[3/2] bg-slate-100 dark:bg-slate-800 overflow-hidden">
                 {category.image ? (
@@ -104,7 +104,7 @@ export default function Index({ categories }) {
                         </p>
                     </div>
                     {canCreateCategories && (
-                        <Button
+                        <Button data-tour="categories-add"
                             type={"link"}
                             icon={
                                 <IconCirclePlus
@@ -125,12 +125,12 @@ export default function Index({ categories }) {
             {/* Toolbar */}
             <div className="mb-4 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                 <div className="w-full sm:w-80">
-                    <Search
+                    <Search data-tour="categories-search"
                         url={route("categories.index")}
                         placeholder="Cari kategori..."
                     />
                 </div>
-                <div className="flex items-center gap-2">
+                <div data-tour="categories-view" className="flex items-center gap-2">
                     <button
                         onClick={() => setViewMode("grid")}
                         className={`p-2.5 rounded-lg transition-colors ${
@@ -160,19 +160,20 @@ export default function Index({ categories }) {
             {categories.data.length > 0 ? (
                 viewMode === "grid" ? (
                     /* Grid View */
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <div data-tour="categories-list" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {categories.data.map((category) => (
                             <CategoryCard
                                 key={category.id}
                                 category={category}
                                 canUpdate={canEditCategories}
                                 canDelete={canDeleteCategories}
+                                tour={category.id === categories.data[0].id && (canEditCategories || canDeleteCategories) ? "categories-row" : undefined}
                             />
                         ))}
                     </div>
                 ) : (
                     /* List View */
-                    <Table.Card title={"Data Kategori"}>
+                    <Table.Card data-tour="categories-list" title={"Data Kategori"}>
                         <Table>
                             <Table.Thead>
                                 <tr>
@@ -221,7 +222,7 @@ export default function Index({ categories }) {
                                                 {category.description || "-"}
                                             </p>
                                         </Table.Td>
-                                        <Table.Td>
+                                        <Table.Td data-tour={category.id === categories.data[0].id && (canEditCategories || canDeleteCategories) ? "categories-row" : undefined}>
                                             <div className="flex gap-2">
                                                 {canEditCategories && (
                                                     <Button
@@ -273,7 +274,7 @@ export default function Index({ categories }) {
                 )
             ) : (
                 /* Empty State */
-                <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div data-tour="categories-empty" className="flex flex-col items-center justify-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
                     <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                         <IconDatabaseOff
                             size={32}
@@ -300,7 +301,7 @@ export default function Index({ categories }) {
             )}
 
             {categories.last_page !== 1 && (
-                <Pagination links={categories.links} />
+                <Pagination data-tour="categories-pagination" links={categories.links} />
             )}
         </>
     );

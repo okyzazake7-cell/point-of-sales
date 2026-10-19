@@ -96,7 +96,7 @@ export default function Payment({
 
             <form onSubmit={handleSubmit} className="max-w-3xl space-y-6">
                 {/* Default Gateway */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+                <div data-tour="settings-payment-default" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                     <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
                         <IconCash size={18} />
                         Gateway Default
@@ -106,7 +106,7 @@ export default function Payment({
                         membuka halaman transaksi.
                     </p>
                     {!canUpdatePaymentSettings && (
-                        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-300">
+                        <div data-tour="settings-payment-readonly" className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-300">
                             Anda hanya memiliki akses lihat. Perubahan payment settings memerlukan permission update dan konfirmasi password ulang.
                         </div>
                     )}
@@ -143,7 +143,7 @@ export default function Payment({
                 </div>
 
                 {/* Bank Transfer */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+                <div data-tour="settings-payment-bank" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                             🏦 Transfer Bank
@@ -182,7 +182,7 @@ export default function Payment({
                 </div>
 
                 {/* Midtrans */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+                <div data-tour="settings-payment-midtrans" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                             <IconBrandStripe size={18} />
@@ -256,7 +256,7 @@ export default function Payment({
                             "midtrans_server_key",
                             "Isi ulang hanya jika ingin mengganti secret."
                         )}
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label data-tour="settings-payment-mode" className="flex items-center gap-2 cursor-pointer">
                             <Checkbox
                                 checked={data.midtrans_production}
                                 onChange={(e) =>
@@ -275,7 +275,7 @@ export default function Payment({
                 </div>
 
                 {/* Xendit */}
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+                <div data-tour="settings-payment-xendit" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                             <IconCreditCard size={18} />
@@ -381,7 +381,7 @@ export default function Payment({
                 </div>
 
                 {/* Webhook URLs Info */}
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+                <div data-tour="settings-payment-webhook" className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
                     <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex items-center gap-2">
                         🔗 Webhook URLs
                     </h3>
@@ -456,7 +456,7 @@ export default function Payment({
                 </div>
 
                 {/* Submit */}
-                <div className="flex justify-end">
+                <div data-tour="settings-payment-submit" className="flex justify-end">
                     <button
                         type="submit"
                         disabled={processing || !canUpdatePaymentSettings}

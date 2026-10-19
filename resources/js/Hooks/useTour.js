@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { driver } from "driver.js";
@@ -25,6 +25,63 @@ export function forgetCompletedTours() {
     selesaiSesiIni.clear();
 }
 
+/*
+ * Halaman tamu (masuk, daftar toko, menu meja untuk pelanggan) tidak punya
+ * akun untuk mengingat panduan yang sudah dibaca: diingat per peramban.
+ * Penyimpanan yang diblokir (mode penyamaran) hanya berarti panduannya
+ * muncul lagi pada kunjungan berikutnya.
+ */
+const KUNCI_TAMU = "pos-panduan-selesai";
+
+function bacaSelesaiTamu() {
+    try {
+        const isi = JSON.parse(window.localStorage.getItem(KUNCI_TAMU) || "[]");
+        return Array.isArray(isi) ? isi : [];
+    } catch {
+        return [];
+    }
+}
+
+function tandaiSelesaiTamu(key) {
+    try {
+        const isi = new Set(bacaSelesaiTamu());
+        isi.add(key);
+        window.localStorage.setItem(KUNCI_TAMU, JSON.stringify([...isi]));
+    } catch {
+        // idem
+    }
+}
+
+/*
+ * driver.js menggulir elemen yang disorot ke TENGAH, juga mendatar. Baris
+ * tabel yang lebih lebar dari wadah gulirnya (hampir semua tabel di
+ * ponsel) jadi tergulir ke tengah barisnya: nama di awal baris tertutup,
+ * padahal langkahnya membahas baris itu. Elemen selebar itu digulir ke
+ * AWALNYA. driver.js memanggil `scrollIntoView` milik elemen itu sendiri,
+ * di dalam panggilan yang sama dengan `onHighlightStarted` — jadi gantinya
+ * hanya berlaku untuk guliran itu.
+ */
+function gulirKeAwalBilaLebar(el) {
+    let wadah = el.parentElement;
+    while (
+        wadah &&
+        wadah !== document.body &&
+        !(
+            wadah.scrollWidth > wadah.clientWidth &&
+            /auto|scroll|hidden/.test(getComputedStyle(wadah).overflowX)
+        )
+    ) {
+        wadah = wadah.parentElement;
+    }
+    const lebarWadah =
+        wadah && wadah !== document.body ? wadah.clientWidth : window.innerWidth;
+    if (el.getBoundingClientRect().width <= lebarWadah) return;
+
+    el.scrollIntoView = (opsi) =>
+        Element.prototype.scrollIntoView.call(el, { ...opsi, inline: "start" });
+    queueMicrotask(() => delete el.scrollIntoView);
+}
+
 /**
  * Panduan untuk HALAMAN YANG SEDANG DIBUKA (komponen Inertia-nya). Tata
  * letak dashboard dan kasir tetap terpasang saat berpindah halaman, jadi
@@ -34,7 +91,12 @@ export function forgetCompletedTours() {
 export function useTour() {
     const page = usePage();
     const component = page.component;
-    const completed = page.props?.auth?.completedTours;
+    const tamu = !page.props?.auth?.user;
+    const completedAkun = page.props?.auth?.completedTours;
+    const completed = useMemo(
+        () => (tamu ? bacaSelesaiTamu() : completedAkun),
+        [tamu, completedAkun]
+    );
     const driverRef = useRef(null);
     const keyRef = useRef(null);
     const componentRef = useRef(component);
@@ -42,15 +104,22 @@ export function useTour() {
 
     componentRef.current = component;
 
-    const markCompleted = useCallback((key) => {
-        selesaiSesiIni.add(key);
-        // ponytail: plain axios — Inertia router rejects the JSON-only response
-        axios
-            .post(route("tours.complete", { tour: key }), {}, {
-                headers: { Accept: "application/json" },
-            })
-            .catch(() => {});
-    }, []);
+    const markCompleted = useCallback(
+        (key) => {
+            selesaiSesiIni.add(key);
+            if (tamu) {
+                tandaiSelesaiTamu(key);
+                return;
+            }
+            // ponytail: plain axios — Inertia router rejects the JSON-only response
+            axios
+                .post(route("tours.complete", { tour: key }), {}, {
+                    headers: { Accept: "application/json" },
+                })
+                .catch(() => {});
+        },
+        [tamu]
+    );
 
     const start = useCallback(
         async ({ auto = false } = {}) => {
@@ -133,6 +202,9 @@ export function useTour() {
                 // yang belum selesai dibaca; menutup tetap lewat × atau Esc.
                 overlayClickBehavior: () => {},
                 steps,
+                onHighlightStarted: (el) => {
+                    if (el) gulirKeAwalBilaLebar(el);
+                },
                 onPopoverRender: (popover, { driver: d, state }) => {
                     // Hitungan "3 dari 8" hanya atas langkah yang terlihat,
                     // supaya nomornya tidak melompat.

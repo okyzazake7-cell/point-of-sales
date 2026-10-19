@@ -46,13 +46,13 @@ export default function BankAccounts({ bankAccounts = [] }) {
             </div>
 
             <div className="max-w-3xl space-y-6">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div data-tour="settings-bank-accounts-list" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                     <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                         <h3 className="font-semibold text-slate-800 dark:text-white">
                             Daftar Rekening ({bankAccounts.length})
                         </h3>
                         {canUpdatePaymentSettings && (
-                            <Link
+                            <Link data-tour="settings-bank-accounts-add"
                                 href={route("settings.bank-accounts.create")}
                                 className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors"
                             >
@@ -65,7 +65,7 @@ export default function BankAccounts({ bankAccounts = [] }) {
                     {bankAccounts.length > 0 ? (
                         <div className="divide-y divide-slate-200 dark:divide-slate-800">
                             {bankAccounts.map((bank) => (
-                                <div
+                                <div data-tour={bank.id === bankAccounts[0].id ? "settings-bank-accounts-row" : undefined}
                                     key={bank.id}
                                     // Membungkus di ponsel: tombol aktif/ubah/hapus
                                     // turun ke baris sendiri alih-alih terpotong
@@ -99,7 +99,7 @@ export default function BankAccounts({ bankAccounts = [] }) {
                                             {bank.account_number} • {bank.account_name}
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-2 max-sm:w-full max-sm:justify-end">
+                                    <div data-tour={bank.id === bankAccounts[0].id ? "settings-bank-accounts-actions" : undefined} className="flex items-center gap-2 max-sm:w-full max-sm:justify-end">
                                         {canUpdatePaymentSettings && (
                                             <>
                                                 <button
@@ -131,7 +131,7 @@ export default function BankAccounts({ bankAccounts = [] }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="p-8 text-center">
+                        <div data-tour="settings-bank-accounts-empty" className="p-8 text-center">
                             <IconBuildingBank
                                 size={48}
                                 className="mx-auto text-slate-300 dark:text-slate-600 mb-3"

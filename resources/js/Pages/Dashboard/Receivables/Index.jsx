@@ -97,7 +97,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="flex rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1">
+                        <div data-tour="receivables-tabs" className="flex rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1">
                             <button
                                 onClick={() => setActiveTab("list")}
                                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -120,7 +120,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                                 Aging
                             </button>
                         </div>
-                        <Link
+                        <Link data-tour="receivables-create"
                             href={route("transactions.index")}
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold transition-colors"
                         >
@@ -137,7 +137,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                             </div>
                         ) : agingData ? (
                             <>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div data-tour="receivables-aging-cards" className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                                         <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Total Piutang</p>
                                         <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">
@@ -165,7 +165,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                                    <div className="md:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                                    <div data-tour="receivables-aging-buckets" className="md:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                                         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Aging Piutang</h3>
                                         <div className="space-y-3">
                                             {agingData.aging_summary?.map((bucket) => {
@@ -198,7 +198,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                                         </div>
                                     </div>
 
-                                    <div className="md:col-span-3 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                                    <div data-tour="receivables-aging-top" className="md:col-span-3 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                                         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                             <IconUsers size={20} />
                                             Pelanggan Terbesar
@@ -228,7 +228,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                     </div>
                 ) : (
                     <>
-                        <form
+                        <form data-tour="receivables-filters"
                             onSubmit={applyFilter}
                             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end"
                         >
@@ -263,7 +263,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                             </button>
                         </form>
 
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                        <div data-tour="receivables-list" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
                             <div className="w-full overflow-x-auto">
                                 <div className="min-w-[720px]">
                                     <div className="grid grid-cols-12 px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
@@ -276,7 +276,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                                     </div>
                                     {rows.length > 0 ? (
                                         rows.map((item) => (
-                                            <Link
+                                            <Link data-tour={item.id === rows[0]?.id ? "receivables-row" : undefined}
                                                 key={item.id}
                                                 href={route("receivables.show", item.id)}
                                                 className="grid grid-cols-12 gap-2 px-4 py-3 items-center border-b border-slate-100 dark:border-slate-800 hover:bg-primary-50/50 dark:hover:bg-slate-800/50 transition-colors"
@@ -305,7 +305,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                                             </Link>
                                         ))
                                     ) : (
-                                        <div className="p-8 text-center text-slate-500 dark:text-slate-400">
+                                        <div data-tour="receivables-empty" className="p-8 text-center text-slate-500 dark:text-slate-400">
                                             <IconAlertCircle size={28} className="mx-auto mb-2" />
                                             Belum ada data nota barang.
                                         </div>
@@ -314,7 +314,7 @@ export default function ReceivablesIndex({ receivables, filters = {} }) {
                             </div>
                         </div>
 
-                        <div className="flex justify-between items-center text-sm text-slate-500">
+                        <div data-tour="receivables-pagination" className="flex justify-between items-center text-sm text-slate-500">
                             <div>
                                 Menampilkan {rows.length} dari {receivables?.total || 0} data
                             </div>

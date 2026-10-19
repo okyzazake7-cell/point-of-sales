@@ -100,7 +100,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Informasi PO</h2>
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-                            <div>
+                            <div data-tour="purchase-orders-create-supplier">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Supplier</label>
                                 <select
                                     value={data.supplier_id}
@@ -113,7 +113,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="purchase-orders-create-warehouse">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Tujuan Gudang</label>
                                 <select
                                     value={data.warehouse_id}
@@ -126,7 +126,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="purchase-orders-create-number">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Nomor Dokumen</label>
                                 <input
                                     type="text"
@@ -136,7 +136,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                                     className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
                             </div>
-                            <div>
+                            <div data-tour="purchase-orders-create-notes">
                                 <label className="mb-1 block text-sm font-semibold text-slate-700 dark:text-slate-200">Catatan</label>
                                 <input
                                     type="text"
@@ -152,7 +152,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
 
                     <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Item Pembelian</h2>
-                        <div className="mb-4 flex gap-3">
+                        <div data-tour="purchase-orders-create-search" className="mb-4 flex gap-3">
                             <input
                                 type="text"
                                 value={searchProduct}
@@ -182,7 +182,7 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                             </div>
                         )}
                         {data.items.length > 0 ? (
-                            <div className="overflow-x-auto">
+                            <div data-tour="purchase-orders-create-items" className="overflow-x-auto">
                                 <table className="w-full text-sm">
                                     <thead>
                                         <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -244,14 +244,14 @@ export default function Create({ suppliers, products, warehouses = [] }) {
                                 </table>
                             </div>
                         ) : (
-                            <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
+                            <div data-tour="purchase-orders-create-empty" className="rounded-xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-700">
                                 <IconPackage size={40} className="mx-auto text-slate-300 dark:text-slate-600" />
                                 <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Cari produk di atas untuk ditambahkan ke PO.</p>
                             </div>
                         )}
                     </div>
 
-                    <div className="flex justify-end gap-3">
+                    <div data-tour="purchase-orders-create-submit" className="flex justify-end gap-3">
                         <Link
                             href={route("purchase-orders.index")}
                             className="flex h-11 items-center rounded-xl border border-slate-200 bg-white px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"

@@ -63,7 +63,7 @@ export default function Index({ orders, filters, suppliers }) {
                     </p>
                 </div>
                 {can("purchase-orders-create") && (
-                    <Button
+                    <Button data-tour="purchase-orders-add"
                         type="link"
                         href={route("purchase-orders.create")}
                         icon={<IconCirclePlus size={18} />}
@@ -73,7 +73,7 @@ export default function Index({ orders, filters, suppliers }) {
                 )}
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-4">
+            <div data-tour="purchase-orders-filters" className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-4">
                 <div className="relative md:col-span-2">
                     <input
                         type="text"
@@ -110,7 +110,7 @@ export default function Index({ orders, filters, suppliers }) {
                 </select>
             </div>
 
-            <Table.Card title="Daftar Purchase Order">
+            <Table.Card data-tour="purchase-orders-list" title="Daftar Purchase Order">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -126,7 +126,7 @@ export default function Index({ orders, filters, suppliers }) {
                         {orders.data.length > 0 ? (
                             orders.data.map((order) => (
                                 <tr key={order.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <Table.Td>
+                                    <Table.Td data-tour={order.id === orders.data[0].id ? "purchase-orders-row" : undefined}>
                                         <p className="font-semibold text-slate-800 dark:text-slate-200">
                                             {order.document_number}
                                         </p>
@@ -147,7 +147,7 @@ export default function Index({ orders, filters, suppliers }) {
                                 </tr>
                             ))
                         ) : (
-                            <Table.Empty colSpan={6} message={
+                            <Table.Empty data-tour="purchase-orders-empty" colSpan={6} message={
                                 <div className="text-slate-500 dark:text-slate-400">
                                     Belum ada purchase order.
                                 </div>
@@ -161,7 +161,7 @@ export default function Index({ orders, filters, suppliers }) {
                 </Table>
             </Table.Card>
 
-            {orders.last_page > 1 && <Pagination links={orders.links} />}
+            {orders.last_page > 1 && <Pagination data-tour="purchase-orders-pagination" links={orders.links} />}
         </>
     );
 }

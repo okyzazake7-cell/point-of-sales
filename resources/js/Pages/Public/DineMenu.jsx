@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Head, router } from "@inertiajs/react";
 import { IconShoppingCart, IconMinus, IconPlus } from "@tabler/icons-react";
 import toast from "react-hot-toast";
+import TombolPanduan from "@/Components/Panduan/TombolPanduan";
 
 const fmt = (v) => Number(v || 0).toLocaleString("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
 
@@ -79,22 +80,25 @@ export default function DineMenu({ table, categories, products, selfOrderEnabled
             <Head title={`Menu ${table.name} — ${storeName}`} />
             <div className="min-h-screen bg-slate-50 flex flex-col">
                 <header className="bg-white border-b border-slate-200 sticky top-0 z-20">
-                    <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
-                        <div>
+                    <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between gap-3">
+                        <div data-tour="dine-menu-header" className="min-w-0">
                             <h1 className="font-bold text-slate-900 text-lg">{storeName}</h1>
                             <p className="text-xs text-slate-500">
                                 Meja {table.name}
                                 {table.area_name ? ` · ${table.area_name}` : ""}
                             </p>
                         </div>
-                        <button onClick={() => window.history.back()} className="text-sm text-slate-500 hover:text-slate-700">
-                            Kembali
-                        </button>
+                        <div className="flex shrink-0 items-center gap-2">
+                            <TombolPanduan ringkas />
+                            <button onClick={() => window.history.back()} className="text-sm text-slate-500 hover:text-slate-700">
+                                Kembali
+                            </button>
+                        </div>
                     </div>
                 </header>
 
                 <main className="flex-1 max-w-lg mx-auto w-full px-4 py-4 pb-28">
-                    <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+                    <div data-tour="dine-menu-categories" className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
                         <button
                             onClick={() => setActiveCategory("all")}
                             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
@@ -121,10 +125,14 @@ export default function DineMenu({ table, categories, products, selfOrderEnabled
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 mt-4">
-                        {filtered.map((product) => {
+                        {filtered.map((product, index) => {
                             const qty = getQty(product.id);
                             return (
-                                <div key={product.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                                <div
+                                    key={product.id}
+                                    data-tour={index === 0 ? "dine-menu-list" : undefined}
+                                    className="bg-white rounded-xl border border-slate-200 overflow-hidden"
+                                >
                                     {product.image ? (
                                         <img src={product.image} alt={product.title} className="w-full aspect-square object-cover" loading="lazy" />
                                     ) : (
@@ -169,7 +177,7 @@ export default function DineMenu({ table, categories, products, selfOrderEnabled
                 </main>
 
                 {cart.length > 0 && (
-                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-30">
+                    <div data-tour="dine-menu-cart" className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-30">
                         <div className="max-w-lg mx-auto px-4 py-3">
                             <button
                                 onClick={() => document.getElementById("cart-modal")?.showModal()}

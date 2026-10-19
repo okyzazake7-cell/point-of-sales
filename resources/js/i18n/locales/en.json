@@ -904,6 +904,7 @@
         "done": "Done",
         "of": "of",
         "reopen_hint": "Want to see this guide again? Press the <b>?</b> button at the top of the screen. On a phone, choose <b>Guided Tour</b> from the menu (☰ or the account circle at the top right).",
+        "short": "Guide",
         "step": "Step {{n}}",
         "load_failed": "The guide could not be loaded. Check your internet connection and try again."
     },

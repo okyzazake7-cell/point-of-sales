@@ -34,9 +34,9 @@ function InputError({ message }) {
     return <p className="mt-1 text-xs text-rose-500">{message}</p>;
 }
 
-function CardSection({ title, description, children }) {
+function CardSection({ title, description, children, "data-tour": tour }) {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <section data-tour={tour} className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
             <div className="mb-4">
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                     {title}
@@ -187,7 +187,7 @@ export default function Form({
                         description="Identitas dasar rule, jenis promo, dan prioritas penerapan."
                     >
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="pricing-rules-form-name">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Nama Rule
                                 </label>
@@ -201,7 +201,7 @@ export default function Form({
                                 />
                                 <InputError message={errors.name} />
                             </div>
-                            <div>
+                            <div data-tour="pricing-rules-form-kind">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Jenis Rule
                                 </label>
@@ -220,7 +220,7 @@ export default function Form({
                                 </select>
                                 <InputError message={errors.kind} />
                             </div>
-                            <div>
+                            <div data-tour="pricing-rules-form-priority">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Priority
                                 </label>
@@ -234,7 +234,7 @@ export default function Form({
                                     className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
                             </div>
-                            <div>
+                            <div data-tour="pricing-rules-form-preview-qty">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Qty Preview POS
                                 </label>
@@ -259,7 +259,7 @@ export default function Form({
                         description="Tentukan produk/kategori yang terkena promo dan siapa yang berhak."
                     >
                         <div className="grid gap-4 md:grid-cols-2">
-                            <div>
+                            <div data-tour="pricing-rules-form-target">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Target Rule
                                 </label>
@@ -277,7 +277,7 @@ export default function Form({
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            <div data-tour="pricing-rules-form-scope">
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Scope Pelanggan
                                 </label>
@@ -296,7 +296,7 @@ export default function Form({
                                 </select>
                             </div>
                             {data.target_type === "product" && (
-                                <div className="md:col-span-2">
+                                <div data-tour="pricing-rules-form-product" className="md:col-span-2">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Produk
                                     </label>
@@ -318,7 +318,7 @@ export default function Form({
                                 </div>
                             )}
                             {data.target_type === "category" && (
-                                <div className="md:col-span-2">
+                                <div data-tour="pricing-rules-form-category" className="md:col-span-2">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Kategori
                                     </label>
@@ -340,7 +340,7 @@ export default function Form({
                                 </div>
                             )}
                             {data.customer_scope === "member" && (
-                                <div className="md:col-span-2">
+                                <div data-tour="pricing-rules-form-tiers" className="md:col-span-2">
                                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                         Tier Member yang Berhak
                                     </label>
@@ -387,7 +387,7 @@ export default function Form({
 
                     {(data.kind === "standard_discount" ||
                         data.kind === "qty_break") && (
-                        <CardSection
+                        <CardSection data-tour="pricing-rules-form-discount"
                             title="Diskon Rule"
                             description="Tentukan tipe diskon yang dipakai rule ini."
                         >
@@ -431,7 +431,7 @@ export default function Form({
                     )}
 
                     {data.kind === "qty_break" && (
-                        <CardSection
+                        <CardSection data-tour="pricing-rules-form-qty-breaks"
                             title="Qty Break / Grosir"
                             description="Satu rule bisa memiliki beberapa breakpoint quantity."
                         >
@@ -520,7 +520,7 @@ export default function Form({
                     )}
 
                     {data.kind === "bundle_price" && (
-                        <CardSection
+                        <CardSection data-tour="pricing-rules-form-bundle"
                             title="Bundle Price"
                             description="Pilih kombinasi produk dan harga paket final."
                         >
@@ -606,7 +606,7 @@ export default function Form({
                     )}
 
                     {data.kind === "buy_x_get_y" && (
-                        <CardSection
+                        <CardSection data-tour="pricing-rules-form-buy-get"
                             title="Buy X Get Y"
                             description="Atur item pembelian (buy) dan item hadiah/diskon (get)."
                         >
@@ -692,7 +692,7 @@ export default function Form({
                         </CardSection>
                     )}
 
-                    <CardSection
+                    <CardSection data-tour="pricing-rules-form-schedule"
                         title="Jadwal & Catatan"
                         description="Gunakan jadwal bila promo hanya aktif pada periode tertentu."
                     >
@@ -736,7 +736,7 @@ export default function Form({
                                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                                 />
                             </div>
-                            <label className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                            <label data-tour="pricing-rules-form-active" className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
                                 <input
                                     type="checkbox"
                                     checked={data.is_active}
@@ -749,7 +749,7 @@ export default function Form({
                         </div>
                     </CardSection>
 
-                    <CardSection
+                    <CardSection data-tour="pricing-rules-form-preview"
                         title="Preview Draft"
                         description="Simulasikan rule ini terhadap contoh produk sebelum disimpan."
                     >
@@ -821,7 +821,7 @@ export default function Form({
                         )}
                     </CardSection>
 
-                    <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+                    <div data-tour="pricing-rules-form-submit" className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
                         <Button
                             type="link"
                             href={route("pricing-rules.index")}

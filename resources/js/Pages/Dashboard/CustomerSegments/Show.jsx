@@ -32,7 +32,7 @@ export default function Show({ segment, customers = [] }) {
                 </Link>
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div>
+                    <div data-tour="customer-segments-show-header">
                         <div className="mb-2 flex items-center gap-2">
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{segment.name}</h1>
                             <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
@@ -43,7 +43,7 @@ export default function Show({ segment, customers = [] }) {
                             {segment.description || "Segment CRM customer"}
                         </p>
                     </div>
-                    <div className="grid gap-3 sm:grid-cols-3">
+                    <div data-tour="customer-segments-show-stats" className="grid gap-3 sm:grid-cols-3">
                         <div className="rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
                             <p className="text-xs uppercase tracking-wide text-slate-500">Total</p>
                             <p className="mt-1 text-xl font-bold text-slate-900 dark:text-white">{segment.stats.total_members}</p>
@@ -61,7 +61,7 @@ export default function Show({ segment, customers = [] }) {
             </div>
 
             <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                <div data-tour="customer-segments-show-members" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                     <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Anggota Segment</h2>
                     <Table>
                         <Table.Thead>
@@ -75,7 +75,7 @@ export default function Show({ segment, customers = [] }) {
                         <Table.Tbody>
                             {segment.memberships.length > 0 ? (
                                 segment.memberships.map((membership) => (
-                                    <tr key={membership.id}>
+                                    <tr data-tour={membership.id === segment.memberships[0].id ? "customer-segments-show-row" : undefined} key={membership.id}>
                                         <Table.Td>
                                             <Link href={route("customers.show", membership.customer?.id)} className="font-semibold text-slate-800 hover:text-primary-600 dark:text-slate-100">
                                                 {membership.customer?.name || "-"}
@@ -101,7 +101,7 @@ export default function Show({ segment, customers = [] }) {
                                     </tr>
                                 ))
                             ) : (
-                                <Table.Empty colSpan={4} message="Belum ada anggota segment.">
+                                <Table.Empty data-tour="customer-segments-show-empty" colSpan={4} message="Belum ada anggota segment.">
                                     <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                                         <IconDatabaseOff size={28} className="text-slate-400" />
                                     </div>
@@ -113,7 +113,7 @@ export default function Show({ segment, customers = [] }) {
 
                 <div className="space-y-6">
                     {isManual && (
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                        <div data-tour="customer-segments-show-add" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">Tambah Anggota Manual</h2>
                             <form onSubmit={submit} className="space-y-4">
                                 <select
@@ -139,7 +139,7 @@ export default function Show({ segment, customers = [] }) {
                         </div>
                     )}
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="customer-segments-show-rule" className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="mb-4 flex items-center gap-2">
                             <IconUsersGroup size={18} className="text-primary-500" />
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Ringkasan Rule</h2>

@@ -59,7 +59,7 @@ export default function Index({ returns, filters, suppliers }) {
                     </p>
                 </div>
                 {can("supplier-returns-create") && (
-                    <Button
+                    <Button data-tour="supplier-returns-add"
                         type="link"
                         href={route("supplier-returns.create")}
                         icon={<IconCirclePlus size={18} />}
@@ -69,7 +69,7 @@ export default function Index({ returns, filters, suppliers }) {
                 )}
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-4">
+            <div data-tour="supplier-returns-filters" className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-4">
                 <div className="relative md:col-span-2">
                     <input
                         type="text"
@@ -104,7 +104,7 @@ export default function Index({ returns, filters, suppliers }) {
                 </select>
             </div>
 
-            <Table.Card title="Daftar Retur Supplier">
+            <Table.Card data-tour="supplier-returns-list" title="Daftar Retur Supplier">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -121,7 +121,7 @@ export default function Index({ returns, filters, suppliers }) {
                         {returns.data.length > 0 ? (
                             returns.data.map((ret) => (
                                 <tr key={ret.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <Table.Td>
+                                    <Table.Td data-tour={ret.id === returns.data[0].id ? "supplier-returns-row" : undefined}>
                                         <p className="font-semibold text-slate-800 dark:text-slate-200">{ret.document_number}</p>
                                         <p className="text-xs text-slate-500">{ret.created_at?.split("T")[0]}</p>
                                     </Table.Td>
@@ -141,7 +141,7 @@ export default function Index({ returns, filters, suppliers }) {
                                 </tr>
                             ))
                         ) : (
-                            <Table.Empty colSpan={7} message={
+                            <Table.Empty data-tour="supplier-returns-empty" colSpan={7} message={
                                 <div className="text-slate-500 dark:text-slate-400">
                                     Belum ada data retur supplier.
                                 </div>
@@ -155,7 +155,7 @@ export default function Index({ returns, filters, suppliers }) {
                 </Table>
             </Table.Card>
 
-            {returns.last_page > 1 && <Pagination links={returns.links} />}
+            {returns.last_page > 1 && <Pagination data-tour="supplier-returns-pagination" links={returns.links} />}
         </>
     );
 }

@@ -47,7 +47,7 @@ export default function UpdateProfileInformation({ className = '' }) {
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
-                <div>
+                <div data-tour="profile-name">
                     <InputLabel htmlFor="name" value="Nama" />
 
                     <TextInput
@@ -63,7 +63,7 @@ export default function UpdateProfileInformation({ className = '' }) {
                     <InputError className="mt-2" message={errors.name} />
                 </div>
 
-                <div>
+                <div data-tour="profile-email">
                     <InputLabel htmlFor="email" value="Surel" />
 
                     <TextInput
@@ -79,7 +79,7 @@ export default function UpdateProfileInformation({ className = '' }) {
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
-                <div>
+                <div data-tour="profile-photo">
                     <InputLabel htmlFor="avatar" value="Foto" />
 
                     <div className="flex items-center gap-4 mt-2">
@@ -108,7 +108,7 @@ export default function UpdateProfileInformation({ className = '' }) {
                     <InputError className="mt-2" message={errors.avatar} />
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div data-tour="profile-save" className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>Simpan</PrimaryButton>
 
                     <Transition

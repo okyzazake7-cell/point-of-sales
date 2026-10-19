@@ -41,7 +41,7 @@ export default function Index({ stockMutations, products, warehouses = [], filte
                 </p>
             </div>
 
-            <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-5">
+            <div data-tour="stock-mutations-filters" className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:grid-cols-5">
                 <select
                     value={filters.product_id || ""}
                     onChange={(event) =>
@@ -100,7 +100,7 @@ export default function Index({ stockMutations, products, warehouses = [], filte
                 />
             </div>
 
-            <Table.Card title="Histori Mutasi Stok">
+            <Table.Card data-tour="stock-mutations-list" title="Histori Mutasi Stok">
                 <Table>
                     <Table.Thead>
                         <tr>
@@ -131,17 +131,17 @@ export default function Index({ stockMutations, products, warehouses = [], filte
                                             </p>
                                         </div>
                                     </Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={mutation.id === stockMutations.data[0].id ? "stock-mutations-type" : undefined}>
                                         <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                                             {mutation.mutation_type}
                                         </span>
                                     </Table.Td>
                                     <Table.Td>{mutation.qty}</Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={mutation.id === stockMutations.data[0].id ? "stock-mutations-before-after" : undefined}>
                                         {mutation.stock_before} → {mutation.stock_after}
                                     </Table.Td>
-                                    <Table.Td>{mutation.warehouse?.name || "-"}</Table.Td>
-                                    <Table.Td>
+                                    <Table.Td data-tour={mutation.id === stockMutations.data[0].id ? "stock-mutations-warehouse" : undefined}>{mutation.warehouse?.name || "-"}</Table.Td>
+                                    <Table.Td data-tour={mutation.id === stockMutations.data[0].id ? "stock-mutations-ref" : undefined}>
                                         <div>
                                             <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                                 {mutation.reference_type}
@@ -156,7 +156,7 @@ export default function Index({ stockMutations, products, warehouses = [], filte
                                 </tr>
                             ))
                         ) : (
-                                <Table.Empty
+                                <Table.Empty data-tour="stock-mutations-empty"
                                     colSpan={8}
                                 message={
                                     <div className="text-slate-500 dark:text-slate-400">
@@ -174,7 +174,7 @@ export default function Index({ stockMutations, products, warehouses = [], filte
             </Table.Card>
 
             {stockMutations.last_page > 1 && (
-                <Pagination links={stockMutations.links} />
+                <Pagination data-tour="stock-mutations-pagination" links={stockMutations.links} />
             )}
         </>
     );

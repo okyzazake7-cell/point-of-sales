@@ -79,7 +79,7 @@ export default function AgingIndex() {
                 {/* Di 320px dua kartu sejajar menyisakan ±94px untuk angkanya, dan
                     "Rp 667.000" berukuran 2xl butuh ±137px — angkanya meluber
                     keluar kartu dan menyeret halaman. Huruf mengecil di ponsel. */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                <div data-tour="aging-cards" className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                     <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-slate-800 dark:bg-slate-900">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/30">
@@ -141,7 +141,7 @@ export default function AgingIndex() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Payable Aging */}
-                    <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="aging-payables" className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
                         <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                                 <IconTruck size={20} className="text-rose-500" />
@@ -194,7 +194,7 @@ export default function AgingIndex() {
                     </div>
 
                     {/* Receivable Aging */}
-                    <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+                    <div data-tour="aging-receivables" className="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
                         <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
                             <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                                 <IconReceipt size={20} className="text-primary-500" />
